@@ -1,0 +1,39 @@
+{
+  "name": "crawler.2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqp-rpc": "0.0.8",
+    "amqplib": "^0.4.1",
+    "elasticsearch": "^11.0.0",
+    "lodash": "^4.8.2",
+    "mysql": "^2.11.1",
+    "rabbit.js": "^0.4.4",
+    "sequelize": "^3.23.6",
+    "sequelize-import": "^1.2.1",
+    "blueimp-md5": "^2.3.0",
+    "cheerio": "^0.20.0",
+    "consign": "^0.1.2",
+    "iconv-lite": "^0.4.13",
+    "jsdom": "^9.4.1",
+    "node-horseman": "^3.1.1",
+    "phantom": "^2.1.11",
+    "commander": "^2.9.0",
+    "json-path-processor": "^0.2.3",
+    "node-schedule": "^1.1.1",
+    "node-uuid": "^1.4.7",
+    "qs": "^6.2.0",
+    "robots-parser": "^1.0.0",
+    "shelljs": "^0.7.0",
+    "superagent": "^1.8.3",
+    "superagent-charset": "^1.1.1",
+    "superagent-proxy": "^1.0.1",
+    "urijs": "^1.18.0"
+  }
+}
