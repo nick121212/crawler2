@@ -1,6 +1,7 @@
-let elasticsearch = require('elasticsearch');
-let config = require('../config');
-let client = new elasticsearch.Client({
+const elasticsearch = require('elasticsearch');
+const config = require('../config');
+
+const client = new elasticsearch.Client({
     host: `${config.elastic.host}:${config.elastic.port}`,
     log: [{
         type: 'stdio',
