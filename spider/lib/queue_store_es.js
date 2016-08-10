@@ -65,9 +65,10 @@ module.exports = (app, core)=> {
          * @param port {Number} 端口
          * @param path {string} 路径
          * @param depth {string} 深度
+         * @param query {string} queryString
          * @returns {queueItem}
          */
-        getQueueItemInfo(protocol, host, port, path, depth) {
+        getQueueItemInfo(protocol, host, port, path, depth, query) {
             let url, queueItem;
 
             if (isNaN(port) || !port) {
@@ -75,7 +76,7 @@ module.exports = (app, core)=> {
             }
             depth = depth || 1;
             protocol = protocol === "https" ? "https" : "http";
-            url = protocol + "://" + host + (port !== 80 ? ":" + port : "") + path;
+            url = protocol + "://" + host + (port !== 80 ? ":" + port : "") + path + (query ? ("?" + query) : "");
             queueItem = {
                 url: url,
                 urlId: md5(url),
@@ -84,6 +85,7 @@ module.exports = (app, core)=> {
                 port: port,
                 path: path,
                 depth: depth,
+                query: query,
                 fetched: false,
                 status: "queued",
                 createDate: Date.now(),
@@ -168,7 +170,7 @@ module.exports = (app, core)=> {
 
             // 检查url在es中是否存在
             _.each(urls, (url) => {
-                let queueItem = this.getQueueItemInfo(url.protocol, url.host, url.port, url.path, url.depth);
+                let queueItem = this.getQueueItemInfo(url.protocol, url.host, url.port, url.path, url.depth, url.query);
                 queueItems[queueItem.urlId] = queueItem;
             }, this);
             // mget一下数据

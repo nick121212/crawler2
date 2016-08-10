@@ -184,7 +184,6 @@ module.exports = (app)=> {
                     } catch (e) {
                         return list;
                     }
-
                     // url是否为空
                     if (!URL.toString().length) {
                         return list;

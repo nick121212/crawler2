@@ -2,6 +2,8 @@
 
 const EventEmitter = require("events").EventEmitter;
 const uri = require("urijs");
+const qs = require("qs");
+const _ = require("lodash");
 
 module.exports = ()=> {
     const QUEUE_ITEM_INITIAL_DEPTH = 1;
@@ -34,6 +36,7 @@ module.exports = ()=> {
             this._fetchConditions = settings.fetchConditions || [];
             this.filterByDomain = settings.filterByDomain == null ? true : settings.filterByDomain;
             this.stripQuerystring = settings.stripQuerystring == null ? true : settings.stripQuerystring;
+            this.allowQueryParams = settings.allowQueryParams || [];
             this.urlEncoding = "iso8859";
         }
 
@@ -99,6 +102,29 @@ module.exports = ()=> {
                 //     newURL = newURL.iso8859();
                 // }
 
+                let queryString = newURL.query();
+                if(newURL.query()){
+                    console.log(newURL.query());
+                }
+
+                // 只留下需要的querystring
+                if (this.allowQueryParams && this.allowQueryParams.length && queryString) {
+                    let noSparse = qs.parse(queryString);
+                    let params = [];
+
+                    _.each(this.allowQueryParams, (qp)=> {
+                        if(noSparse[qp]){
+                            params.push(`${qp}=${noSparse[qp]}`);
+                        }
+                    });
+
+                    newURL.query(params.join("&"))
+                }
+
+                if (newURL.query()) {
+                    console.log(newURL.query());
+                }
+
             } catch (e) {
                 // Couldn't process the URL, since URIjs choked on it.
                 console.log(e.message);
@@ -112,6 +138,7 @@ module.exports = ()=> {
                 port: newURL.port() || 80,
                 path: newURL.resource(),
                 uriPath: newURL.path(),
+                query: newURL.query(),
                 depth: context.depth + 1
             };
         }

@@ -1,4 +1,5 @@
 let _ = require("lodash");
+let jpp = require("json-path-processor");
 
 module.exports = (app)=> {
     class Strategy extends app.spider.deal.deal.abase {
@@ -21,14 +22,25 @@ module.exports = (app)=> {
          */
         doDeal(queueItem, data, results, $, index) {
             let defer = Promise.defer();
+            let jData = jpp(results);
+            let path = "";
 
-            data.key && (results[data.key] = []);
+            if (typeof index === "number" && _.isArray(results)) {
+                path = `${index}`;
+            }
+            if (data.key) {
+                path.length && (path += ".");
+                path += `${data.key}`;
+            }
+            jData.set(path, [], true);
+            results = jData.get(path).value();
+            // data.key && (results[data.key] = []);
             app.spider.deal.html.index.getOne(data.htmlStrategy).doDeal(queueItem, data, $, index).then((res) => {
                 let promises = [];
 
-                res.result = results[data.key];
+                res.result = results;
                 for (let i = 0; i < res.len; i++) {
-                    results[data.key].push({});
+                    res.result.push({});
                     promises = promises.concat(this.doDealData(queueItem, data.data.concat([]), res.result, res.$cur, i));
                 }
                 if (promises.length) {

@@ -9,8 +9,10 @@ let _ = require("lodash");
 module.exports = exports = (core) => {
     let config = new core.utils.builder("fangjiadp", "www.fangjiadp.com", []);
 
-    config.setBaseInfo(1000, "superagent");
-    config.initDomain = "www.fangjiadp.com/shanghai/newhouse/index";
+    config.setBaseInfo(1000, "phantom");
+    config.initDomain = "www.fangjiadp.com";
+    config.allowQueryParams = ["pg"];
+    config.stripQuerystring = false;
     config.proxySettings = {
         useProxy: false,
         charset: "utf-8",
