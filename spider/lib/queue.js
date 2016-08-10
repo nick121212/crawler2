@@ -103,30 +103,19 @@ module.exports = ()=> {
                 // }
 
                 let queryString = newURL.query();
-                if(newURL.query()){
-                    console.log(newURL.query());
-                }
 
                 // 只留下需要的querystring
                 if (this.allowQueryParams && this.allowQueryParams.length && queryString) {
                     let noSparse = qs.parse(queryString);
-                    let params = [];
 
+                    newURL.query("");
                     _.each(this.allowQueryParams, (qp)=> {
-                        if(noSparse[qp]){
-                            params.push(`${qp}=${noSparse[qp]}`);
+                        if (noSparse[qp]) {
+                            newURL.addQuery(qp, noSparse[qp]);
                         }
                     });
-
-                    newURL.query(params.join("&"))
                 }
-
-                if (newURL.query()) {
-                    console.log(newURL.query());
-                }
-
             } catch (e) {
-                // Couldn't process the URL, since URIjs choked on it.
                 console.log(e.message);
                 return false;
             }
@@ -136,7 +125,7 @@ module.exports = ()=> {
                 protocol: newURL.protocol() || "http",
                 host: newURL.hostname(),
                 port: newURL.port() || 80,
-                path: newURL.resource(),
+                path: newURL.path(),
                 uriPath: newURL.path(),
                 query: newURL.query(),
                 depth: context.depth + 1
@@ -165,10 +154,12 @@ module.exports = ()=> {
             // }
 
             // Check the domain is valid before adding it to the queue
+
             if (this.domainValid(parsedURL.host)) {
                 return {
                     protocol: parsedURL.protocol,
                     host: parsedURL.host,
+                    query: parsedURL.query,
                     port: parsedURL.port,
                     path: parsedURL.path,
                     depth: parsedURL.depth
@@ -238,9 +229,7 @@ module.exports = ()=> {
                 host === this.host ||
                 // Or if we're ignoring WWW subdomains, and both domains,
                 // less www. are the same, return true.
-                this.ignoreWWWDomain &&
-                this.host.replace(/^www\./i, "") ===
-                host.replace(/^www\./i, "") ||
+                (this.ignoreWWWDomain && this.host.replace(/^www\./i, "") === host.replace(/^www\./i, "")) ||
                 // Or if the domain in question exists in the domain whitelist,
                 // return true.
                 domainInWhitelist(host) ||

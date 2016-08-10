@@ -10,8 +10,9 @@ module.exports = exports = (core) => {
     let config = new core.utils.builder("fangjiadp", "www.fangjiadp.com", []);
 
     config.setBaseInfo(1000, "phantom");
-    config.initDomain = "www.fangjiadp.com";
+    config.initDomain = "www.fangjiadp.com/shanghai/newhouse/index";
     config.allowQueryParams = ["pg"];
+    config.stripWWWDomain = false;
     config.stripQuerystring = false;
     config.proxySettings = {
         useProxy: false,
