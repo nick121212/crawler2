@@ -221,8 +221,6 @@ module.exports = (app, core)=> {
                             result.ch.reject(msg);
                             console.log(err);
                         });
-
-                        console.log(URL);
                     });
                 }, console.error);
             });
