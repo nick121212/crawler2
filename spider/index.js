@@ -31,6 +31,7 @@ module.exports = (app, core)=> {
             this.proxySettings = settings.proxySettings || {};
             this.initDomain = settings.initDomain || {};
             this.ignoreStatusCode = settings.ignoreStatusCode || [302, 400, 404, 500, "ENOTFOUND", "ECONNABORTED"];
+            this.limitMinLinks = settings.limitMinLinks || 0;
 
             this.queue = new app.spider.lib.queue(settings);
             this.queueStore = new app.spider.lib.queue_store_es(this.key);
@@ -39,7 +40,7 @@ module.exports = (app, core)=> {
 
             this.doInitHtmlDeal();
 
-            if(process.env.NODE_PIC){
+            if (process.env.NODE_PIC) {
                 this.doInitDownloadDeal();
             }
         }
@@ -78,10 +79,10 @@ module.exports = (app, core)=> {
         consumeQueue(msg, result) {
             let urls = [],
                 queueItem;
-            let next = (msg, reject = false) => {
+            let next = (msg, reject = false, interval = this.interval) => {
                 setTimeout(function () {
                     reject ? result.ch.reject(msg) : result.ch.ack(msg);
-                }, this.interval);
+                }, interval);
             };
 
             try {
@@ -98,8 +99,16 @@ module.exports = (app, core)=> {
                 // 请求页面
                 queueItem.url = decodeURIComponent(queueItem.url);
                 this.fetchQueueItem(queueItem).then((data) => {
+                    let discoverUrls = this.discover.discoverResources(data.responseBody, queueItem);
+
+                    if (discoverUrls.length < this.limitMinLinks) {
+                        let err = new Error("下载的页面不正确!");
+                        err.status = 601;
+                        throw err;
+                    }
+
                     // 发现并过滤页面中的urls
-                    this.discover.discoverResources(data.responseBody, queueItem).map((url) => {
+                    discoverUrls.map((url) => {
                         url = this.queue.queueURL(decodeURIComponent(url), queueItem);
                         url && urls.push(url);
                     }, this);
@@ -127,6 +136,9 @@ module.exports = (app, core)=> {
                     if (errors[queueItem.urlId] >= 200) {
                         delete errors[queueItem.urlId];
                         return this.queueStore.addCompleteQueueItem(queueItem, "", this.key, "error").then(next.bind(this, msg), next.bind(this, msg));
+                    }
+                    if (err.status === 601) {
+                        return next(msg, true, 1000 * 60 * 10);
                     }
                     next(msg, true);
                 });

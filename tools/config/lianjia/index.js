@@ -9,6 +9,7 @@ module.exports = exports = (core) => {
 
     config.setBaseInfo(5000, "phantom");
     config.initDomain = "sh.lianjia.com";
+    config.limitMinLinks = 50;
     config.proxySettings = {
         useProxy: false && process.env.ENV == "production",
         charset: "utf-8",
