@@ -2,6 +2,8 @@
  * Created by NICK on 16/8/10.
  */
 
+const fs = require("fs");
+const md5 = require("blueimp-md5");
 const request = require("superagent");
 const requestProxy = require("superagent-proxy")(request);
 
@@ -15,13 +17,10 @@ class Download {
             if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
                 req.proxy(`http://${settings.ipInfo.host}:${settings.ipInfo.port}`);
             }
-            req.pipe(stream)
+            req.pipe(fs.createWriteStream(`${__dirname}/images/${md5(uri.toString())}`))
                 .end((err, res) => {
                     if (err) {
                         return defer.reject(err);
-                    }
-                    if (!res.text || res.statusCode !== 200) {
-                        return defer.reject(new Error(`状态码(${res.statusCode})不正确。`));
                     }
                     defer.resolve();
                 });

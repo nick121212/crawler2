@@ -38,7 +38,10 @@ module.exports = (app, core)=> {
             this.deal = new app.spider.deal.index(settings, this.queueStore.addCompleteData.bind(this.queueStore), this.queueStore.rollbackCompleteData.bind(this.queueStore));
 
             this.doInitHtmlDeal();
-            this.doInitDownloadDeal();
+
+            if(process.env.NODE_PIC){
+                this.doInitDownloadDeal();
+            }
         }
 
         /**
@@ -204,7 +207,7 @@ module.exports = (app, core)=> {
             core.q.getQueue(`crawler.downloader.picture`, {durable: true}).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
-                    result.ch.bindQueue(result.q.queue, "amq.topic"),
+                    result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}`),
                     // 每次消费1条queue
                     result.ch.prefetch(1)
                 ]).then(() => {
