@@ -11,7 +11,8 @@ module.exports = (core) => {
             strictField: "name",
             test: false,
             download: [{
-                each: "layouts.url"
+                each: "layouts",
+                field: "url"
             }],
             area: {
                 none: {
@@ -20,7 +21,7 @@ module.exports = (core) => {
                         core.utils.data_builder.normal("name", [".comm-title h1"]),
                         // 户型
                         core.utils.data_builder.array("layouts", [".photo-list dd"], [], [
-                            core.utils.data_builder.normal("url", ["img"], [], { attr: ["src"] }),
+                            core.utils.data_builder.normal("url", ["img"], [], {attr: ["src"]}),
                             core.utils.data_builder.combine(core.utils.data_builder.normal("layout", [".title"], []), {
                                 formats: [{
                                     "str": [],

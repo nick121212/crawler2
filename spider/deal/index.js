@@ -1,8 +1,9 @@
 "use strict";
 
 let _ = require("lodash");
+let jpp = require("json-path-processor");
 
-module.exports = (app)=> {
+module.exports = (app, core)=> {
     class DealHtml {
         constructor(settings, saveFunc, rollbackFunc) {
             this.settings = settings;
@@ -34,15 +35,38 @@ module.exports = (app)=> {
         }
 
         /**
+         * 下载图片设置
+         * @param rule
+         * @param result
+         * @param ch
+         */
+        dealDownload(rule, result, ch) {
+            _.each(rule.download, (d)=> {
+                if (d.each) {
+                    _.map(jpp(result, d.each), (v)=> {
+                        v[d.field] && ch.publish("amq.topic", `crawler.downloader.picture`, new Buffer(v[d.field]), {persistent: true});
+                    });
+                } else {
+                    result[d.field] && ch.publish("amq.topic", `crawler.downloader.picture`, new Buffer(result[d.field]), {persistent: true});
+                }
+            });
+        }
+
+        /**
          * 检查状态，html解析完成后，判断数据是保存还是回滚
          * @param queueItem {Object}
          * @param results   {Object}
+         * @param ch {Object} queue的channel
          * @return {Array<promise>}
          */
-        checkStatus(queueItem, results) {
+        checkStatus(queueItem, results, ch) {
             let promises = [];
 
             let save = (queueItem, result, rule) => {
+                if (rule.download) {
+                    this.dealDownload(rule, result, ch);
+                }
+
                 if (rule.fieldKey && (result[rule.fieldKey] || queueItem[rule.fieldKey])) {
                     promises.push(this.saveFunc(queueItem, result, this.dealKey, rule.key, rule.fieldKey));
                 } else {
@@ -76,9 +100,10 @@ module.exports = (app)=> {
         /**
          * 消费一条消息,一条数据可能被多个规则匹配到，需要处理多次
          * @param queueItem {Object}
+         * @param ch {Object} queue的channel
          * @return {Promise}
          */
-        consumeQueue(queueItem) {
+        consumeQueue(queueItem, ch) {
             let rules = this.findRule(decodeURIComponent(queueItem.url)),
                 defer = Promise.defer(),
                 promises = [];
@@ -93,7 +118,7 @@ module.exports = (app)=> {
                     });
                     // 所有的处理完后，保存结果
                     Promise.all(promises).then((results) => {
-                        return Promise.all(this.checkStatus(queueItem, results));
+                        return Promise.all(this.checkStatus(queueItem, results, ch));
                     }).then(() => {
                         console.log(`deal complete ${queueItem.url} at ${new Date()}`);
                         defer.resolve();

@@ -38,6 +38,7 @@ module.exports = (app, core)=> {
             this.deal = new app.spider.deal.index(settings, this.queueStore.addCompleteData.bind(this.queueStore), this.queueStore.rollbackCompleteData.bind(this.queueStore));
 
             this.doInitHtmlDeal();
+            this.doInitDownloadDeal();
         }
 
         /**
@@ -46,12 +47,11 @@ module.exports = (app, core)=> {
          */
         fetchQueueItem(queueItem) {
             let defer = Promise.defer();
-            let URL = queueItem.protocol + "://" + queueItem.host + (queueItem.port !== 80 ? ":" + queueItem.port : "") + queueItem.path;
 
             try {
                 this.lastTime = Date.now();
                 // 开始下载页面
-                app.spider.download.index.start(this.downloader, uri(URL).normalize(), this.proxySettings || {}).then((result) => {
+                app.spider.download.index.start(this.downloader, uri(queueItem.url).normalize(), this.proxySettings || {}).then((result) => {
                     result.res && (queueItem.stateData = result.res.headers);
                     // 保存下载下来的页面
                     return this.queueStore.addCompleteQueueItem(queueItem, result.responseBody, this.key).then(res => defer.resolve(result), (err) => {
@@ -93,6 +93,7 @@ module.exports = (app, core)=> {
 
                 console.log(`start fetch ${queueItem.url} depth:${queueItem.depth} at ${new Date()}`);
                 // 请求页面
+                queueItem.url = decodeURIComponent(queueItem.url);
                 this.fetchQueueItem(queueItem).then((data) => {
                     // 发现并过滤页面中的urls
                     this.discover.discoverResources(data.responseBody, queueItem).map((url) => {
@@ -180,9 +181,8 @@ module.exports = (app, core)=> {
                         }
                         try {
                             if (queueItem) {
-                                this.deal.consumeQueue(queueItem).then(() => {
+                                this.deal.consumeQueue(queueItem, result.ch).then(() => {
                                     result.ch.ack(msg);
-                                    // result.ch.reject(msg);
                                 }, (err) => {
                                     console.log(err);
                                     result.ch.reject(msg);
@@ -192,6 +192,34 @@ module.exports = (app, core)=> {
                             console.log(e);
                             result.ch.reject(msg);
                         }
+                    });
+                }, console.error);
+            });
+        }
+
+        /**
+         * 初始化html处理部分的queue
+         */
+        doInitDownloadDeal() {
+            core.q.getQueue(`crawler.downloader.picture`, {durable: true}).then((result) => {
+                Promise.all([
+                    // 绑定queue到exchange
+                    result.ch.bindQueue(result.q.queue, "amq.topic"),
+                    // 每次消费1条queue
+                    result.ch.prefetch(1)
+                ]).then(() => {
+                    // 开始消费
+                    result.ch.consume(result.q.queue, (msg) => {
+                        let URL = msg.content.toString();
+
+                        app.spider.download.index.start("request", URL, this.proxySettings || {}).then(() => {
+                            result.ch.ack(msg);
+                        }).catch((err)=> {
+                            result.ch.reject(msg);
+                            console.log(err);
+                        });
+
+                        console.log(URL);
                     });
                 }, console.error);
             });

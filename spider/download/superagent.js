@@ -3,9 +3,6 @@ const requestProxy = require("superagent-proxy")(request);
 const superagent_charset = require("superagent-charset")(request);
 
 class Downloader {
-    constructor() {
-        this.key = "superagent";
-    }
     start(uri, settings = {}, ipInfo = {}) {
         let result = {};
         let defer = Promise.defer();

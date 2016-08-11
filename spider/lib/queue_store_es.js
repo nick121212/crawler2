@@ -77,6 +77,7 @@ module.exports = (app, core)=> {
             depth = depth || 1;
             protocol = protocol === "https" ? "https" : "http";
             url = protocol + "://" + host + (port !== 80 ? ":" + port : "") + path + (query ? ("?" + query) : "");
+            url = decodeURIComponent(url);
             queueItem = {
                 url: url,
                 urlId: md5(url),
@@ -146,8 +147,6 @@ module.exports = (app, core)=> {
             if (idField !== "randow") {
                 config.id = data[idField];
             }
-
-            console.log(config);
 
             core.elastic.index(config).then(() => {
                 defer.resolve(data);
@@ -375,6 +374,9 @@ module.exports = (app, core)=> {
 
         /**
          * 将数据回滚到待下载状态
+         * @param queueItem {Object}
+         * @param key {String}
+         * @return {Promise}
          */
         rollbackCompleteData(queueItem, key) {
             let defer = Promise.defer();
@@ -391,24 +393,6 @@ module.exports = (app, core)=> {
             }).then(()=> {
                 this.addQueueItemsToQueue(queueItem, key, 2).then(defer.resolve, defer.reject);
             }).catch(defer.reject);
-            // core.elastic.update({
-            //     index: this.esIndex,
-            //     type: this.esTypeUrls,
-            //     id: queueItem.urlId,
-            //     body: {
-            //         doc: {
-            //             fetched: false,
-            //             updatedAt: Date.now()
-            //         }
-            //     }
-            // }).then(() => {
-            //     queueItem.responseBody = "";
-            //     queueItem.fetched = false;
-            //     queueItem.createdAt = null;
-            //     queueItem.updatedAt = null;
-            //     queueItem.stateData = null;
-            //     this.addQueueItemsToQueue(queueItem, key, 2).then(defer.resolve, defer.reject);
-            // }).catch(defer.reject);
 
             return defer.promise;
         }

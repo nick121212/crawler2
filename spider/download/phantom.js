@@ -1,10 +1,6 @@
 const Horseman = require('node-horseman');
 
 class Downloader {
-    constructor() {
-        this.key = "phantom";
-    }
-
     start(uri, settings = {}, ipInfo = {}) {
         let horseman,
             defer = Promise.defer(),

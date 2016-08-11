@@ -11,7 +11,8 @@ module.exports = (core) => {
             strictField: "name",
             test: false,
             download: [{
-                each: "layouts.url"
+                each: "layouts",
+                field: "url"
             }],
             area: {
                 none: {
