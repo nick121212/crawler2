@@ -19,8 +19,6 @@ class Download {
             uri = URI(uri.toString());
             uri = uri.toString().replace(/\d+x\d+\D\.(?:jpg|png)/, "10000x10000m." + uri.suffix());
 
-            console.log(uri);
-
             req = request.get(uri.toString());
             if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
                 req.proxy(`http://${settings.ipInfo.host}:${settings.ipInfo.port}`);

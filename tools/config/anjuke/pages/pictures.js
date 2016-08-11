@@ -32,7 +32,7 @@ module.exports = (core) => {
             strict: true,
             strictField: "name",
             download: [{
-                each: "layouts",
+                each: "pictures",
                 field: "url"
             }],
             area: {
