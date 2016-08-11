@@ -1,0 +1,157 @@
+{
+  "template": "crawler.loupan",
+  "settings": {
+    "index.number_of_shards": 5,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "_default_": {
+      "_source": {
+        "enabled": true
+      },
+      "properties": {
+        "jobProgress": {
+          "type": "string"
+        },
+        "sellAddress": {
+          "type": "string"
+        },
+        "sellPhone": {
+          "type": "string"
+        },
+        "decorationStandard": {
+          "type": "string"
+        },
+        "deliveryTime": {
+          "type": "string"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "aliasName": {
+          "type": "string"
+        },
+        "province": {
+          "type": "string",
+          "index": "no"
+        },
+        "city": {
+          "type": "string",
+          "index": "no"
+        },
+        "area": {
+          "type": "string",
+          "index": "no"
+        },
+        "locationPlate": {
+          "type": "string",
+          "index": "no"
+        },
+        "street": {
+          "type": "string",
+          "index": "no"
+        },
+        "streetCode": {
+          "type": "long",
+          "index": "no"
+        },
+        "address": {
+          "type": "string"
+        },
+        "propertyType": {
+          "type": "string"
+        },
+        "propertyAge": {
+          "type": "string"
+        },
+        "developerName": {
+          "type": "string"
+        },
+        "investorName": {
+          "type": "string"
+        },
+        "propertyName": {
+          "type": "string"
+        },
+        "propertyFee": {
+          "type": "string"
+        },
+        "geoBaidu": {
+          "type": "geo_point"
+        },
+        "loopLine": {
+          "type": "string"
+        },
+        "promotionName": {
+          "type": "string"
+        },
+        "developmentNumber": {
+          "type": "string"
+        },
+        "buildingType": {
+          "type": "string"
+        },
+        "floorAmount": {
+          "type": "string"
+        },
+        "completionTime": {
+          "type": "string"
+        },
+        "greeningRate": {
+          "type": "string"
+        },
+        "volumeRate": {
+          "type": "string"
+        },
+        "letterRate": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "string"
+        },
+        "areaAmount": {
+          "type": "string"
+        },
+        "buildingAmount": {
+          "type": "string"
+        },
+        "roomAmount": {
+          "type": "string"
+        },
+        "parkingAmount": {
+          "type": "string"
+        },
+        "totalHouseholds": {
+          "type": "string"
+        },
+        "parkingRate": {
+          "type": "string"
+        },
+        "buildingFloorAmount": {
+          "type": "string"
+        },
+        "averagePrice": {
+          "type": "float"
+        },
+        "averagePriceUnit": {
+          "type": "string"
+        },
+        "pictures": {
+          "type": "nested"
+        },
+        "introduction": {
+          "type": "string"
+        },
+        "serialNumber": {
+          "type": "string"
+        },
+        "buildingTime": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

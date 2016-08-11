@@ -1,0 +1,107 @@
+{
+    "template": "crawler.room",
+    "settings": {
+        "index.number_of_shards": 5,
+        "number_of_replicas": 1
+    },
+    "mappings": {
+        "_default_": {
+            "_source": {
+                "enabled": true
+            },
+            "properties": {
+                "feature": {
+                    "type": "string"
+                },
+                "position": {
+                    "type": "string"
+                },
+                "floorRoomScale": {
+                    "type": "string"
+                },
+                "monthPayment": {
+                    "type": "string"
+                },
+                "prevTrade": {
+                    "type": "string"
+                },
+                "yearLimit": {
+                    "type": "string"
+                },
+                "area": {
+                    "type": "string"
+                },
+                "sellingPoint": {
+                    "type": "string"
+                },
+                "toward": {
+                    "type": "string"
+                },
+                "completionTime": {
+                    "type": "string"
+                },
+                "onSellTime": {
+                    "type": "string"
+                },
+                "downPayment": {
+                    "type": "string"
+                },
+                "floorScale": {
+                    "type": "string"
+                },
+                "decoration": {
+                    "type": "string"
+                },
+                "floor": {
+                    "type": "string"
+                },
+                "propertyType": {
+                    "type": "string"
+                },
+                "layout": {
+                    "type": "string"
+                },
+                "roomNumber": {
+                    "type": "string"
+                },
+                "buildingName": {
+                    "type": "string"
+                },
+                "hasDegree": {
+                    "type": "string"
+                },
+                "sumPrice": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "string"
+                },
+                "community": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "pictures": {
+                    "type": "nested",
+                    "properties": {
+                        "title": {
+                            "type": "string",
+                            "index": "analyzed"
+                        },
+                        "url": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        }
+                    }
+                },
+                "no": {
+                    "type": "string"
+                },
+                "introduction": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -12,17 +12,16 @@ class Download {
         let defer = Promise.defer();
 
         try {
+            let stream = fs.createWriteStream(`${__dirname}/../../images/${md5(uri.toString())}`);
             let req = request.get(uri.toString());
 
             if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
                 req.proxy(`http://${settings.ipInfo.host}:${settings.ipInfo.port}`);
             }
-            req.pipe(fs.createWriteStream(`${__dirname}/images/${md5(uri.toString())}`))
-                .end((err, res) => {
-                    if (err) {
-                        return defer.reject(err);
-                    }
-                    defer.resolve();
+            req.pipe(stream)
+                .on('error', defer.reject)
+                .end(() => {
+                    defer.reject();
                 });
         } catch (err) {
             defer.reject(err);
