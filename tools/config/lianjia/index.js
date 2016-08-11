@@ -7,7 +7,7 @@ let _ = require("lodash");
 module.exports = exports = (core) => {
     let config = new core.utils.builder("lianjia", "www.lianjia.com", ["sh.lianjia.com", "sh.fang.lianjia.com"]);
 
-    config.setBaseInfo(1000, "phantom");
+    config.setBaseInfo(5000, "phantom");
     config.initDomain = "sh.lianjia.com";
     config.proxySettings = {
         useProxy: false && process.env.ENV == "production",
