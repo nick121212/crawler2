@@ -10,7 +10,7 @@ module.exports = (core) => {
         "shanghai.anjuke.com"
     ]);
 
-    config.setBaseInfo(1000, "superagent");
+    config.setBaseInfo(3000, "superagent");
     config.initDomain = "shanghai.anjuke.com";
     config.proxySettings = {
         useProxy: false && process.env.ENV == "production",
