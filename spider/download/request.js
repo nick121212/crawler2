@@ -3,10 +3,24 @@
  */
 
 const fs = require("fs");
+const path = require("path");
 const URI = require("urijs");
 const md5 = require("blueimp-md5");
 const request = require("superagent");
 const requestProxy = require("superagent-proxy")(request);
+
+//递归创建目录 同步方法
+function mkdirsSync(dirname, mode){
+    console.log(dirname);
+    if(fs.existsSync(dirname)){
+        return true;
+    }else{
+        if(mkdirsSync(path.dirname(dirname), mode)){
+            fs.mkdirSync(dirname, mode);
+            return true;
+        }
+    }
+}
 
 class Download {
     start(uri, settings = {}, ipInfo = {}) {
@@ -17,7 +31,9 @@ class Download {
             let stream = null;
             let req;
 
-            if (fs.existsSync(`/data/images/${urlId}`)) {
+            settings.images = settings.images || "/data/images";
+            mkdirsSync(settings.images, null);
+            if (fs.existsSync(`${settings.images}${urlId}`)) {
                 defer.resolve();
             } else {
                 stream = fs.createWriteStream(`${__dirname}/../../images/${urlId}`);
