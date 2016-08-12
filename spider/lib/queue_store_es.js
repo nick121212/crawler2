@@ -140,7 +140,7 @@ module.exports = (app, core)=> {
                 index: index || this.esIndex,
                 type: type,
                 body: data,
-                consistency: "one"
+                // consistency: "one"
             };
 
             if (idField !== "randow") {
