@@ -84,8 +84,8 @@
       <file leaf-file-name="request.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spider/download/request.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="40" column="79" selection-start-line="40" selection-start-column="79" selection-end-line="40" selection-end-column="79" />
+            <state relative-caret-position="123">
+              <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
               <folding>
                 <element signature="e#0#38#0" expanded="false" />
               </folding>
@@ -489,7 +489,7 @@
       <workItem from="1470796696441" duration="9425000" />
       <workItem from="1470812050393" duration="44000" />
       <workItem from="1470812122084" duration="3036000" />
-      <workItem from="1470815475898" duration="35047000" />
+      <workItem from="1470815475898" duration="35113000" />
     </task>
     <task id="LOCAL-00001" summary="房点评">
       <created>1470816265050</created>
@@ -680,11 +680,18 @@
       <option name="project" value="LOCAL" />
       <updated>1470988210452</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="房点评">
+      <created>1470988402023</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1470988402023</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47552000" />
+    <option name="totallyTimeSpent" value="47618000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -1159,8 +1166,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/spider/download/request.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="40" column="79" selection-start-line="40" selection-start-column="79" selection-end-line="40" selection-end-column="79" />
+        <state relative-caret-position="123">
+          <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
           <folding>
             <element signature="e#0#38#0" expanded="false" />
           </folding>

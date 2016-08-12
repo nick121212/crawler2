@@ -11,7 +11,6 @@ const requestProxy = require("superagent-proxy")(request);
 
 //递归创建目录 同步方法
 function mkdirsSync(dirname, mode) {
-    console.log(dirname);
     if (fs.existsSync(dirname)) {
         return true;
     } else {
@@ -30,8 +29,6 @@ class Download {
             let urlId = md5(uri.toString());
             let stream = null;
             let req;
-
-            console.log(settings.images);
 
             settings.images = settings.images || "/data/images";
             mkdirsSync(settings.images);
