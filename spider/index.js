@@ -290,6 +290,7 @@ module.exports = (app, core)=> {
 
             // 如果有这个变量,则不开启下载
             if (process.env.NODE_FETCH) {
+                this.isStart = true;
                 return;
             }
 
