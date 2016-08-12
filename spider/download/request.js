@@ -17,7 +17,7 @@ class Download {
             let stream = null;
             let req;
 
-            if (fs.existsSync(`${__dirname}/../../images/${urlId}`)) {
+            if (fs.existsSync(`/data/images/${urlId}`)) {
                 defer.resolve();
             } else {
                 stream = fs.createWriteStream(`${__dirname}/../../images/${urlId}`);
