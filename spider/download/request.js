@@ -10,12 +10,12 @@ const request = require("superagent");
 const requestProxy = require("superagent-proxy")(request);
 
 //递归创建目录 同步方法
-function mkdirsSync(dirname, mode){
+function mkdirsSync(dirname, mode) {
     console.log(dirname);
-    if(fs.existsSync(dirname)){
+    if (fs.existsSync(dirname)) {
         return true;
-    }else{
-        if(mkdirsSync(path.dirname(dirname), mode)){
+    } else {
+        if (mkdirsSync(path.dirname(dirname), mode)) {
             fs.mkdirSync(dirname, mode);
             return true;
         }
@@ -34,11 +34,11 @@ class Download {
             console.log(settings.images);
 
             settings.images = settings.images || "/data/images";
-            mkdirsSync(settings.images, null);
-            if (fs.existsSync(`${settings.images}${urlId}`)) {
+            mkdirsSync(settings.images);
+            if (fs.existsSync(path.join(settings.images, urlId))) {
                 defer.resolve();
             } else {
-                stream = fs.createWriteStream(`${__dirname}/../../images/${urlId}`);
+                stream = fs.createWriteStream(path.join(settings.images, urlId));
                 uri = URI(uri.toString());
                 uri = uri.toString().replace(/\d+x\d+\D\.(?:jpg|png)/, "10000x10000m." + uri.suffix());
 
