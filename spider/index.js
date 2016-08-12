@@ -288,6 +288,11 @@ module.exports = (app, core)=> {
                 throw new Error("host不能为空！");
             }
 
+            // 如果有这个变量,则不开启下载
+            if (process.env.NODE_FETCH) {
+                return;
+            }
+
             let robotsTxtUrl = uri(this.host).pathname("/robots.txt");
             let next = () => {
                 setTimeout(function () {
