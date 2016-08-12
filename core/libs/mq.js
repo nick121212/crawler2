@@ -4,17 +4,22 @@ let connPromise = require('amqplib').connect(connectionStr);
 let rpc = require('amqp-rpc').factory({
     url: connectionStr
 });
+let _ = require("lodash");
 
 function getQueue(qName, qSetting) {
     let defer = Promise.defer(),
         ch = null;
 
     connPromise.then(conn => {
-            return conn.createChannel();
-        }).then((c) => {
-            ch = c;
-            return ch.assertQueue(qName, qSetting);
-        })
+        return conn.createChannel();
+    }).then((c) => {
+        ch = c;
+        return ch.assertQueue(qName, _.extend({
+            durable: true,
+            exclusive: true,
+            autoDelete: false
+        }, qSetting));
+    })
         .then(q => {
             defer.resolve({
                 ch: ch,
@@ -29,8 +34,8 @@ function deleteQueue(qName, qSetting) {
     let defer = Promise.defer();
 
     connPromise.then((conn) => {
-            return conn.createChannel();
-        })
+        return conn.createChannel();
+    })
         .then((c) => {
             return c.deleteQueue(qName, qSetting || {});
         })

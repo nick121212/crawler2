@@ -154,7 +154,11 @@ module.exports = (app, core)=> {
             let defer = Promise.defer();
 
             // 建立请求队列
-            core.q.getQueue(`crawler.urls.${this.key}`, {durable: true}).then((result) => {
+            core.q.getQueue(`crawler.urls.${this.key}`, {
+                durable: true,
+                exclusive: true,
+                autoDelete: false
+            }).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
                     result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}.urls`),
