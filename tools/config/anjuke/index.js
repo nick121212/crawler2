@@ -20,7 +20,7 @@ module.exports = (core) => {
             host: "10.25.254.241",
             port: "8081"
         },
-        images: "/data/images/anjuke"
+        images: "/data/images/anjuke/"
     };
     // 白名单
 

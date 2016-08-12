@@ -31,6 +31,8 @@ class Download {
             let stream = null;
             let req;
 
+            console.log(settings.images);
+
             settings.images = settings.images || "/data/images";
             mkdirsSync(settings.images, null);
             if (fs.existsSync(`${settings.images}${urlId}`)) {
