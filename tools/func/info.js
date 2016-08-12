@@ -12,6 +12,8 @@ module.exports = exports = (core) => {
                 console.log(counts);
             }
             defer.resolve();
+        }, null, {
+            autoDeleteCallback: true
         });
 
         return defer.promise;

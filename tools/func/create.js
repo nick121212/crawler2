@@ -14,6 +14,8 @@ module.exports = exports = (core) => {
                 console.log(stat);
             }
             defer.resolve();
+        }, null, {
+            autoDeleteCallback: true
         });
 
         return defer.promise;

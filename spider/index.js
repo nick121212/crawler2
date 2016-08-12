@@ -110,7 +110,15 @@ module.exports = (app, core)=> {
                     // 发现并过滤页面中的urls
                     discoverUrls.map((url) => {
                         url = this.queue.queueURL(decodeURIComponent(url), queueItem);
-                        url && urls.push(url);
+                        if (url) {
+                            let rules = this.deal.findRule(decodeURIComponent(url.url));
+
+                            if (rules.length) {
+                                url.priority = rules[0].priority || 1;
+                                url.rule = rules[0];
+                            }
+                            urls.push(url);
+                        }
                     }, this);
                     // 把搜索到的地址存入到es
                     if (urls.length) {

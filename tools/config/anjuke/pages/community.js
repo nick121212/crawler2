@@ -6,6 +6,7 @@ module.exports = (core) => {
                 "regexp": /\/community\/view\/\d+/.toString(),
                 scope: "i"
             }],
+            priority: 2,
             fieldKey: "name",
             test: false,
             strict: true,
@@ -43,8 +44,8 @@ module.exports = (core) => {
                         // 均价
                         core.utils.data_builder.combine(core.utils.data_builder.normal("averagePrice", [".mag-b2 em"]), {
                             formats: [
-                                { str: [] },
-                                { num: [] }
+                                {str: []},
+                                {num: []}
                             ]
                         }),
                         // 均价单位

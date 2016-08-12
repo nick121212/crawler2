@@ -23,12 +23,16 @@ module.exports = exports = (core) => {
             core.q.rpc.call(`${name}.${options.pid}`, params, (err, stat) => {
                 onResponse(err, stat);
                 defer.resolve();
+            }, null, {
+                autoDeleteCallback: true
             });
         } else {
             core.q.rpc.callBroadcast(options.hostname ? `${name}.${options.hostname}` : name, params, {
                 ttl: options.interval || 1000,
                 onResponse: onResponse,
                 onComplete: defer.resolve
+            }, null, {
+                autoDeleteCallback: true
             });
         }
 

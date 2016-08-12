@@ -20,6 +20,8 @@ module.exports = exports = (core) => {
             core.q.rpc.call(`kill.${pid}`, params, (err, stat) => {
                 onResponse(err, stat);
                 defer.resolve();
+            }, null, {
+                autoDeleteCallback: true
             });
         } else {
             console.log("d");
@@ -29,6 +31,8 @@ module.exports = exports = (core) => {
                 onComplete: function() {
                     defer.resolve();
                 }
+            }, null, {
+                autoDeleteCallback: true
             });
         }
 

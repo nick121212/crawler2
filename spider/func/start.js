@@ -50,12 +50,15 @@ module.exports = exports = (app, core) => {
     };
 
     core.q.rpc.onBroadcast('start', start, null, {
-        autoDelete: true
+        autoDelete: true,
+        durable:false
     });
     core.q.rpc.onBroadcast(`start.${ipInfo.hostname}`, start, null, {
-        autoDelete: true
+        autoDelete: true,
+        durable:false
     });
     core.q.rpc.on(`start.${process.pid}`, start, null, {
-        autoDelete: true
+        autoDelete: true,
+        durable:false
     });
 };

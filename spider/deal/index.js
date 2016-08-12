@@ -44,10 +44,10 @@ module.exports = (app, core)=> {
             _.each(rule.download, (d)=> {
                 if (d.each) {
                     _.map(jpp(result, d.each), (v)=> {
-                        v[d.field] && ch.publish("amq.topic", `crawler.downloader.picture`, new Buffer(v[d.field]), {persistent: true});
+                        v[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(v[d.field]), {persistent: true});
                     });
                 } else {
-                    result[d.field] && ch.publish("amq.topic", `crawler.downloader.picture`, new Buffer(result[d.field]), {persistent: true});
+                    result[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(result[d.field]), {persistent: true});
                 }
             });
         }

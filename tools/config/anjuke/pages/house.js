@@ -6,6 +6,7 @@ module.exports = (core) => {
                 "regexp": /\/loupan\/canshu-\d+.html/.toString(),
                 scope: "i"
             }],
+            priority: 3,
             fieldKey: "name",
             test: false,
             strict: true,

@@ -10,6 +10,7 @@ module.exports = (core) => {
                 regexp: /\/loupan\/huxing-\d+(\.html)/.toString(),
                 scope: "i"
             }],
+            priority: 3,
             fieldKey: "random",
             test: false,
             strict: true,

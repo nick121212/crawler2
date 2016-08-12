@@ -17,7 +17,7 @@ module.exports = exports = (app, core) => {
             core.q.deleteQueue(`crawler.deals.${params.key}`),
             core.q.deleteQueue(`crawler.urls.${params.key}`),
         ]).then(() => {
-            cb();
+            cb(null, "删除成功");
         }, cb);
     }, null, {
         autoDelete: true

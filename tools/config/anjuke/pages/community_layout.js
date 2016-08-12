@@ -6,6 +6,7 @@ module.exports = (core) => {
                 regexp: /\/community\/photos\/model\/\d+/.toString(),
                 scope: "i"
             }],
+            priority: 2,
             fieldKey: "random",
             strict: true,
             strictField: "name",
