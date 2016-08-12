@@ -1,4 +1,4 @@
-let ip = "192.168.222.185";
+let ip = "192.168.222.198";
 
 module.exports = exports = {
     elastic: {
