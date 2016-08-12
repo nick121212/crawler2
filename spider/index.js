@@ -80,6 +80,10 @@ module.exports = (app, core)=> {
             let urls = [],
                 queueItem;
             let next = (msg, reject = false, interval = this.interval) => {
+                if (interval == this.interval) {
+                    interval = ~~(Math.random() * (interval - 500) + 500);
+                }
+
                 setTimeout(function () {
                     reject ? result.ch.reject(msg) : result.ch.ack(msg);
                 }, interval);
