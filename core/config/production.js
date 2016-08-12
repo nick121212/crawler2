@@ -1,10 +1,13 @@
+
+let ip = "114.55.146.215";
+
 module.exports = exports = {
     elastic: {
-        host: "114.55.146.215",
+        host: ip,
         port: 9200
     },
     q: {
-        host: "114.55.146.215",
+        host: ip,
         user: "nick",
         password: "111111"
     },
