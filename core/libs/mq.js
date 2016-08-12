@@ -16,7 +16,7 @@ function getQueue(qName, qSetting) {
         ch = c;
         return ch.assertQueue(qName, _.extend({
             durable: true,
-            exclusive: true,
+            exclusive: false,
             autoDelete: false
         }, qSetting));
     })
