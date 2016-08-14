@@ -1,6 +1,7 @@
 let config = require("../config");
 let connectionStr = `amqp://${config.q.user}:${config.q.password}@${config.q.host}`;
-let amqplib = require('amqplib')
+let amqplib = require('amqplib');
+let connPromise = amqplib.connect(connectionStr);
 
 let rpc = require('amqp-rpc').factory({
     url: connectionStr
@@ -10,9 +11,10 @@ let _ = require("lodash");
 let channel = null;
 
 function getQueue(qName, qSetting) {
-    let defer = Promise.defer(), ch = null;
+    let defer = Promise.defer(),
+        ch = null;
 
-    amqplib.connect(connectionStr).then(conn => {
+    connPromise.then(conn => {
         return conn.createChannel();
     }).then((c) => {
         ch = c;
@@ -32,16 +34,17 @@ function getQueue(qName, qSetting) {
 }
 
 function deleteQueue(qName, qSetting) {
-    let defer = Promise.defer(), ch = null;
+    let defer = Promise.defer(),
+        ch = null;
 
     amqplib.connect(connectionStr).then((conn) => {
-        return conn.createChannel();
-    })
+            return conn.createChannel();
+        })
         .then((c) => {
             ch = c;
             return ch.deleteQueue(qName, qSetting || {});
         })
-        .then(()=> {
+        .then(() => {
             return ch.close();
         })
         .then(defer.resolve)
@@ -50,7 +53,7 @@ function deleteQueue(qName, qSetting) {
     return defer.promise;
 }
 
-process.on("exit", ()=> {
+process.on("exit", () => {
     console.log("exit");
 });
 
