@@ -35,9 +35,11 @@ function getQueue(qName, qSetting) {
 
 function deleteQueue(qName, qSetting) {
     let defer = Promise.defer(),
-        ch = null;
+        ch = null,
+        connec;
 
     amqplib.connect(connectionStr).then((conn) => {
+            connec = conn;
             return conn.createChannel();
         })
         .then((c) => {
@@ -46,6 +48,9 @@ function deleteQueue(qName, qSetting) {
         })
         .then(() => {
             return ch.close();
+        })
+        .then(() => {
+            connec.close();
         })
         .then(defer.resolve)
         .catch(defer.reject);
