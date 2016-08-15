@@ -47,7 +47,7 @@ module.exports = exports = (core) => {
             _.forEach(stats, (stat) => {
                 if (stat.downloader.isStart) {
                     // 如果时间大于3分钟，则杀掉进程。
-                    console.log(Date.now() - stat.downloader.lastTime);
+                    console.log(Date.now() - ~~stat.downloader.lastTime > (3 * 60 * 1000));
 
                     if (Date.now() - ~~stat.downloader.lastTime > (3 * 60 * 1000)) {
                         console.log("start kill" + stat.pid);
