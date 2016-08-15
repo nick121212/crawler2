@@ -20,3 +20,4 @@ consign({verbose: false})
     .into(app, core);
 
 console.log(`pid:${process.pid};ENV:${process.env.ENV}`);
+// console.log(navigator.userAgent);

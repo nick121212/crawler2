@@ -133,6 +133,10 @@ module.exports = (app, core)=> {
                     delete errors[queueItem.urlId];
                     next(msg);
                 }).catch((err) => {
+                    // 可能是页面封锁机制,爬取到的页面是错误的
+                    if (err.status === 601) {
+                        return next(msg, true, 1000 * 60 * 5);
+                    }
                     // 错误重试机制
                     if (!errors[queueItem.urlId]) {
                         errors[queueItem.urlId] = 0;
@@ -148,9 +152,6 @@ module.exports = (app, core)=> {
                     if (errors[queueItem.urlId] >= 200) {
                         delete errors[queueItem.urlId];
                         return this.queueStore.addCompleteQueueItem(queueItem, "", this.key, "error").then(next.bind(this, msg), next.bind(this, msg));
-                    }
-                    if (err.status === 601) {
-                        return next(msg, true, 1000 * 60 * 10);
                     }
                     next(msg, true);
                 });
