@@ -12,16 +12,16 @@ module.exports = exports = (app, core) => {
                 uptime: process.uptime(),
                 ip: ipInfo.ips["IPv4"] || ipInfo.ips["IPv6"],
                 downloader: core.downloadInstance || {},
+                now: Date.now(),
                 counter: counter++
             });
-        }
-        else {
-            cb(null, {counter: counter++});
+        } else {
+            cb(null, { counter: counter++ });
         }
     };
     let name = "getWorkerStat";
 
-    core.q.rpc.onBroadcast(name, workerStat, null, {autoDelete: true});
-    core.q.rpc.onBroadcast(`${name}.${ipInfo.hostname}`, workerStat, null, {autoDelete: true});
-    core.q.rpc.on(`${name}.${process.pid}`, workerStat, null, {autoDelete: true});
+    core.q.rpc.onBroadcast(name, workerStat, null, { autoDelete: true });
+    core.q.rpc.onBroadcast(`${name}.${ipInfo.hostname}`, workerStat, null, { autoDelete: true });
+    core.q.rpc.on(`${name}.${process.pid}`, workerStat, null, { autoDelete: true });
 };
