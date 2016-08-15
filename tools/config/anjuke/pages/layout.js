@@ -15,10 +15,10 @@ module.exports = (core) => {
             test: false,
             strict: true,
             strictField: "name",
-            download: [{
-                each: "layouts",
-                field: "url"
-            }],
+            // download: [{
+            //     each: "layouts",
+            //     field: "url"
+            // }],
             area: {
                 none: {
                     data: [

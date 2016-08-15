@@ -32,10 +32,10 @@ module.exports = (core) => {
             strict: true,
             strictField: "name",
             priority: 1,
-            download: [{
-                each: "pictures",
-                field: "url"
-            }],
+            // download: [{
+            //     each: "pictures",
+            //     field: "url"
+            // }],
             area: {
                 none: {
                     data: [
@@ -43,7 +43,7 @@ module.exports = (core) => {
                         core.utils.data_builder.normal("name", [".lp-info .lp-tit h1"]),
                         // 图片列表
                         core.utils.data_builder.array("pictures", [".xiangce-list li"], [], [
-                            core.utils.data_builder.normal("url", ["img"], [], {attr: ["imglazyload-src"]}),
+                            core.utils.data_builder.normal("url", ["img"], [], { attr: ["imglazyload-src"] }),
                             core.utils.data_builder.normal("title", [".album-des"]),
                             core.utils.data_builder.normal("date", [".album-time"]),
                         ])

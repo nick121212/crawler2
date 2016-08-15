@@ -10,10 +10,12 @@ module.exports = exports = (core) => {
     config.setBaseInfo(5000, "phantom");
     config.initDomain = "sh.lianjia.com";
     config.limitMinLinks = 50;
+    config.stripWWWDomain = false;
     config.proxySettings = {
         useProxy: false && process.env.ENV == "production",
         charset: "utf-8",
         timeout: 5000,
+        ua: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36",
         // wait: 1000,
         ipInfo: {
             host: "10.25.254.241",

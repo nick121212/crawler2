@@ -11,10 +11,10 @@ module.exports = (core) => {
             strict: true,
             strictField: "name",
             test: false,
-            download: [{
-                each: "layouts",
-                field: "url"
-            }],
+            // download: [{
+            //     each: "layouts",
+            //     field: "url"
+            // }],
             area: {
                 none: {
                     data: [
@@ -22,8 +22,8 @@ module.exports = (core) => {
                         core.utils.data_builder.normal("name", [".comm-title h1"]),
                         // 户型
                         core.utils.data_builder.array("layouts", [".photos .photo2"], [], [
-                            core.utils.data_builder.normal("url", ["img"], [], {attr: ["src"]}),
-                            core.utils.data_builder.normal("title", ["img"], [], {attr: ["alt"]}),
+                            core.utils.data_builder.normal("url", ["img"], [], { attr: ["src"] }),
+                            core.utils.data_builder.normal("title", ["img"], [], { attr: ["alt"] }),
                         ])
                     ]
                 }
