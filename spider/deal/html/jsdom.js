@@ -11,8 +11,10 @@ module.exports = (app)=> {
         load(queueItem, $) {
             let defer = Promise.defer();
 
+
             !$ && jsdom.env({
-                html: queueItem.responseBody,
+                html: queueItem.responseBody.replace(/iframe/g, "iframe1"),
+                parsingMode: "html",
                 src: [jquery],
                 done: function (err, window) {
                     if (err) {
