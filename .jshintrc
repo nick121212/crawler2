@@ -1,0 +1,22 @@
+{
+    "freeze": true,
+    "indent": true,
+    "noarg": true,
+    "undef": true,
+    "strict": true,
+    "unused": true,
+    "maxcomplexity": false,
+    "asi": true,
+    "curly": true,
+    "camelcase": true,
+    "funcscope": true,
+    "boss": true,
+    "lastsemic": true,
+    "devel": true,
+    "jquery": true,
+    "module": true,
+    "node": true,
+    "phantom": true,
+    "typed": true,
+    "esversion": 6
+}
