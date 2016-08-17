@@ -223,24 +223,25 @@ module.exports = (app, core) => {
 
                 return esBulkBody;
             }).then((esBulkBody) => {
-                let newQueueItems = [];
-
                 if (!esBulkBody.length) {
                     return defer.resolve();
                 }
-
                 // 新建数据,并添加到queue
                 return core.elastic.bulk({
                     body: esBulkBody
-                }).then((response) => {
-                    _.each(response.items, (createResult) => {
-                        createResult = createResult.create;
-                        (createResult.status === 201) && queueItems[createResult._id] && newQueueItems.push(queueItems[createResult._id]);
-                    });
-                    if (newQueueItems.length) {
-                        return this.addQueueItemsToQueue(newQueueItems, key).then(defer.resolve, defer.reject);
-                    }
                 });
+            }).then((response) => {
+                let newQueueItems = [];
+
+                _.each(response.items, (createResult) => {
+                    createResult = createResult.create;
+                    (createResult.status === 201) && queueItems[createResult._id] && newQueueItems.push(queueItems[createResult._id]);
+                });
+                if (newQueueItems.length) {
+                    return this.addQueueItemsToQueue(newQueueItems, key); //.then(defer.resolve, defer.reject);
+                }
+            }).then(() => {
+                defer.resolve();
             }).catch(defer.reject);
 
             return defer.promise;
