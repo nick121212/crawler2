@@ -54,10 +54,12 @@ module.exports = (app, core) => {
 
             try {
                 this.lastTime = Date.now();
-                // 开始下载页面
+                // 开始下载页面"
+                console.log("start download as " + new Date());
                 app.spider.download.index.start(this.downloader, uri(queueItem.url).normalize(), this.proxySettings || {}).then((result) => {
                     result.res && (queueItem.stateData = result.res.headers);
                     // 保存下载下来的页面
+                    console.log("start save as " + new Date());
                     return this.queueStore.addCompleteQueueItem(queueItem, result.responseBody, this.key).then(res => defer.resolve(result), (err) => {
                         err.status = null;
                         defer.reject(err);
@@ -105,6 +107,7 @@ module.exports = (app, core) => {
                 this.fetchQueueItem(queueItem).then((data) => {
                     let discoverUrls = this.discover.discoverResources(data.responseBody, queueItem);
 
+                    console.log("start discover as " + new Date());
                     if (discoverUrls.length < this.limitMinLinks) {
                         let err = new Error("下载的页面不正确!");
                         err.status = 601;
