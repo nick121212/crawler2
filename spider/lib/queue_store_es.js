@@ -187,7 +187,6 @@ module.exports = (app, core) => {
                 });
             });
 
-            console.log("start mget urls");
             // 处理数据,先判断queueUrl中是否存在,存在则不添加到queue
             // 判断urls中是否存在,如果存在,则判断数据是否已经fetched,如果没有则加到queue里
             core.elastic.mget({
@@ -230,7 +229,6 @@ module.exports = (app, core) => {
                     return defer.resolve();
                 }
 
-                console.log("start bulk urls");
                 // 新建数据,并添加到queue
                 return core.elastic.bulk({
                     body: esBulkBody
@@ -240,8 +238,7 @@ module.exports = (app, core) => {
                         (createResult.status === 201) && queueItems[createResult._id] && newQueueItems.push(queueItems[createResult._id]);
                     });
                     if (newQueueItems.length) {
-                        console.log("start pull urls to queue");
-                        this.addQueueItemsToQueue(newQueueItems, key).then(defer.resolve, defer.reject);
+                        return this.addQueueItemsToQueue(newQueueItems, key).then(defer.resolve, defer.reject);
                     }
                 });
             }).catch(defer.reject);

@@ -55,11 +55,9 @@ module.exports = (app, core) => {
             try {
                 this.lastTime = Date.now();
                 // 开始下载页面"
-                console.log("start download as " + new Date());
                 app.spider.download.index.start(this.downloader, uri(queueItem.url).normalize(), this.proxySettings || {}).then((result) => {
                     result.res && (queueItem.stateData = result.res.headers);
                     // 保存下载下来的页面
-                    console.log("start save as " + new Date());
                     return this.queueStore.addCompleteQueueItem(queueItem, result.responseBody, this.key).then(res => defer.resolve(result), (err) => {
                         err.status = null;
                         defer.reject(err);
@@ -113,7 +111,6 @@ module.exports = (app, core) => {
                         err.status = 601;
                         throw err;
                     }
-                    console.log("start discover at " + new Date());
                     // 发现并过滤页面中的urls
                     discoverUrls.map((url) => {
                         url = this.queue.queueURL(decodeURIComponent(url), queueItem);
@@ -128,14 +125,12 @@ module.exports = (app, core) => {
                         }
                     }, this);
                     // 把搜索到的地址存入到es
-                    console.log(urls.length + "start saveUrl at " + new Date());
                     if (urls.length) {
                         return this.queueStore.addUrlsToEsUrls(urls, this.key);
                     } else {
                         console.log("no ips");
                     }
                 }).then(() => {
-                    console.log("start delete errcode");
                     delete errors[queueItem.urlId];
                     next(msg);
                 }).catch((err) => {
