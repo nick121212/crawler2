@@ -3,7 +3,7 @@
 let EventEmitter = require("events").EventEmitter;
 let uri = require("urijs");
 
-module.exports = (app)=> {
+module.exports = (app) => {
     // 正则，用来匹配页面中的地址
     let discoverRegex = [
         /\s(?:href|src)\s?=\s?(["']).*?\1/ig,
@@ -24,7 +24,7 @@ module.exports = (app)=> {
         // Find srcset links
         (string) => {
             var result = /\ssrcset\s*=\s*(["'])(.*)\1/.exec(string);
-            return Array.isArray(result) ? String(result[2]).split(",").map(function (string) {
+            return Array.isArray(result) ? String(result[2]).split(",").map(function(string) {
                 return string.replace(/\s?\w*$/, "").trim();
             }) : "";
         },
@@ -128,7 +128,7 @@ module.exports = (app)=> {
          * @returns boolean
          */
         extendSupported(suffix) {
-            return !suffixs.some(function (value) {
+            return !suffixs.some(function(value) {
                 return value === suffix.toLowerCase();
             });
         }
@@ -142,7 +142,7 @@ module.exports = (app)=> {
             let result;
             let check = (list) => {
                 let res =
-                    list.some(function (value) {
+                    list.some(function(value) {
                         if (value.constructor === RegExp) {
                             return value.test(path);
                         } else if (value.constructor === Function) {
@@ -178,10 +178,14 @@ module.exports = (app)=> {
                 .reduce((list, URL) => {
                     // Ensure URL is whole and complete
                     try {
-                        URL = uri(URL)
-                            .absoluteTo(queueItem.url || "")
+                        URL = uri(decodeURIComponent(URL))
+                            .absoluteTo(queueItem.url)
                             .normalize();
                     } catch (e) {
+                        // console.log(e.message);
+                        URL = null;
+                    }
+                    if (!URL) {
                         return list;
                     }
                     // url是否为空
@@ -209,7 +213,7 @@ module.exports = (app)=> {
                         return list;
                     }
                     // url是否已经存在列表中
-                    if (list.reduce(function (prev, current) {
+                    if (list.reduce(function(prev, current) {
                             return prev || current === URL.toString();
                         }, false)) {
                         return list;
@@ -260,7 +264,7 @@ module.exports = (app)=> {
             return this.maxDepth === 0 ||
                 queueItem.depth <= this.maxDepth ||
                 whitelistedDepth <= this.maxDepth &&
-                whitelistedMimeTypes.some(function (mimeCheck) {
+                whitelistedMimeTypes.some(function(mimeCheck) {
                     return mimeCheck.test(queueItem.stateData.contentType);
                 });
         }
