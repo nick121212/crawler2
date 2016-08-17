@@ -3,7 +3,7 @@
 const _ = require("lodash");
 const md5 = require("blueimp-md5");
 
-module.exports = (app, core)=> {
+module.exports = (app, core) => {
     /**
      * 数据存储在es里面
      * queue队列存储在rabbitmq里面
@@ -187,6 +187,7 @@ module.exports = (app, core)=> {
                 });
             });
 
+            console.log("start mget urls");
             // 处理数据,先判断queueUrl中是否存在,存在则不添加到queue
             // 判断urls中是否存在,如果存在,则判断数据是否已经fetched,如果没有则加到queue里
             core.elastic.mget({
@@ -222,13 +223,14 @@ module.exports = (app, core)=> {
                 }
 
                 return esBulkBody;
-            }, defer.reject).then((esBulkBody) => {
+            }).then((esBulkBody) => {
                 let newQueueItems = [];
 
                 if (!esBulkBody.length) {
                     return defer.resolve();
                 }
 
+                console.log("start bulk urls");
                 // 新建数据,并添加到queue
                 core.elastic.bulk({
                     body: esBulkBody
@@ -237,9 +239,12 @@ module.exports = (app, core)=> {
                         createResult = createResult.create;
                         (createResult.status === 201) && queueItems[createResult._id] && newQueueItems.push(queueItems[createResult._id]);
                     });
-                    newQueueItems.length && this.addQueueItemsToQueue(newQueueItems, key).then(defer.resolve, defer.reject);
-                }, defer.reject);
-            });
+                    if (newQueueItems.length) {
+                        console.log("start pull urls to queue");
+                        this.addQueueItemsToQueue(newQueueItems, key).then(defer.resolve, defer.reject);
+                    }
+                });
+            }).catch(defer.reject);
 
             return defer.promise;
         }
@@ -388,11 +393,11 @@ module.exports = (app, core)=> {
             core.elastic.bulk({
                 body: [
 
-                    {delete: {_index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId}},
-                    {index: {_index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId}},
+                    { delete: { _index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId } },
+                    { index: { _index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId } },
                     saveQueueItem
                 ]
-            }).then(()=> {
+            }).then(() => {
                 this.addQueueItemsToQueue(queueItem, key, 2).then(defer.resolve, defer.reject);
             }).catch(defer.reject);
 
