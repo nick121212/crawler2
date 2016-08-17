@@ -105,17 +105,18 @@ module.exports = (app, core) => {
                 // 请求页面
                 queueItem.url = decodeURIComponent(queueItem.url);
                 this.fetchQueueItem(queueItem).then((data) => {
-                    let discoverUrls = this.discover.discoverResources(data.responseBody, queueItem);
+                    let discoverUrls = this.discover.discoverResources(data.responseBody, queueItem) || [];
 
-                    console.log("start discover as " + new Date());
+
                     if (discoverUrls.length < this.limitMinLinks) {
                         let err = new Error("下载的页面不正确!");
                         err.status = 601;
                         throw err;
                     }
-
+                    console.log("start discover at " + new Date());
                     // 发现并过滤页面中的urls
                     discoverUrls.map((url) => {
+                        console.log("start queueUrl at " + new Date());
                         url = this.queue.queueURL(decodeURIComponent(url), queueItem);
                         if (url) {
                             let rules = this.deal.findRule(decodeURIComponent(url.url));
