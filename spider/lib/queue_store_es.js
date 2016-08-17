@@ -238,7 +238,7 @@ module.exports = (app, core) => {
                     (createResult.status === 201) && queueItems[createResult._id] && newQueueItems.push(queueItems[createResult._id]);
                 });
                 if (newQueueItems.length) {
-                    return this.addQueueItemsToQueue(newQueueItems, key); //.then(defer.resolve, defer.reject);
+                    return this.addQueueItemsToQueue(newQueueItems, key);
                 }
             }).then(() => {
                 defer.resolve();
