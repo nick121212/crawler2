@@ -1,4 +1,4 @@
-module.exports = (app)=> {
+module.exports = (app) => {
     class Strategy extends app.spider.deal.deal.abase {
         /**
          * 构造函数
@@ -14,7 +14,7 @@ module.exports = (app)=> {
          */
         doDeal(queueItem, data, results, $, index) {
             let promise = app.spider.deal.html.index.getOne(data.htmlStrategy).doDeal(queueItem, data, $, index).then((res) => {
-                if (res.result !== res.data.match) {
+                if (!res.result || res.result.indexOf(res.data.match) < 0) {
                     res = null;
                 } else {
                     res.result = results;

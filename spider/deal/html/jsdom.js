@@ -3,7 +3,7 @@ let _ = require("lodash");
 let fs = require("fs");
 let jquery = fs.readFileSync(`${__dirname}/../../../jquery.js`, "utf-8");
 
-module.exports = (app)=> {
+module.exports = (app) => {
     class CheerDealStrategy {
         /**
          * @param queueItem {Object} 数据
@@ -16,7 +16,7 @@ module.exports = (app)=> {
                 html: queueItem.responseBody.replace(/iframe/g, "iframe1"),
                 parsingMode: "html",
                 src: [jquery],
-                done: function (err, window) {
+                done: function(err, window) {
                     if (err) {
                         return defer.reject(err);
                     }
@@ -41,16 +41,18 @@ module.exports = (app)=> {
         doDeal(queueItem, data, $, index) {
             let defer = Promise.defer();
             let $sel, result, len = 0;
+            let $noSelcSel;
 
             // 载入当前的cheerio根节点
             this.load(queueItem, $).then(($) => {
                 // 如果存在index，则获取索引节点
-                if (typeof index === "number") {
+                if (typeof index === "number" && $.size() > index) {
                     $sel = $.eq(index);
                 }
                 try {
+                    $noSelcSel = $sel || $;
                     // 查找当前的dom
-                    $sel = this.doFindSelector($sel || $, data.selector);
+                    $sel = this.doFindSelector($noSelcSel, data.selector);
                     $sel && (len = $sel.length);
 
                     if (len && data.methodInfo) {
@@ -60,8 +62,9 @@ module.exports = (app)=> {
 
                     defer.resolve({
                         result: result,
-                        data: _.extend({}, data),
+                        data: _.cloneDeep(data),
                         $cur: $sel,
+                        $noSelcSel: $noSelcSel,
                         $parent: $,
                         len: len,
                         index: index
@@ -81,8 +84,7 @@ module.exports = (app)=> {
             _.each(selector, (sel) => {
                 try {
                     $sel.find(sel).remove();
-                } catch (e) {
-                }
+                } catch (e) {}
             });
 
             return $sel;
@@ -97,6 +99,9 @@ module.exports = (app)=> {
         doFindSelector($, selector) {
             let $sel = $;
 
+            if (!selector) {
+                selector = [];
+            }
             if (!_.isArray(selector)) {
                 typeof selector === "string" && (selector = [selector]);
             }

@@ -1,6 +1,6 @@
 let _ = require("lodash");
 
-module.exports = (app)=> {
+module.exports = (app) => {
 
     class DealStrategy {
         getOne(key) {
@@ -67,7 +67,7 @@ module.exports = (app)=> {
                 promises.push(this.getOne(d.dealStrategy).doDeal(queueItem, area));
             }, this);
             Promise.all(promises).then((results) => {
-                defer.resolve(_.keyBy(results, function (res) {
+                defer.resolve(_.keyBy(results, function(res) {
                     if (res && res.data) {
                         return res.data.key;
                     }
@@ -92,7 +92,7 @@ module.exports = (app)=> {
                 let promises = [];
 
                 _.forEach(results, (result) => {
-                    result && result.data && result.data.data && (promises = promises.concat(this.getPromises(queueItem, result.data.data, result.result, result.$)));
+                    result && result.data && result.data.data && (promises = promises.concat(this.getPromises(queueItem, result.data.data, result.result, result.$cur)));
                 });
 
                 return promises.length ? Promise.all(promises).then(check, defer.reject) : defer.resolve({
@@ -103,7 +103,7 @@ module.exports = (app)=> {
             // 处理区域
             this.doDealAreas(queueItem, rule.area).then((results) => {
                 _.forEach(rule.area, (area) => {
-                    promiseAll = promiseAll.concat(this.getPromises(queueItem, area.data, dataResults, results[area.key] ? results[area.key].$ : null));
+                    promiseAll = promiseAll.concat(this.getPromises(queueItem, area.data, dataResults, results[area.key] ? results[area.key].$cur : null));
                 });
 
                 return Promise.all(promiseAll).then(check);

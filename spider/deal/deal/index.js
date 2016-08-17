@@ -4,7 +4,7 @@ let _ = require("lodash");
  * 处理html文本策越
  */
 
-module.exports = (app)=> {
+module.exports = (app) => {
     class TypeStrategy extends app.spider.deal.deal.abase {
         /**
          * 构造函数

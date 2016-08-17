@@ -1,6 +1,6 @@
 let _ = require("lodash");
 
-module.exports = (app)=> {
+module.exports = (app) => {
 
     class Base {
         constructor() {
@@ -20,6 +20,7 @@ module.exports = (app)=> {
             let promises = [];
             let strategy = null;
 
+            data = data.concat([]);
             _.each(data, (d) => {
                 strategy = this.deals[d.dealStrategy] || this.deals.normal;
                 promises.push(strategy.doDeal.call(this, queueItem, d, curResults, $, index));

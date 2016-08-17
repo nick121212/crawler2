@@ -6,7 +6,7 @@ let consign = require('consign');
 let core = require("../core");
 var program = require('commander');
 
-consign({verbose: false})
+consign({ verbose: false })
     .include('utils')
     .include('config/anjuke/pages')
     .include('config/lianjia/pages')
@@ -16,6 +16,7 @@ consign({verbose: false})
     .include('config/iwjw/pages')
     .include('config/fangdd/pages')
     .include('config/qiongyou/pages')
+    .include('config/fangtianxia/pages')
     .include('config/fangjiadp/pages')
     .include('config')
     .include('func')
