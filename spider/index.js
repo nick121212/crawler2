@@ -129,12 +129,14 @@ module.exports = (app, core) => {
                         }
                     }, this);
                     // 把搜索到的地址存入到es
+                    console.log(urls.length + "start saveUrl at " + new Date());
                     if (urls.length) {
                         return this.queueStore.addUrlsToEsUrls(urls, this.key);
                     } else {
                         console.log("no ips");
                     }
                 }).then(() => {
+                    console.log("start delete errcode");
                     delete errors[queueItem.urlId];
                     next(msg);
                 }).catch((err) => {
