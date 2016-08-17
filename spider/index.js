@@ -4,7 +4,7 @@ let uri = require("urijs");
 let _ = require("lodash");
 let robotsTxtParser = require("robots-parser");
 
-module.exports = (app, core)=> {
+module.exports = (app, core) => {
     const errors = {};
 
     class Crawler {
@@ -84,7 +84,7 @@ module.exports = (app, core)=> {
                     interval = ~~(Math.random() * (interval - 500) + 500);
                 }
 
-                setTimeout(function () {
+                setTimeout(function() {
                     reject ? result.ch.reject(msg) : result.ch.ack(msg);
                 }, interval);
             };
@@ -127,8 +127,9 @@ module.exports = (app, core)=> {
                     // 把搜索到的地址存入到es
                     if (urls.length) {
                         return this.queueStore.addUrlsToEsUrls(urls, this.key);
+                    } else {
+                        console.log("no ips");
                     }
-                    return null;
                 }).then(() => {
                     delete errors[queueItem.urlId];
                     next(msg);
@@ -192,7 +193,7 @@ module.exports = (app, core)=> {
          * 初始化html处理部分的queue
          */
         doInitHtmlDeal() {
-            core.q.getQueue(`crawler.deals.${this.key}`, {durable: true}).then((result) => {
+            core.q.getQueue(`crawler.deals.${this.key}`, { durable: true }).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
                     result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}.bodys`),
@@ -229,7 +230,7 @@ module.exports = (app, core)=> {
          * 初始化html处理部分的queue
          */
         doInitDownloadDeal() {
-            core.q.getQueue(`crawler.downloader.picture`, {durable: true}).then((result) => {
+            core.q.getQueue(`crawler.downloader.picture`, { durable: true }).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
                     result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}`),
@@ -242,7 +243,7 @@ module.exports = (app, core)=> {
 
                         app.spider.download.index.start("request", URL, this.proxySettings || {}).then(() => {
                             result.ch.ack(msg);
-                        }).catch((err)=> {
+                        }).catch((err) => {
                             result.ch.reject(msg);
                             console.log(err);
                         });
@@ -297,7 +298,7 @@ module.exports = (app, core)=> {
 
             let robotsTxtUrl = uri(this.host).pathname("/robots.txt");
             let next = () => {
-                setTimeout(function () {
+                setTimeout(function() {
                     this.queueStore.addUrlsToEsUrls([{
                         protocol: this.initialProtocol,
                         host: this.initDomain || this.host,
