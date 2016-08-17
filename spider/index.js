@@ -116,7 +116,6 @@ module.exports = (app, core) => {
                     console.log("start discover at " + new Date());
                     // 发现并过滤页面中的urls
                     discoverUrls.map((url) => {
-                        console.log("start queueUrl at " + new Date());
                         url = this.queue.queueURL(decodeURIComponent(url), queueItem);
                         if (url) {
                             let rules = this.deal.findRule(decodeURIComponent(url.url));
