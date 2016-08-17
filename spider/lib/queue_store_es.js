@@ -232,7 +232,7 @@ module.exports = (app, core) => {
 
                 console.log("start bulk urls");
                 // 新建数据,并添加到queue
-                core.elastic.bulk({
+                return core.elastic.bulk({
                     body: esBulkBody
                 }).then((response) => {
                     _.each(response.items, (createResult) => {
