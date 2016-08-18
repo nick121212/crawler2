@@ -32,10 +32,10 @@ module.exports = (core) => {
             strict: true,
             strictField: "name",
             priority: 1,
-            // download: [{
-            //     each: "pictures",
-            //     field: "url"
-            // }],
+            download: [{
+                each: "pictures",
+                field: "url"
+            }],
             area: {
                 none: {
                     data: [
