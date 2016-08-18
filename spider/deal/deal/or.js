@@ -1,6 +1,6 @@
 let _ = require("lodash");
 
-module.exports = (app)=>{
+module.exports = (app) => {
     class Strategy extends app.spider.deal.deal.abase {
         /**
          * 构造函数
@@ -15,7 +15,6 @@ module.exports = (app)=>{
          * @returns Promise
          */
         doDeal(queueItem, data, results, $, index) {
-            let defer = Promise.defer();
             let promises = this.doDealData(queueItem, data.data.concat([]), results, $, index);
 
             return Promise.all(promises).then((cases) => {
@@ -27,13 +26,9 @@ module.exports = (app)=>{
                         return false;
                     }
                 });
-                defer.resolve(rtnResults);
             }).catch((err) => {
                 console.log(err);
-                defer.reject(err);
             });
-
-            return defer.promise;
         }
     }
 

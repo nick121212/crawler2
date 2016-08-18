@@ -7,3 +7,5 @@
     ENV=production node . export excel -i crawler.rooms -t all -f room.txt -F community,layout,sumArea,sumPrice,price,floor,decoration,toward,downPayment,monthPayment,sellingPoint,address,plate,completeTime,propertyAge,no,floorScale,prevTrade,type,yearLimit,isOnly,ift
 ##导出经纪人
     ENV=production node . export excel -i crawler.brokers -t all -f brokers.txt -F phone1,avatar,company,store,introduce,name,sax,features,Career
+##导出二手房
+    ENV=production node . export excel -i crawler.room -t all -f rooms.txt -F sellingPoint,community,layout,sumArea,floor,decoration,toward,downPayment,monthPayment,price,sumPrice,address,plate,completingTime,lift,floorScale,propertyAge,propertyType,prevTrade,type,yearLimit,isOnly

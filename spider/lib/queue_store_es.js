@@ -299,7 +299,6 @@ module.exports = (app, core) => {
                     if (!isError) {
                         return this.addCompleteQueueItemsToQueue(queueItem, responseBody, key);
                     }
-                    return null;
                 }, defer.reject).then(defer.resolve, defer.reject);
             }, defer.reject);
 

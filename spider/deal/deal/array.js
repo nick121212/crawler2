@@ -1,7 +1,7 @@
 let _ = require("lodash");
 let jpp = require("json-path-processor");
 
-module.exports = (app)=> {
+module.exports = (app) => {
     class Strategy extends app.spider.deal.deal.abase {
         /**
          * 构造函数
@@ -24,9 +24,10 @@ module.exports = (app)=> {
             let defer = Promise.defer();
             let jData = jpp(results);
             let path = "";
+            let idx = _.isUndefined(data.dataIndex) ? index : data.dataIndex;
 
-            if (typeof index === "number" && _.isArray(results)) {
-                path = `${index}`;
+            if (typeof idx === "number" && _.isArray(results)) {
+                path = `${idx}`;
             }
             if (data.key) {
                 path.length && (path += ".");

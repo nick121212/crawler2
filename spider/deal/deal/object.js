@@ -1,7 +1,7 @@
 let _ = require("lodash");
 let jpp = require("json-path-processor");
 
-module.exports = (app)=> {
+module.exports = (app) => {
     class Strategy extends app.spider.deal.deal.abase {
         /**
          * 构造函数
@@ -19,9 +19,10 @@ module.exports = (app)=> {
             let promise = app.spider.deal.html.index.getOne(data.htmlStrategy).doDeal(queueItem, data, $, index).then((res) => {
                 let jData = jpp(results);
                 let path = "";
+                let idx = _.isUndefined(res.data.dataIndex) ? res.index : res.data.dataIndex;
 
-                if (typeof res.index === "number" && _.isArray(results)) {
-                    path = `${res.index}`;
+                if (typeof idx === "number" && _.isArray(results)) {
+                    path = `${idx}`;
                 }
 
                 if (path) {

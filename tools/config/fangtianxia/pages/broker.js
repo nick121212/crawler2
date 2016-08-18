@@ -18,7 +18,9 @@ module.exports = (core) => {
                             core.utils.data_builder.normal("avatar", [".pic a img"], [], { attr: ["src"] }),
                             core.utils.data_builder.normal("zhuanjia", [".pic .zhuanjia"], [], { size: [] }),
                             core.utils.data_builder.normal("name", [".house dl dt p.housetitle a:eq(0)"]),
-
+                            core.utils.data_builder.array("techang", [".techang span"], [], [
+                                core.utils.data_builder.normal("")
+                            ]),
                             core.utils.data_builder.switchs([".house dl dt p"], [], [
                                 core.utils.data_builder.cases("", [], "所属公司", [
                                     core.utils.data_builder.normal("company", ["span"], [])
@@ -36,11 +38,6 @@ module.exports = (core) => {
                                 ]),
                                 core.utils.data_builder.cases("", [], "专家楼盘", [
                                     core.utils.data_builder.array("communities", ["a"], [], [
-                                        core.utils.data_builder.normal("")
-                                    ])
-                                ]),
-                                core.utils.data_builder.cases("p", [], "职业特长", [
-                                    core.utils.data_builder.array("techang", ["span"], [], [
                                         core.utils.data_builder.normal("")
                                     ])
                                 ]),
