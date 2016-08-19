@@ -169,6 +169,7 @@ module.exports = (app, core) => {
                     this.lastError = err.message;
                     // 可能是页面封锁机制,爬取到的页面是错误的
                     if (err.status === 601) {
+                        // 重启更换ip服务
                         if (process.env.NODE_CHIPS) {
                             core.q.rpc.call("chips", {});
                         }
