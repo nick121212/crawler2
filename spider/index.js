@@ -175,7 +175,7 @@ module.exports = (app, core) => {
                                 console.log("更换ip成功调用");
                             });
                         }
-                        return next(msg, true, 1000 * 60 * (process.env.NODE_CHIPS ? 3000 : (~~this.proxySettings.errorInterval || 5)));
+                        return next(msg, true, 1000 * 60 * (process.env.NODE_CHIPS ? 0.3 : (~~this.proxySettings.errorInterval || 5)));
                     }
                     // 错误重试机制
                     if (!errors[queueItem.urlId]) {
