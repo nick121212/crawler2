@@ -6,6 +6,12 @@ let robotsTxtParser = require("robots-parser");
 
 module.exports = (app, core) => {
     const errors = {};
+    const errPage = () => {
+        let err = new Error("下载的页面不正确!");
+        err.status = 601;
+
+        return err;
+    };
 
     class Crawler {
         /**
@@ -57,6 +63,32 @@ module.exports = (app, core) => {
                 // 开始下载页面"
                 app.spider.download.index.start(this.downloader, uri(queueItem.url).normalize(), this.proxySettings || {}).then((result) => {
                     result.res && (queueItem.stateData = result.res.headers);
+                    if (result.res && result.res.status !== 200) {
+                        let err = new Error(result.res.statusText);
+                        err.status = result.res.status;
+                        throw err;
+                    }
+
+                    return result;
+                }).then((result) => {
+                    let defer = Promise.defer();
+                    // 检测下下载的页面是否有error
+                    if (this.deal.pages.error) {
+                        app.spider.deal.deal.index.doDeal(result, this.deal.pages.error).then((res) => {
+                            let isError = false;
+                            _.forEach(res.result, (val) => {
+                                if (val) {
+                                    isError = true;
+                                    return false;
+                                }
+                            });
+                            isError ? defer.reject(errPage()) : defer.resolve(result);
+                        }, defer.reject);
+                    } else {
+                        defer.resolve(result);
+                    }
+                    return defer.promise;
+                }).then((result) => {
                     // 保存下载下来的页面
                     return this.queueStore.addCompleteQueueItem(queueItem, result.responseBody, this.key).then(res => defer.resolve(result), (err) => {
                         err.status = null;
@@ -88,12 +120,6 @@ module.exports = (app, core) => {
                     reject ? result.ch.reject(msg) : result.ch.ack(msg);
                 }, interval);
             };
-            let errPage = () => {
-                let err = new Error("下载的页面不正确!");
-                err.status = 601;
-
-                return err;
-            };
 
             try {
                 queueItem = JSON.parse(msg.content.toString());
@@ -110,28 +136,10 @@ module.exports = (app, core) => {
                 queueItem.url = decodeURIComponent(queueItem.url);
                 // 开始下载页面
                 this.fetchQueueItem(queueItem).then((data) => {
-                    let defer = Promise.defer();
-                    // 检测下下载的页面是否有error
-                    if (this.deal.pages.error) {
-                        app.spider.deal.deal.index.doDeal(data, this.deal.pages.error).then((result) => {
-                            let isError = false;
-                            _.forEach(result.result, (val) => {
-                                if (val) {
-                                    isError = true;
-                                    return false;
-                                }
-                            });
-                            isError ? defer.reject(errPage()) : defer.resolve(data);
-                        }, defer.reject);
-                    } else {
-                        defer.resolve(data);
-                    }
-
-                    return defer.promise;
-                }).then((data) => {
                     // 处理页面中的链接
                     let discoverUrls = this.discover.discoverResources(data.responseBody, queueItem) || [];
 
+                    console.log(`处理链接数量${discoverUrls.length} at ${new Date()}`);
                     if (discoverUrls.length < this.limitMinLinks) {
                         throw errPage();
                     }
@@ -158,10 +166,13 @@ module.exports = (app, core) => {
                     next(msg);
                 }).catch((err) => {
                     console.error(err.status, err.code, err.message, errors[queueItem.urlId]);
-
+                    this.lastError = err.message;
                     // 可能是页面封锁机制,爬取到的页面是错误的
                     if (err.status === 601) {
-                        return next(msg, true, 1000 * 60 * 5);
+                        // if (process.env.NODE_CHIPS) {
+                        core.q.core.call("chips", {});
+                        // }
+                        return next(msg, true, 1000 * 60 * (~~this.proxySettings.errorInterval || 5));
                     }
                     // 错误重试机制
                     if (!errors[queueItem.urlId]) {
@@ -173,8 +184,6 @@ module.exports = (app, core) => {
                     } else {
                         errors[queueItem.urlId]++;
                     }
-
-                    this.lastError = err.message;
                     // 如果错误数超过200，丢弃掉消息
                     if (errors[queueItem.urlId] >= 200) {
                         delete errors[queueItem.urlId];

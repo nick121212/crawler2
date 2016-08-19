@@ -21,18 +21,18 @@ module.exports = exports = (core) => {
 
     let scheduleJob1 = () => {
         // 5s后重启nginx
-        setTimeout(()=> {
+        setTimeout(() => {
             "use strict";
-            shell.exec(commands.nginxRestart, {silent: false});
+            shell.exec(commands.nginxRestart, { silent: false });
             retryCount = 0;
             isRunning = false;
         }, 5000);
     };
-    let success = ()=> {
-        setTimeout(()=> {
+    let success = () => {
+        setTimeout(() => {
             "use strict";
-            shell.exec(commands.routeAdd + lastIp, {silent: false});
-            let route = shell.exec(commands.route, {silent: false}).stdout;
+            shell.exec(commands.routeAdd + lastIp, { silent: false });
+            let route = shell.exec(commands.route, { silent: false }).stdout;
 
             if (route.indexOf(lastIp) > 0) {
                 scheduleJob1();
@@ -40,7 +40,7 @@ module.exports = exports = (core) => {
                 if (retryCount > 5) {
                     return shell.exit(1);
                 }
-                setTimeout(function () {
+                setTimeout(function() {
                     isRunning = false;
                     scheduleJob();
                 }, 10);
@@ -55,13 +55,13 @@ module.exports = exports = (core) => {
         isRunning = true;
         console.log(new Date());
         // 关闭nginx
-        shell.exec(commands.nginxStop, {silent: false});
+        shell.exec(commands.nginxStop, { silent: false });
         // 关闭poff
-        shell.exec(commands.poff, {silent: false});
+        shell.exec(commands.poff, { silent: false });
         // 次数+1
         retryCount++;
         // 登陆vpn
-        pptpsetup = shell.exec(commands.pptpsetup, {silent: true, async: true});
+        pptpsetup = shell.exec(commands.pptpsetup, { silent: true, async: true });
         pptpsetup.stdout.on("data", (data) => {
             datas.push(data);
             if (/remote/i.test(datas.join(""))) {
@@ -81,7 +81,16 @@ module.exports = exports = (core) => {
         });
     };
     return (options) => {
-        schedule.scheduleJob(`*/${options.interval || 1} * * * *`, scheduleJob);
-        scheduleJob();
+        if (options.interval) {
+            schedule.scheduleJob(`*/${options.interval || 1} * * * *`, scheduleJob);
+            scheduleJob();
+        } else {
+            core.q.rpc.on('chips', function(params, cb) {
+                scheduleJob();
+                cb();
+            }, null, {
+                autoDelete: true
+            });
+        }
     };
 };

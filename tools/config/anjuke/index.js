@@ -10,15 +10,16 @@ module.exports = (core) => {
         "shanghai.anjuke.com"
     ]);
 
-    config.setBaseInfo(3000, "superagent");
+    config.setBaseInfo(2000, "superagent");
     config.initDomain = "shanghai.anjuke.com";
     config.proxySettings = {
-        useProxy: false && process.env.ENV == "production",
+        useProxy: true || process.env.ENV == "production",
         timeout: 10000,
         charset: "utf-8",
+        errorInterval: 2,
         ipInfo: {
-            host: "10.25.254.241",
-            port: "8081"
+            host: "114.55.146.215",
+            port: "8083"
         },
         images: "/data/images/anjuke/"
     };

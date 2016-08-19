@@ -43,6 +43,6 @@ class Downloader {
         return defer.promise;
     }
 }
-module.exports = (app)=> {
+module.exports = (app) => {
     return new Downloader();
 };

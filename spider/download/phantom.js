@@ -47,6 +47,6 @@ class Downloader {
     }
 }
 
-module.exports = (app)=> {
+module.exports = (app) => {
     return new Downloader();
 };
