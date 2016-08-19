@@ -2,10 +2,10 @@
  * Created by NICK on 16/8/2.
  */
 
-module.exports = exports = (core)=> {
+module.exports = exports = (core) => {
     "use strict";
 
-    let rtn = (t)=> {
+    let rtn = (t) => {
         let defer = Promise.defer();
         let total = 0;
         let results = [];
@@ -24,12 +24,12 @@ module.exports = exports = (core)=> {
                 return defer.reject(error);
             }
 
-            response.hits.hits.forEach(function (res) {
+            response.hits.hits.forEach(function(res) {
                 res = res._source;
                 let area = res.area.replace(/楼盘/g, "");
                 let price = res.price.match(/\d+/i);
 
-                console.log(res.price);
+                // console.log(res.price);
 
                 if (area === "浦东") {
                     area += "新区";
@@ -49,7 +49,7 @@ module.exports = exports = (core)=> {
                     averagePrice: price && price.length ? price[0] : 0,
                     source: "anjuke",
                     averagePriceUnit: res.averagePriceUnit,
-                    locationPlate: res.plate.replace(/楼盘/g, ""),
+                    plate: res.plate.replace(/楼盘/g, ""),
                     address: res.address,
                     developerName: res.developerName,
                     propertyCompany: res.propertyCompany,
@@ -82,8 +82,7 @@ module.exports = exports = (core)=> {
                     scroll: '30s'
                 }, getMoreUntilDone);
             } else {
-                core.db.models.loupan.bulkCreate(results,
-                    {ignoreDuplicates: true}).then(function (loupans) {
+                core.db.models.loupan.bulkCreate(results, { ignoreDuplicates: true }).then(function(loupans) {
                     console.log("done");
                     defer.resolve();
                 }, defer.reject);
@@ -93,7 +92,7 @@ module.exports = exports = (core)=> {
         return defer.promise;
     };
 
-    return ()=> {
+    return () => {
         return Promise.all([
             core.db.models.loupan.destroy({
                 where: {}
@@ -102,7 +101,7 @@ module.exports = exports = (core)=> {
                 return rtn(t).then(() => {
                     return t.commit().then(console.log, console.error);
                 }, (err) => {
-                    return t.rollback().then(()=>console.error(err), console.error);
+                    return t.rollback().then(() => console.error(err), console.error);
                 });
             }, console.error)
         ]);

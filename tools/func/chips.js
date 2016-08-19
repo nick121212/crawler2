@@ -87,7 +87,7 @@ module.exports = exports = (core) => {
         } else {
             core.q.rpc.on('chips', function(params, cb) {
                 scheduleJob();
-                cb();
+                cb(null, "重启成功");
             }, null, {
                 autoDelete: true
             });

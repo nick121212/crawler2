@@ -171,7 +171,9 @@ module.exports = (app, core) => {
                     if (err.status === 601) {
                         // 重启更换ip服务
                         if (process.env.NODE_CHIPS) {
-                            core.q.rpc.call("chips", {});
+                            core.q.rpc.call("chips", {}, () => {
+                                console.log("更换ip成功调用");
+                            });
                         }
                         return next(msg, true, 1000 * 60 * (~~this.proxySettings.errorInterval || 5));
                     }
@@ -185,6 +187,7 @@ module.exports = (app, core) => {
                     } else {
                         errors[queueItem.urlId]++;
                     }
+
                     // 如果错误数超过200，丢弃掉消息
                     if (errors[queueItem.urlId] >= 200) {
                         delete errors[queueItem.urlId];
