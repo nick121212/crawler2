@@ -85,6 +85,7 @@ module.exports = exports = (core) => {
             schedule.scheduleJob(`*/${options.interval || 1} * * * *`, scheduleJob);
             scheduleJob();
         } else {
+            console.log("chips");
             core.q.rpc.on('chips', function(params, cb) {
                 scheduleJob();
                 cb(null, "重启成功");
