@@ -90,9 +90,9 @@ module.exports = (app, core) => {
             };
             let errPage = () => {
                 let err = new Error("下载的页面不正确!");
-
                 err.status = 601;
-                throw err;
+
+                return err;
             };
 
             try {
@@ -114,12 +114,14 @@ module.exports = (app, core) => {
                     // 检测下下载的页面是否有error
                     if (this.deal.pages.error) {
                         app.spider.deal.deal.index.doDeal(data, this.deal.pages.error).then((result) => {
+                            let isError = false;
                             _.forEach(result.result, (val) => {
                                 if (val) {
-                                    return errPage();
+                                    isError = true;
+                                    return false;
                                 }
                             });
-                            defer.resolve(data);
+                            isError ? defer.reject(errPage()) : defer.resolve(data);
                         }, defer.reject);
                     } else {
                         defer.resolve(data);
@@ -131,7 +133,7 @@ module.exports = (app, core) => {
                     let discoverUrls = this.discover.discoverResources(data.responseBody, queueItem) || [];
 
                     if (discoverUrls.length < this.limitMinLinks) {
-                        return errPage();
+                        throw errPage();
                     }
                     // 发现并过滤页面中的urls
                     discoverUrls.map((url) => {
@@ -155,6 +157,8 @@ module.exports = (app, core) => {
                     this.lastError = "";
                     next(msg);
                 }).catch((err) => {
+                    console.error(err.status, err.code, err.message, errors[queueItem.urlId]);
+
                     // 可能是页面封锁机制,爬取到的页面是错误的
                     if (err.status === 601) {
                         return next(msg, true, 1000 * 60 * 5);
@@ -169,7 +173,6 @@ module.exports = (app, core) => {
                     } else {
                         errors[queueItem.urlId]++;
                     }
-                    console.error(err.status, err.code, err.message, errors[queueItem.urlId]);
 
                     this.lastError = err.message;
                     // 如果错误数超过200，丢弃掉消息
