@@ -37,7 +37,7 @@ module.exports = (app, core) => {
             this.queueStore = new app.spider.lib.queue_store_es(this.key);
             this.discover = new app.spider.lib.discover(settings, this.queue);
             this.deal = new app.spider.deal.index(settings, this.queueStore.addCompleteData.bind(this.queueStore), this.queueStore.rollbackCompleteData.bind(this.queueStore));
-
+            this.lastError = "";
             this.doInitHtmlDeal();
 
             if (process.env.NODE_PIC) {
@@ -88,6 +88,12 @@ module.exports = (app, core) => {
                     reject ? result.ch.reject(msg) : result.ch.ack(msg);
                 }, interval);
             };
+            let errPage = () => {
+                let err = new Error("下载的页面不正确!");
+
+                err.status = 601;
+                throw err;
+            };
 
             try {
                 queueItem = JSON.parse(msg.content.toString());
@@ -103,13 +109,27 @@ module.exports = (app, core) => {
                 // 请求页面
                 queueItem.url = decodeURIComponent(queueItem.url);
                 this.fetchQueueItem(queueItem).then((data) => {
+                    let defer = Promise.defer();
+
+                    if (this.deal.pages.error) {
+                        app.spider.deal.deal.index.doDeal(data, this.deal.pages.error).then((result) => {
+                            _.forEach(result.result, (val) => {
+                                if (val) {
+                                    return errPage();
+                                }
+                            });
+                            defer.resolve(data);
+                        }, defer.reject);
+                    } else {
+                        defer.resolve(data);
+                    }
+
+                    return defer.promise;
+                }).then((data) => {
                     let discoverUrls = this.discover.discoverResources(data.responseBody, queueItem) || [];
 
-
                     if (discoverUrls.length < this.limitMinLinks) {
-                        let err = new Error("下载的页面不正确!");
-                        err.status = 601;
-                        throw err;
+                        return errPage();
                     }
                     // 发现并过滤页面中的urls
                     discoverUrls.map((url) => {
@@ -127,11 +147,10 @@ module.exports = (app, core) => {
                     // 把搜索到的地址存入到es
                     if (urls.length) {
                         return this.queueStore.addUrlsToEsUrls(urls, this.key);
-                    } else {
-                        console.log("no ips");
                     }
                 }).then(() => {
                     delete errors[queueItem.urlId];
+                    this.lastError = "";
                     next(msg);
                 }).catch((err) => {
                     // 可能是页面封锁机制,爬取到的页面是错误的
@@ -149,6 +168,8 @@ module.exports = (app, core) => {
                         errors[queueItem.urlId]++;
                     }
                     console.error(err.status, err.code, err.message, errors[queueItem.urlId]);
+
+                    this.lastError = err.message;
                     // 如果错误数超过200，丢弃掉消息
                     if (errors[queueItem.urlId] >= 200) {
                         delete errors[queueItem.urlId];
@@ -156,7 +177,7 @@ module.exports = (app, core) => {
                     }
                     next(msg, true);
                 });
-            } catch (e) {
+            } catch (err) {
                 next(msg);
             }
         }

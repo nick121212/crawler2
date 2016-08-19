@@ -3,16 +3,14 @@
 let _ = require("lodash");
 let jpp = require("json-path-processor");
 
-module.exports = (app, core)=> {
+module.exports = (app, core) => {
     class DealHtml {
         constructor(settings, saveFunc, rollbackFunc) {
             this.settings = settings;
             this.pages = settings.pages;
             this.dealKey = settings.key || "";
-            this.saveFunc = saveFunc || function () {
-                };
-            this.rollbackFunc = rollbackFunc || function () {
-                };
+            this.saveFunc = saveFunc || function() {};
+            this.rollbackFunc = rollbackFunc || function() {};
 
             _.forEach(this.pages, (page) => {
                 page.rule = _.map(page.rule, (rule) => {
@@ -41,13 +39,13 @@ module.exports = (app, core)=> {
          * @param ch
          */
         dealDownload(rule, result, ch) {
-            _.each(rule.download, (d)=> {
+            _.each(rule.download, (d) => {
                 if (d.each) {
-                    _.map(jpp(result, d.each), (v)=> {
-                        v[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(v[d.field]), {persistent: true});
+                    _.map(jpp(result, d.each), (v) => {
+                        v[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(v[d.field]), { persistent: true });
                     });
                 } else {
-                    result[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(result[d.field]), {persistent: true});
+                    result[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(result[d.field]), { persistent: true });
                 }
             });
         }
