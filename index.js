@@ -8,7 +8,7 @@ const fs = require("fs");
 const path = require("path");
 const app = {};
 
-consign({verbose: false})
+consign({ verbose: false })
     .include("spider/utils")
     .include("spider/func")
     .include("spider/deal/data")
@@ -19,5 +19,6 @@ consign({verbose: false})
     .include("spider")
     .into(app, core);
 
+core.q.rpc.call("chips", {});
 console.log(`pid:${process.pid};ENV:${process.env.ENV}`);
 // console.log(navigator.userAgent);

@@ -169,9 +169,9 @@ module.exports = (app, core) => {
                     this.lastError = err.message;
                     // 可能是页面封锁机制,爬取到的页面是错误的
                     if (err.status === 601) {
-                        // if (process.env.NODE_CHIPS) {
-                        core.q.core.call("chips", {});
-                        // }
+                        if (process.env.NODE_CHIPS) {
+                            core.q.rpc.call("chips", {});
+                        }
                         return next(msg, true, 1000 * 60 * (~~this.proxySettings.errorInterval || 5));
                     }
                     // 错误重试机制
