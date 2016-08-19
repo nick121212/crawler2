@@ -83,7 +83,6 @@ module.exports = exports = (core) => {
     return (options) => {
         if (options.interval) {
             schedule.scheduleJob(`*/${options.interval || 1} * * * *`, scheduleJob);
-            scheduleJob();
         } else {
             console.log("chips");
             core.q.rpc.on('chips', function(params, cb) {
@@ -93,5 +92,6 @@ module.exports = exports = (core) => {
                 autoDelete: true
             });
         }
+        scheduleJob();
     };
 };
