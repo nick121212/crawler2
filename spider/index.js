@@ -108,9 +108,10 @@ module.exports = (app, core) => {
                 console.log(`start fetch ${queueItem.url} depth:${queueItem.depth} at ${new Date()}`);
                 // 请求页面
                 queueItem.url = decodeURIComponent(queueItem.url);
+                // 开始下载页面
                 this.fetchQueueItem(queueItem).then((data) => {
                     let defer = Promise.defer();
-
+                    // 检测下下载的页面是否有error
                     if (this.deal.pages.error) {
                         app.spider.deal.deal.index.doDeal(data, this.deal.pages.error).then((result) => {
                             _.forEach(result.result, (val) => {
@@ -126,6 +127,7 @@ module.exports = (app, core) => {
 
                     return defer.promise;
                 }).then((data) => {
+                    // 处理页面中的链接
                     let discoverUrls = this.discover.discoverResources(data.responseBody, queueItem) || [];
 
                     if (discoverUrls.length < this.limitMinLinks) {

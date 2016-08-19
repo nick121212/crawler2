@@ -16,7 +16,8 @@ module.exports = exports = (core) => {
         console.log('index\thostname\tip\tpid\tuptime\tcounter\thost\tlastFetchDate\tlastErrMessage');
         for (let worker in all_stats) {
             let s = all_stats[worker];
-            console.log(`${i++}\t${s.hostname}\t${s.ip}\t${s.pid}\t${s.uptime.toFixed(2)}s\t${s.counter}\t${s.downloader.host || ''}\t${  (s.downloader.now - s.downloader.lastTime ) || ''}\t${s.downloader.lastErrMessage || ''}`);
+
+            console.log(`${i++}\t${s.hostname}\t${s.ip}\t${s.pid}\t${s.uptime.toFixed(2)}s\t${s.counter}\t${s.downloader.host || ''}\t${  (s.now - s.downloader.lastTime ) || ''}\t${s.downloader.lastErrMessage || ''}`);
         }
         defer.resolve(all_stats);
     };
