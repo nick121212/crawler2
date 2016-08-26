@@ -4,8 +4,6 @@
 
 const core = require('./core');
 const consign = require("consign");
-const fs = require("fs");
-const path = require("path");
 const app = {};
 
 consign({ verbose: false })
@@ -21,4 +19,3 @@ consign({ verbose: false })
 
 core.q.rpc.call("chips", {});
 console.log(`pid:${process.pid};ENV:${process.env.ENV}`);
-// console.log(navigator.userAgent);

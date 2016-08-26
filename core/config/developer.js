@@ -1,4 +1,4 @@
-const ip = "192.168.222.152";
+const ip = "192.168.222.125";
 
 module.exports = exports = {
     elastic: {

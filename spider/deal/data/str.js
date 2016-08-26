@@ -1,6 +1,6 @@
 let _ = require("lodash");
 
-module.exports = (app)=> {
+module.exports = (app) => {
     /**
      * string值处理
      */
@@ -18,8 +18,8 @@ module.exports = (app)=> {
 
             result = result || "";
             result = result.replace(/\r\n/gi, '');
-            result = result.replace(/\t/gi, '');
-            result = result.replace(/\s+/g, '');
+            // result = result.replace(/\t/gi, '');
+            // result = result.replace(/\s+/g, '');
             result = _.trim(result);
 
             return result;

@@ -5,10 +5,10 @@
 let _ = require("lodash");
 
 module.exports = exports = (core) => {
-    let config = new core.utils.builder("zhongyuan", "sh.centanet.com", []);
+    let config = new core.utils.builder("zhongyuan", "sh.centanet.com", ["sh.centanet.com"]);
 
     config.setBaseInfo(1000, "phantom");
-    config.initDomain = "sh.centanet.com/ershoufang";
+    config.initDomain = "sh.centanet.com/xiaoqu/g1";
     config.proxySettings = {
         useProxy: false,
         charset: "utf-8",
@@ -16,7 +16,9 @@ module.exports = exports = (core) => {
         timeout: 5000
     };
     // 白名单
-    config.addWhitePath(/^\/ershoufang(?:\/\D+|\/.+\.html|)(?:|\/g\d+)\/?$/);
+    // config.addWhitePath(/^\/ershoufang(?:\/\D+|\/.+\.html|)(?:|\/g\d+)\/?$/);
+
+    config.addWhitePath(/^\/xiaoqu\/g\d+\/?$/);
 
     // -----------------页面配置------------------
     _.forEach(core.config.zhongyuan.pages, (page) => {
