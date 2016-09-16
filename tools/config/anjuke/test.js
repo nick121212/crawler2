@@ -35,7 +35,8 @@ let regexs = {
             "http://shanghai.anjuke.com/community/photos/model/13235",
             "http://shanghai.anjuke.com/community/photos2/b/8",
             "http://shanghai.anjuke.com/community/photos2/b/8W0QQpZ2",
-            "http://shanghai.anjuke.com/community/photos/model/8"
+            "http://shanghai.anjuke.com/community/photos/model/8",
+            "http://shanghai.anjuke.com/community/photos/model/83333333",
         ]
     },
     broker: {

@@ -23,8 +23,6 @@ module.exports = (core) => {
         },
         images: "/data/images/anjuke/"
     };
-    // 白名单
-
     // 楼盘列表、分页、相册,户型
     config.addWhitePath(/^\/loupan(?:\/?|\/(?:[a-z]*(?:\/p\d+\/?|\/?))|\/(?:canshu|huxing|xiangce|)-?\d+\/?(?:ybj|sjt|xgt|ght|ptt|wzt|)\.html)$/);
     // 匹配小区列表页，小区详情页,户型图页（只根据区域版块过滤）

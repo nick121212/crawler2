@@ -85,7 +85,9 @@ module.exports = (core) => {
                         // 停车位
                         core.utils.data_builder.normal("partingAmount", [".comm-r-detail dd:eq(5)"], []),
                         // 绿化率
-                        core.utils.data_builder.normal("greeningRate", [".comm-r-detail dd:eq(6)"])
+                        core.utils.data_builder.normal("greeningRate", [".comm-r-detail dd:eq(6)"]),
+                        // 简介
+                        core.utils.data_builder.normal("desc", ["#comm-description .desc-cont"])
                     ]
                 }
             },

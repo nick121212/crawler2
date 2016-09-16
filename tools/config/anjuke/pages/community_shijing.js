@@ -1,7 +1,7 @@
 module.exports = (core) => {
     return (config) => {
         config.pages.communityLayout = {
-            key: "crawler.community_layouts",
+            key: "crawler.community_shijing",
             rule: [{
                 regexp: /\/community\/photos2\/b\/\d+/.toString(),
                 scope: "i"

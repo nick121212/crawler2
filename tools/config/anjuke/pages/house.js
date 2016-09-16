@@ -41,6 +41,9 @@ module.exports = (core) => {
                     data: [
                         core.utils.data_builder.switchs([], [], [
                             core.utils.data_builder.cases(".name", [], "楼盘名称", [
+                                core.utils.data_builder.normal("status", [".des i"])
+                            ]),
+                            core.utils.data_builder.cases(".name", [], "楼盘名称", [
                                 core.utils.data_builder.normal("name", [".des"], ["i"])
                             ]),
                             core.utils.data_builder.cases(".name", [], "楼盘特点", [
@@ -127,8 +130,11 @@ module.exports = (core) => {
                             core.utils.data_builder.cases(".name", [], "物业公司", [
                                 core.utils.data_builder.normal("propertyCompany", [".des"]),
                             ]),
-                            core.utils.data_builder.cases(".name", [], "车位比", [
+                            core.utils.data_builder.cases(".name", [], "车位数", [
                                 core.utils.data_builder.normal("parkingAmount", [".des"]),
+                            ]),
+                            core.utils.data_builder.cases(".name", [], "车位比", [
+                                core.utils.data_builder.normal("parkingRate", [".des"]),
                             ])
                         ])
                     ]

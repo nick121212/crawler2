@@ -24,7 +24,7 @@ module.exports = (core) => {
                             core.utils.data_builder.array("communities", [".jjr-info .xq_tag a"], [], [
                                 core.utils.data_builder.normal("")
                             ]),
-                            core.utils.data_builder.normal("phone", [".jjr-side"], [".tel-icon"]),
+                            core.utils.data_builder.normal("phone", [".jjr-side"], [".tel-icon"])
                         ])
                     ]
                 }
