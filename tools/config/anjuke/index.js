@@ -5,7 +5,7 @@
 let _ = require("lodash");
 
 module.exports = (core) => {
-    let config = new core.utils.builder("anjuke", "www.anjuke.com", [
+    let config = new core.utils.builder("anjuke-1", "www.anjuke.com", [
         "sh.fang.anjuke.com",
         "shanghai.anjuke.com"
     ]);

@@ -81,17 +81,18 @@ module.exports = exports = (core) => {
         });
     };
     return (options) => {
-        if (options.interval) {
-            schedule.scheduleJob(`*/${options.interval || 1} * * * *`, scheduleJob);
-        } else {
-            console.log("chips");
-            core.q.rpc.on('chips', function(params, cb) {
-                scheduleJob();
-                cb(null, "重启成功");
-            }, null, {
-                autoDelete: true
-            });
+        console.log(options.interval);
+
+        if (options.interval > 0) {
+            return schedule.scheduleJob(`*/${options.interval || 1} * * * *`, scheduleJob);
         }
+        console.log("chips");
+        core.q.rpc.on('chips', function(params, cb) {
+            scheduleJob();
+            cb(null, "重启成功");
+        }, null, {
+            autoDelete: true
+        });
         scheduleJob();
     };
 };
