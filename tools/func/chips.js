@@ -81,12 +81,10 @@ module.exports = exports = (core) => {
         });
     };
     return (options) => {
-        console.log(options.interval);
-
         if (options.interval > 0) {
             return schedule.scheduleJob(`*/${options.interval || 1} * * * *`, scheduleJob);
         }
-        console.log("chips");
+        console.log("------------------rabbitmq on chips !!!!------------------");
         core.q.rpc.on('chips', function(params, cb) {
             scheduleJob();
             cb(null, "重启成功");
