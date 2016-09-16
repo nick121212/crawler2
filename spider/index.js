@@ -49,6 +49,11 @@ module.exports = (app, core) => {
             if (process.env.NODE_PIC) {
                 this.doInitDownloadDeal();
             }
+
+            core.q.rpc.call("chips", {}, () => {
+                console.log("更换ip成功调用");
+            });
+
         }
 
         /**
