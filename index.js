@@ -6,7 +6,7 @@ const core = require('./core');
 const consign = require("consign");
 const app = {};
 
-consign({ verbose: false })
+consign({verbose: false})
     .include("spider/utils")
     .include("spider/func")
     .include("spider/deal/data")
@@ -19,3 +19,4 @@ consign({ verbose: false })
 
 core.q.rpc.call("chips", {});
 console.log(`pid:${process.pid};ENV:${process.env.ENV}`);
+console.log(process.env);
