@@ -176,6 +176,7 @@ module.exports = (app, core) => {
                     if (err.status === 601) {
                         // 重启更换ip服务
                         if (process.env.NODE_CHIPS) {
+                            console.log("-----------------在此更改ip。。。--------------");
                             core.q.rpc.call("chips", {}, () => {
                                 console.log("更换ip成功调用");
                             });
