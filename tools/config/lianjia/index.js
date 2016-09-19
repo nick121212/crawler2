@@ -5,7 +5,38 @@
 let _ = require("lodash");
 
 module.exports = exports = (core) => {
-    let config = new core.utils.builder("lianjia", "www.lianjia.com", ["sh.lianjia.com", "sh.fang.lianjia.com"]);
+    let config = new core.utils.builder("lianjia", "www.lianjia.com", [
+        "sh.lianjia.com",
+        "sh.fang.lianjia.com",
+        "bj.lianjia.com",
+        "cd.lianjia.com",
+        "dl.lianjia.com",
+        "fs.lianjia.com",
+        "nj.lianjia.com",
+        "su.lianjia.com",
+        "wx.fang.lianjia.com",
+        "sh.lianjia.com",
+        "tj.lianjia.com",
+        "cq.lianjia.com",
+        "xa.fang.lianjia.com",
+        "sy.fang.lianjia.com",
+        "sz.lianjia.com",
+        "zs.fang.lianjia.com",
+        "cs.lianjia.com",
+        "qd.lianjia.com",
+        "sjz.fang.lianjia.com",
+        "wh.lianjia.com",
+        "yt.fang.lianjia.com",
+        "hz.lianjia.com",
+        "jn.lianjia.com",
+        "jx.fang.lianjia.com",
+        "lin.fang.lianjia.com",
+        "xm.lianjia.com",
+        "wf.fang.lianjia.com",
+        "wz.fang.lianjia.com",
+        "xz.fang.lianjia.com",
+        "yz.fang.lianjia.com"
+    ]);
 
     config.setBaseInfo(5000, "phantom");
     config.initDomain = "sh.lianjia.com";
@@ -29,7 +60,7 @@ module.exports = exports = (core) => {
     // 匹配小区列表，小区详情页，小区版块列表（只按照区域和版块过滤）
     config.addWhitePath(/^\/xiaoqu(?:\/[a-z]*\/?(?:d\d+\/?|\/?)|\/?|\/\d+.html)$/);
     // 楼盘
-    // config.addWhitePath(/^\/list\/pg\d+/)
+    config.addWhitePath(/^\/list\/pg\d+/);
 
     // -----------------页面配置------------------
     _.forEach(core.config.lianjia.pages, (page) => {

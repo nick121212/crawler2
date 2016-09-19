@@ -36,7 +36,7 @@ module.exports = (core) => {
                                 formats: [{
                                     "str": [],
                                     "match": {
-                                        regexp: /(东|南|西|北)./.toString(),
+                                        regexp: /(东|南|西|北)+/.toString(),
                                         index: 0
                                     }
                                 }]
