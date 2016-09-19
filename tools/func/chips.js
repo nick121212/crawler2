@@ -52,6 +52,7 @@ module.exports = exports = (core) => {
 
         if (isRunning) return;
 
+        retryCount = 0;
         isRunning = true;
         console.log(new Date());
         // 关闭nginx
@@ -65,16 +66,11 @@ module.exports = exports = (core) => {
         pptpsetup.stdout.on("data", (data) => {
             datas.push(data);
             if (/remote/i.test(datas.join(""))) {
-                console.log("pptp done");
                 isSuccess = /succeeded/i.test(datas.join(""));
                 isSuccess && (localhostIp = datas.join("").match(/\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/ig));
 
-                console.log(datas.join(""));
-                console.log(localhostIp);
-
                 if (isSuccess && localhostIp.length > 1) {
                     lastIp = localhostIp[0];
-                    console.log(lastIp);
                     return success();
                 }
             }
