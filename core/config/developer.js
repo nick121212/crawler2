@@ -1,4 +1,4 @@
-const ip = "192.168.222.90";
+const ip = "192.168.222.73";
 
 module.exports = exports = {
     elastic: {
@@ -23,5 +23,9 @@ module.exports = exports = {
                 idle: 10000
             }
         }
+    },
+    socket: {
+        host: ip,
+        port: 8080
     }
 };

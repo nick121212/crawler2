@@ -23,5 +23,9 @@ module.exports = exports = {
                 idle: 10000
             }
         }
+    },
+    socket: {
+        host: ip,
+        port: 8080
     }
 };
