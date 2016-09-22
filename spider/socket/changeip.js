@@ -77,6 +77,7 @@ module.exports = exports = (app, core, socket) => {
     };
 
     return ()=> {
+        scheduleJob();
         socket.on('crawler:chip', (params, cb)=> {
             !isRunning && scheduleJob();
             cb({ret: 0});
