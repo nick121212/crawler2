@@ -21,11 +21,10 @@ module.exports = exports = (app, core, socket) => {
     let scheduleJob1 = () => {
         // 5s后重启nginx
         setTimeout(() => {
-            "use strict";
             shell.exec(commands.nginxRestart, {silent: false});
             retryCount = 0;
             isRunning = false;
-        }, 5000);
+        }, 3000);
     };
     let success = () => {
         setTimeout(() => {
@@ -33,11 +32,12 @@ module.exports = exports = (app, core, socket) => {
             shell.exec(commands.routeAdd + lastIp, {silent: false});
             let route = shell.exec(commands.route, {silent: false}).stdout;
 
+            console.log("success----------",lastIp, route);
             if (route.indexOf(lastIp) > 0) {
                 scheduleJob1();
             } else {
                 if (retryCount > 5) {
-                    return shell.exit(1);
+                    return scheduleJob1();
                 }
                 setTimeout(function () {
                     isRunning = false;
@@ -53,7 +53,7 @@ module.exports = exports = (app, core, socket) => {
 
         retryCount = 0;
         isRunning = true;
-        console.log(new Date());
+        console.log("scheduleJob-----------", new Date());
         // 关闭nginx
         shell.exec(commands.nginxStop, {silent: false});
         // 关闭poff
