@@ -6,7 +6,7 @@ const io = require('socket.io-client');
 const core = require('./core');
 const consign = require("consign");
 const app = {};
-const socket = io('http://localhost:3000/crawler');
+const socket = io(`http://${core.config.socket.host}:${core.config.socket.port}/crawler`);
 
 consign({verbose: false})
     .include("spider/utils")

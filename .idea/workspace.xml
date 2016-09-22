@@ -2,19 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3ae7234b-a18e-4c01-9014-8f3d454f359a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/spider/socket/changeip.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/spider/socket/update.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/config/developer.js" afterPath="$PROJECT_DIR$/core/config/developer.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/deal/deal/index.js" afterPath="$PROJECT_DIR$/spider/deal/deal/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/deal/index.js" afterPath="$PROJECT_DIR$/spider/deal/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/index.js" afterPath="$PROJECT_DIR$/spider/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/socket/conection.js" afterPath="$PROJECT_DIR$/spider/socket/conection.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/socket/reset.js" afterPath="$PROJECT_DIR$/spider/socket/reset.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/socket/start.js" afterPath="$PROJECT_DIR$/spider/socket/start.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/command/start.js" afterPath="$PROJECT_DIR$/tools/command/start.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/config/cityhouse/pages/house.js" afterPath="$PROJECT_DIR$/tools/config/cityhouse/pages/house.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/config/lianjia/index.js" afterPath="$PROJECT_DIR$/tools/config/lianjia/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/config/production.js" afterPath="$PROJECT_DIR$/core/config/production.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/index.js" afterPath="$PROJECT_DIR$/core/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
     </list>
     <ignored path="crawler.2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -37,7 +29,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spider/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="45">
@@ -53,21 +45,43 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="update.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/spider/socket/update.js">
+      <file leaf-file-name="production.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/config/production.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="35" selection-start-line="7" selection-start-column="35" selection-end-line="7" selection-end-column="35" />
+            <state relative-caret-position="420">
+              <caret line="28" column="18" selection-start-line="28" selection-start-column="18" selection-end-line="28" selection-end-column="18" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="stop.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/spider/socket/stop.js">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="237">
-              <caret line="20" column="16" selection-start-line="0" selection-start-column="0" selection-end-line="33" selection-end-column="2" />
+            <state relative-caret-position="60">
+              <caret line="6" column="35" selection-start-line="6" selection-start-column="35" selection-end-line="6" selection-end-column="35" />
+              <folding>
+                <element signature="e#0#38#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/config/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -96,6 +110,16 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="developer.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/config/developer.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="344">
+              <caret line="28" column="18" selection-start-line="28" selection-start-column="18" selection-end-line="28" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spider/deal/index.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -106,41 +130,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="area.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/spider/deal/deal/area.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-91">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spider/deal/deal/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
               <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="conection.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/spider/socket/conection.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="developer.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/config/developer.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="26" selection-start-line="14" selection-start-column="26" selection-end-line="14" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -161,7 +155,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/spider/func/del.js" />
         <option value="$PROJECT_DIR$/core/libs/mq.js" />
         <option value="$PROJECT_DIR$/tools/func/create.js" />
         <option value="$PROJECT_DIR$/tools/func/del.js" />
@@ -190,9 +183,7 @@
         <option value="$PROJECT_DIR$/tools/conf/代理ip机器-nginx" />
         <option value="$PROJECT_DIR$/tools/conf/非代理ip机器-nginx" />
         <option value="$PROJECT_DIR$/tools/config/anjuke/index.js" />
-        <option value="$PROJECT_DIR$/core/config/production.js" />
         <option value="$PROJECT_DIR$/spider/socket/info.js" />
-        <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/spider/socket/create.js" />
         <option value="$PROJECT_DIR$/spider/socket/stop.js" />
         <option value="$PROJECT_DIR$/tools/config/anjuke/pages/community_shijing.js" />
@@ -203,7 +194,6 @@
         <option value="$PROJECT_DIR$/tools/command/start.js" />
         <option value="$PROJECT_DIR$/tools/config/cityhouse/pages/house.js" />
         <option value="$PROJECT_DIR$/ddfd.js" />
-        <option value="$PROJECT_DIR$/core/config/developer.js" />
         <option value="$PROJECT_DIR$/spider/socket/reset.js" />
         <option value="$PROJECT_DIR$/spider/socket/conection.js" />
         <option value="$PROJECT_DIR$/spider/socket/update.js" />
@@ -212,6 +202,10 @@
         <option value="$PROJECT_DIR$/spider/socket/start.js" />
         <option value="$PROJECT_DIR$/spider/index.js" />
         <option value="$PROJECT_DIR$/spider/socket/changeip.js" />
+        <option value="$PROJECT_DIR$/core/index.js" />
+        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/core/config/developer.js" />
+        <option value="$PROJECT_DIR$/core/config/production.js" />
       </list>
     </option>
   </component>
@@ -282,6 +276,56 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="spider" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler.2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler.2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spider" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="socket" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler.2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler.2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler.2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawler.2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -431,7 +475,7 @@
       <workItem from="1471846857166" duration="10000" />
       <workItem from="1471847472222" duration="14000" />
       <workItem from="1474008666444" duration="31172000" />
-      <workItem from="1474337923580" duration="19734000" />
+      <workItem from="1474337923580" duration="19871000" />
     </task>
     <task id="LOCAL-00001" summary="房点评">
       <created>1470816265050</created>
@@ -720,11 +764,18 @@
       <option name="project" value="LOCAL" />
       <updated>1474270401822</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="房点评">
+      <created>1474528363755</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1474528363755</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="109370000" />
+    <option name="totallyTimeSpent" value="109507000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -774,20 +825,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/spider/func/info.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="7" selection-start-line="3" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spider/func/create.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="26" selection-start-line="0" selection-start-column="0" selection-end-line="32" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/spider/func/list.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -795,21 +832,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="11" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/spider/socket/info.js" />
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="8" column="48" selection-start-line="8" selection-start-column="48" selection-end-line="8" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -1078,14 +1101,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/config/developer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="26" selection-start-line="14" selection-start-column="26" selection-end-line="14" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/spider/socket/stop.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="237">
@@ -1164,6 +1179,48 @@
             <element signature="e#11508#12579#0" expanded="false" />
             <element signature="e#12692#13899#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/config/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="6" column="35" selection-start-line="6" selection-start-column="35" selection-end-line="6" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#38#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/config/developer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="344">
+          <caret line="28" column="18" selection-start-line="28" selection-start-column="18" selection-end-line="28" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/config/production.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" column="18" selection-start-line="28" selection-start-column="18" selection-end-line="28" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>

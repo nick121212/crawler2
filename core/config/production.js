@@ -26,6 +26,6 @@ module.exports = exports = {
     },
     socket: {
         host: ip,
-        port: 8080
+        port: 3000
     }
 };
