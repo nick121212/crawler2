@@ -38,7 +38,6 @@ module.exports = (app, core, socket) => {
 
             this.downloader = settings.downloader || "superagent";
             this.interval = settings.interval || 500;
-            this.lastTime = Date.now();
             this.proxySettings = settings.proxySettings || {};
             this.initDomain = settings.initDomain || {};
             this.ignoreStatusCode = settings.ignoreStatusCode || [302, 400, 404, 500, "ENOTFOUND", "ECONNABORTED"];
@@ -58,7 +57,6 @@ module.exports = (app, core, socket) => {
             let defer = Promise.defer();
 
             try {
-                this.lastTime = Date.now();
                 // 开始下载页面"
                 app.spider.download.index.start(this.downloader, uri(queueItem.url).normalize(), this.proxySettings || {}).then((result) => {
                     result.res && (queueItem.stateData = result.res.headers);
@@ -169,11 +167,8 @@ module.exports = (app, core, socket) => {
                     }
                 }).then(() => {
                     delete errors[queueItem.urlId];
-                    this.lastError = "";
                     next(msg);
                 }).catch((err) => {
-                    console.error(err.status, err.code, err.message, errors[queueItem.urlId]);
-
                     app.spider.socket.update({
                         error: {
                             queueItem: queueItem,
@@ -183,8 +178,9 @@ module.exports = (app, core, socket) => {
                         }
                     });
 
-                    this.lastError = err.message;
                     // 可能是页面封锁机制,爬取到的页面是错误的
+                    console.error(err.status, err.code, err.message, errors[queueItem.urlId]);
+
                     if (err.status === 601) {
                         // 重启更换ip服务
                         if (process.env.NODE_CHIPS) {
