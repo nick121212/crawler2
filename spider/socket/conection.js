@@ -6,7 +6,6 @@ module.exports = exports = (app, core, socket) => {
     let ipInfo = app.spider.utils.ipinfo;
 
     socket.on('connect', function () {
-        console.log("connect");
         socket.emit("crawler:join", {
             pid: process.pid,
             hostname: ipInfo["hostname"],

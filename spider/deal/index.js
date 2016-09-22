@@ -9,8 +9,10 @@ module.exports = (app, core) => {
             this.settings = settings;
             this.pages = settings.pages;
             this.dealKey = settings.key || "";
-            this.saveFunc = saveFunc || function() {};
-            this.rollbackFunc = rollbackFunc || function() {};
+            this.saveFunc = saveFunc || function () {
+                };
+            this.rollbackFunc = rollbackFunc || function () {
+                };
 
             _.forEach(this.pages, (page) => {
                 page.rule = _.map(page.rule, (rule) => {
@@ -42,10 +44,10 @@ module.exports = (app, core) => {
             _.each(rule.download, (d) => {
                 if (d.each) {
                     _.map(jpp(result, d.each), (v) => {
-                        v[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(v[d.field]), { persistent: true });
+                        v[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(v[d.field]), {persistent: true});
                     });
                 } else {
-                    result[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(result[d.field]), { persistent: true });
+                    result[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(result[d.field]), {persistent: true});
                 }
             });
         }
@@ -76,6 +78,13 @@ module.exports = (app, core) => {
                 if (!result.rule.test) {
                     // 合并数据，将配置好的静态数据和解析得来的数据合并
                     result.result = _.extend({}, result.rule.extendData || {}, result.result);
+                    // 更新下信息
+                    app.spider.socket.update({
+                        deal: {
+                            queueItem: queueItem,
+                            message: result.result
+                        }
+                    });
                     // 判断验证模式，如果验证字段为空，则回滚数据，否则保存数据
                     if (result.rule.strict && result.rule.strictField) {
                         if (result.result[result.rule.strictField]) {
@@ -119,6 +128,14 @@ module.exports = (app, core) => {
                         return Promise.all(this.checkStatus(queueItem, results, ch));
                     }).then(() => {
                         console.log(`deal complete ${queueItem.url} at ${new Date()}`);
+
+                        // core.spilder.socket.update({
+                        //     deal: {
+                        //         queueItem: queueItem,
+                        //         message: `deal complete ${queueItem.url} at ${new Date()}`
+                        //     }
+                        // });
+
                         defer.resolve();
                     }).catch((err) => {
                         console.error(err);

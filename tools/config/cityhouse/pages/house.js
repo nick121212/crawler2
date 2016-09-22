@@ -1,6 +1,6 @@
 module.exports = (core) => {
     return (config) => {
-        config.pages.broker = {
+        config.pages.loupan = {
             key: "crawler.loupan",
             extendData: {},
             rule: [{
@@ -21,7 +21,8 @@ module.exports = (core) => {
                             core.utils.data_builder.normal("completeTime", [".infobox .text ul:eq(0) li:eq(0) span:last"]),
                             core.utils.data_builder.normal("address", [".infobox .text ul:eq(1) li:eq(0) span[class]"]),
                             core.utils.data_builder.normal("usage", [".infobox .text ul:eq(1) li:eq(1) span[class]"]),
-                            core.utils.data_builder.normal("propertyType", [".infobox .text ul:eq(1) li:eq(2) span:eq(1)"])
+                            core.utils.data_builder.normal("propertyType", [".infobox .text ul:eq(1) li:eq(2) span:eq(1)"]),
+                            core.utils.data_builder.normal("phone", [".infobox .phone.mt .numb"])
                         ])
                     ]
                 }

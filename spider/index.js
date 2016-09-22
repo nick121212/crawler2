@@ -4,7 +4,7 @@ let uri = require("urijs");
 let _ = require("lodash");
 let robotsTxtParser = require("robots-parser");
 
-module.exports = (app, core) => {
+module.exports = (app, core, socket) => {
     const errors = {};
     const errPage = () => {
         let err = new Error("下载的页面不正确!");
@@ -24,13 +24,18 @@ module.exports = (app, core) => {
          *   cluster           boolean 是否是从
          **/
         constructor(settings) {
+
+            this.isStart = false;
+            this.isStartDeal = false;
+            this.isStartDownload = false;
+
             this.initialPath = settings.initialPath || "/";
             this.initialPort = settings.initialPort || 80;
             this.initialProtocol = settings.initialPort || "http";
             this.host = settings.host;
             this.key = settings.key;
             this.robotsHost = settings.robotsHost;
-            this.isStart = false;
+
             this.downloader = settings.downloader || "superagent";
             this.interval = settings.interval || 500;
             this.lastTime = Date.now();
@@ -43,12 +48,6 @@ module.exports = (app, core) => {
             this.queueStore = new app.spider.lib.queue_store_es(this.key);
             this.discover = new app.spider.lib.discover(settings, this.queue);
             this.deal = new app.spider.deal.index(settings, this.queueStore.addCompleteData.bind(this.queueStore), this.queueStore.rollbackCompleteData.bind(this.queueStore));
-            this.lastError = "";
-            this.doInitHtmlDeal();
-
-            if (process.env.NODE_PIC) {
-                this.doInitDownloadDeal();
-            }
         }
 
         /**
@@ -116,7 +115,7 @@ module.exports = (app, core) => {
                     interval = ~~(Math.random() * (interval - 500) + 500);
                 }
 
-                setTimeout(function() {
+                setTimeout(function () {
                     reject ? result.ch.reject(msg) : result.ch.ack(msg);
                 }, interval);
             };
@@ -140,6 +139,14 @@ module.exports = (app, core) => {
                     let discoverUrls = this.discover.discoverResources(data.responseBody, queueItem) || [];
 
                     console.log(`处理链接数量${discoverUrls.length} at ${new Date()}`);
+
+                    app.spider.socket.update({
+                        success: {
+                            message: `处理链接数量${discoverUrls.length} at ${new Date()}`,
+                            queueItem: queueItem
+                        }
+                    });
+
                     if (discoverUrls.length < this.limitMinLinks) {
                         throw errPage();
                     }
@@ -166,15 +173,23 @@ module.exports = (app, core) => {
                     next(msg);
                 }).catch((err) => {
                     console.error(err.status, err.code, err.message, errors[queueItem.urlId]);
+
+                    app.spider.socket.update({
+                        error: {
+                            queueItem: queueItem,
+                            status: err.status,
+                            code: err.code, message: err.message,
+                            errors: errors[queueItem.urlId]
+                        }
+                    });
+
                     this.lastError = err.message;
                     // 可能是页面封锁机制,爬取到的页面是错误的
                     if (err.status === 601) {
                         // 重启更换ip服务
                         if (process.env.NODE_CHIPS) {
                             console.log("-----------------在此更改ip。。。--------------");
-                            core.q.rpc.call("chips", {}, () => {
-                                console.log("更换ip成功调用");
-                            });
+                            socket.emit("crawler:chip");
                         }
                         return next(msg, true, 1000 * 60 * (process.env.NODE_CHIPS ? 0.3 : (~~this.proxySettings.errorInterval || 5)));
                     }
@@ -233,7 +248,8 @@ module.exports = (app, core) => {
          * 初始化html处理部分的queue
          */
         doInitHtmlDeal() {
-            core.q.getQueue(`crawler.deals.${this.key}`, { durable: true }).then((result) => {
+            this.isStartDeal = true;
+            core.q.getQueue(`crawler.deals.${this.key}`, {durable: true}).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
                     result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}.bodys`),
@@ -262,15 +278,19 @@ module.exports = (app, core) => {
                             result.ch.reject(msg);
                         }
                     });
-                }, console.error);
+                }, (e)=> {
+                    this.isStartDownload = false;
+                    console.error(e);
+                });
             });
         }
 
         /**
-         * 初始化html处理部分的queue
+         * 初始化下载图片的queue
          */
         doInitDownloadDeal() {
-            core.q.getQueue(`crawler.downloader.picture`, { durable: true }).then((result) => {
+            this.isStartDownload = true;
+            core.q.getQueue(`crawler.downloader.picture`, {durable: true}).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
                     result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}`),
@@ -288,7 +308,10 @@ module.exports = (app, core) => {
                             console.log(err);
                         });
                     });
-                }, console.error);
+                }, (e)=> {
+                    this.isStartDownload = false;
+                    console.error(e);
+                });
             });
         }
 
@@ -330,15 +353,9 @@ module.exports = (app, core) => {
                 throw new Error("host不能为空！");
             }
 
-            // 如果有这个变量,则不开启下载
-            if (process.env.NODE_FETCH) {
-                this.isStart = true;
-                return;
-            }
-
             let robotsTxtUrl = uri(this.host).pathname("/robots.txt");
             let next = () => {
-                setTimeout(function() {
+                setTimeout(function () {
                     this.queueStore.addUrlsToEsUrls([{
                         protocol: this.initialProtocol,
                         host: this.initDomain || this.host,
@@ -357,6 +374,10 @@ module.exports = (app, core) => {
                 this.doLoop().then(next.bind(this));
             });
             this.isStart = true;
+
+            app.spider.socket.update({
+                downloader: core.downloadInstance
+            });
         }
     }
 

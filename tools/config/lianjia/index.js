@@ -43,7 +43,7 @@ module.exports = exports = (core) => {
     config.limitMinLinks = 50;
     config.stripWWWDomain = false;
     config.proxySettings = {
-        useProxy: false && process.env.ENV == "production",
+        useProxy: true && process.env.ENV == "production",
         charset: "utf-8",
         timeout: 5000,
         errorInterval: 5,

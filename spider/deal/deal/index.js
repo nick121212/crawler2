@@ -46,7 +46,7 @@ module.exports = (app) => {
 
             // 处理area
             this.deals.area.doDeal(queueItem, rule.area).then((results) => {
-                _.forEach(rule.area, (area) => {
+                _.forEach(rule.fields, (area) => {
                     promiseAll = promiseAll.concat(this.doDealData.call(this, queueItem, area.data, dataResults, results[area.key] ? results[area.key].$cur : null));
                 });
 

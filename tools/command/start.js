@@ -10,8 +10,8 @@ module.exports = exports = (core, program) => {
             console.error("没有找到配置数据");
             return process.exit(1);
         }
-        // console.log(JSON.stringify(config));
-        core.func.start(config.index, options).then(process.exit, process.exit);
+        console.log(JSON.stringify(config.index.pages.loupan));
+        // core.func.start(config.index, options).then(process.exit, process.exit);
     };
 
     program
