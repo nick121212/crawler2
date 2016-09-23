@@ -3,6 +3,7 @@
 let uri = require("urijs");
 let _ = require("lodash");
 let robotsTxtParser = require("robots-parser");
+let currentInterval = 0;
 
 module.exports = (app, core, socket) => {
     const errors = {};
@@ -40,7 +41,7 @@ module.exports = (app, core, socket) => {
             this.interval = settings.interval || 500;
             this.proxySettings = settings.proxySettings || {};
             this.initDomain = settings.initDomain || {};
-            this.ignoreStatusCode = settings.ignoreStatusCode || [302, 400, 404, 500, "ENOTFOUND", "ECONNABORTED"];
+            this.ignoreStatusCode = settings.ignoreStatusCode || [301, 302, 400, 404, 500, "ENOTFOUND", "ECONNABORTED"];
             this.limitMinLinks = settings.limitMinLinks || 0;
 
             this.queue = new app.spider.lib.queue(settings);
@@ -57,9 +58,10 @@ module.exports = (app, core, socket) => {
             let defer = Promise.defer();
 
             try {
-                // 开始下载页面"
+                // 开始下载页面
                 app.spider.download.index.start(this.downloader, uri(queueItem.url).normalize(), this.proxySettings || {}).then((result) => {
                     result.res && (queueItem.stateData = result.res.headers);
+
                     if (result.res && result.res.status !== 200) {
                         let err = new Error(result.res.statusText);
                         err.status = result.res.status;
@@ -70,8 +72,12 @@ module.exports = (app, core, socket) => {
                 }).then((result) => {
                     let defer = Promise.defer();
                     // 检测下下载的页面是否有error
-                    if (this.deal.pages.error) {
-                        app.spider.deal.deal.index.doDeal(result, this.deal.pages.error).then((res) => {
+                    let errorDeal = _.filter(this.deal.pages, (page)=> {
+                        return page.key === "error";
+                    });
+
+                    if (errorDeal.length) {
+                        app.spider.deal.deal.index.doDeal(result, errorDeal[0]).then((res) => {
                             let isError = false;
                             _.forEach(res.result, (val) => {
                                 if (val) {
@@ -84,6 +90,7 @@ module.exports = (app, core, socket) => {
                     } else {
                         defer.resolve(result);
                     }
+
                     return defer.promise;
                 }).then((result) => {
                     // 保存下载下来的页面
@@ -113,9 +120,10 @@ module.exports = (app, core, socket) => {
                     interval = ~~(Math.random() * (interval - 500) + 500);
                 }
 
-                setTimeout(function () {
-                    reject ? result.ch.reject(msg) : result.ch.ack(msg);
-                }, interval);
+                currentInterval = interval;
+                // setTimeout(function () {
+                reject ? result.ch.reject(msg) : result.ch.ack(msg);
+                // }, interval);
             };
 
             try {
@@ -137,12 +145,10 @@ module.exports = (app, core, socket) => {
                     let discoverUrls = this.discover.discoverResources(data.responseBody, queueItem) || [];
 
                     console.log(`处理链接数量${discoverUrls.length} at ${new Date()}`);
-
-                    app.spider.socket.update({
-                        success: {
-                            message: `处理链接数量${discoverUrls.length} at ${new Date()}`,
-                            queueItem: queueItem
-                        }
+                    app.spider.socket.log({
+                        message: `${queueItem.url}--处理链接数量{${discoverUrls.length}}`,
+                        isError: false,
+                        url: queueItem.url
                     });
 
                     if (discoverUrls.length < this.limitMinLinks) {
@@ -169,13 +175,10 @@ module.exports = (app, core, socket) => {
                     delete errors[queueItem.urlId];
                     next(msg);
                 }).catch((err) => {
-                    app.spider.socket.update({
-                        error: {
-                            queueItem: queueItem,
-                            status: err.status,
-                            code: err.code, message: err.message,
-                            errors: errors[queueItem.urlId]
-                        }
+                    app.spider.socket.log({
+                        message: `${queueItem.url}--${err.message}--${err.status}--${err.code}`,
+                        isError: true,
+                        date: Date.now()
                     });
 
                     // 可能是页面封锁机制,爬取到的页面是错误的
@@ -183,11 +186,15 @@ module.exports = (app, core, socket) => {
 
                     if (err.status === 601) {
                         // 重启更换ip服务
-                        if (process.env.NODE_CHIPS) {
-                            console.log("-----------------在此更改ip。。。--------------");
-                            socket.emit("crawler:chip");
-                        }
-                        return next(msg, true, 1000 * 60 * (process.env.NODE_CHIPS ? 0.3 : (~~this.proxySettings.errorInterval || 5)));
+                        console.log("-----------------在此更改ip。。。--------------");
+                        app.spider.socket.log({
+                            message: `发送更换IP请求！！`,
+                            isError: true,
+                            date: Date.now()
+                        });
+                        socket.emit("crawler:chip");
+
+                        return next(msg, true, 1000 * 60 * (process.env.NODE_CHIPS ? 0.3 : (~~this.proxySettings.errorInterval || 1)));
                     }
                     // 错误重试机制
                     if (!errors[queueItem.urlId]) {
@@ -195,7 +202,7 @@ module.exports = (app, core, socket) => {
                     }
                     // 在定义的错误列表中，加速错误
                     if (_.indexOf(this.ignoreStatusCode, err.status) >= 0 || _.indexOf(this.ignoreStatusCode, err.code) >= 0) {
-                        errors[queueItem.urlId] += 20;
+                        errors[queueItem.urlId] += 40;
                     } else {
                         errors[queueItem.urlId]++;
                     }
@@ -228,7 +235,10 @@ module.exports = (app, core, socket) => {
                 ]).then(() => {
                     // 添加消费监听
                     result.ch.consume(result.q.queue, (msg) => {
-                        this.consumeQueue(msg, result);
+                        console.log(`等待${currentInterval}毫秒！！！！`);
+                        setTimeout(()=> {
+                            this.consumeQueue(msg, result);
+                        }, currentInterval);
                     }, {
                         noAck: false
                     });

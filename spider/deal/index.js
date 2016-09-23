@@ -79,11 +79,9 @@ module.exports = (app, core) => {
                     // 合并数据，将配置好的静态数据和解析得来的数据合并
                     result.result = _.extend({}, result.rule.extendData || {}, result.result);
                     // 更新下信息
-                    app.spider.socket.update({
-                        deal: {
-                            queueItem: queueItem,
-                            message: result.result
-                        }
+                    app.spider.socket.log({
+                        message: "处理成功",
+                        data: result.result
                     });
                     // 判断验证模式，如果验证字段为空，则回滚数据，否则保存数据
                     if (result.rule.strict && result.rule.strictField) {

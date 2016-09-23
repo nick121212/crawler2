@@ -2,6 +2,7 @@
 
 let EventEmitter = require("events").EventEmitter;
 let uri = require("urijs");
+let _ = require('lodash');
 
 module.exports = (app) => {
     // 正则，用来匹配页面中的地址
@@ -24,7 +25,7 @@ module.exports = (app) => {
         // Find srcset links
         (string) => {
             var result = /\ssrcset\s*=\s*(["'])(.*)\1/.exec(string);
-            return Array.isArray(result) ? String(result[2]).split(",").map(function(string) {
+            return Array.isArray(result) ? String(result[2]).split(",").map(function (string) {
                 return string.replace(/\s?\w*$/, "").trim();
             }) : "";
         },
@@ -91,7 +92,7 @@ module.exports = (app) => {
             this.allowedProtocols = settings.allowedProtocols || ["http"];
             this.blackPathList = settings.blackPathList || [];
             this.whitePathList = settings.whitePathList || [];
-            this.whitePathList.push(/^\/$/ig);
+            this.whitePathList.push(/^\/$/i);
             this.userAgent = settings.userAgent || "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36";
             this._robotsTxts = [];
             this.fetchWhitelistedMimeTypesBelowMaxDepth = settings.fetchWhitelistedMimeTypesBelowMaxDepth || false;
@@ -128,7 +129,7 @@ module.exports = (app) => {
          * @returns boolean
          */
         extendSupported(suffix) {
-            return !suffixs.some(function(value) {
+            return !suffixs.some(function (value) {
                 return value === suffix.toLowerCase();
             });
         }
@@ -141,23 +142,23 @@ module.exports = (app) => {
         pathSUpported(path) {
             let result;
             let check = (list) => {
-                let res =
-                    list.some(function(value) {
-                        if (value.constructor === RegExp) {
-                            return value.test(path);
-                        } else if (value.constructor === Function) {
-                            return value(path);
-                        } else if (value.constructor === String) {
-                            return value === path;
-                        }
-                    });
+                let filters = _.filter(list, (value)=> {
+                    if (value.constructor === RegExp) {
+                        return value.test(path);
+                    } else if (value.constructor === Function) {
+                        return value(path);
+                    } else if (value.constructor === String) {
+                        return value === path;
+                    }
+                    return false;
+                });
 
-                return res;
+                return filters.length > 0;
             };
             // 判断不在在黑名单里面么
-            result = !check(this.blackPathList);
+            result = !check(this.blackPathList || []);
             // 是否在白名单里面
-            result && (result = check(this.whitePathList));
+            result && (result = check(this.whitePathList || []));
 
             return result;
         }
@@ -213,7 +214,7 @@ module.exports = (app) => {
                         return list;
                     }
                     // url是否已经存在列表中
-                    if (list.reduce(function(prev, current) {
+                    if (list.reduce(function (prev, current) {
                             return prev || current === URL.toString();
                         }, false)) {
                         return list;
@@ -264,7 +265,7 @@ module.exports = (app) => {
             return this.maxDepth === 0 ||
                 queueItem.depth <= this.maxDepth ||
                 whitelistedDepth <= this.maxDepth &&
-                whitelistedMimeTypes.some(function(mimeCheck) {
+                whitelistedMimeTypes.some(function (mimeCheck) {
                     return mimeCheck.test(queueItem.stateData.contentType);
                 });
         }
