@@ -32,7 +32,7 @@ module.exports = exports = (app, core, socket) => {
             shell.exec(commands.routeAdd + lastIp, {silent: false});
             let route = shell.exec(commands.route, {silent: false}).stdout;
 
-            console.log("success----------",lastIp, route);
+            console.log("success----------", lastIp, route);
             if (route.indexOf(lastIp) > 0) {
                 scheduleJob1();
             } else {
@@ -80,7 +80,7 @@ module.exports = exports = (app, core, socket) => {
         scheduleJob();
         socket.on('crawler:chip', (params, cb)=> {
             !isRunning && scheduleJob();
-            cb({ret: 0});
+            cb && cb({ret: 0});
         });
     };
 };
