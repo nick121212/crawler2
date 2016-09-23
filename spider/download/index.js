@@ -10,11 +10,6 @@ module.exports = (app, core)=> {
                     return instance.start(result.res.redirectURL, settings);
                 }
                 return result;
-            }, err => {
-                // if (err && err.status == 302 && err.redirectUrl) {
-                //     return instance.start(err.redirectUrl, settings);
-                // }
-                return err;
             });
 
             // return promise;
