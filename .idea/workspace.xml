@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3ae7234b-a18e-4c01-9014-8f3d454f359a" name="Default" comment="">
+    <list default="true" id="3ae7234b-a18e-4c01-9014-8f3d454f359a" name="Default" comment="房点评">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/socket/conection.js" afterPath="$PROJECT_DIR$/spider/socket/conection.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/socket/log.js" afterPath="$PROJECT_DIR$/spider/socket/log.js" />
     </list>
     <ignored path="crawler.2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,20 +54,22 @@
         </entry>
       </file>
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/spider/deal/deal/index.js">
+        <entry file="file://$PROJECT_DIR$/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="60">
+              <caret line="6" column="35" selection-start-line="6" selection-start-column="35" selection-end-line="6" selection-end-column="35" />
+              <folding>
+                <element signature="e#0#38#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="changeip.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/spider/socket/changeip.js">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/spider/deal/deal/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="40" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
+            <state relative-caret-position="225">
+              <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -93,7 +95,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="conection.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="conection.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spider/socket/conection.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
@@ -123,11 +125,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="log.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="log.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spider/socket/log.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="41" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="41" />
+            <state relative-caret-position="135">
+              <caret line="9" column="41" selection-start-line="9" selection-start-column="41" selection-end-line="9" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -184,7 +186,6 @@
         <option value="$PROJECT_DIR$/core/config/developer.js" />
         <option value="$PROJECT_DIR$/core/config/production.js" />
         <option value="$PROJECT_DIR$/spider/lib/discover.js" />
-        <option value="$PROJECT_DIR$/spider/socket/log.js" />
         <option value="$PROJECT_DIR$/tools/config/lianjia/pages/error.js" />
         <option value="$PROJECT_DIR$/tools/command/start.js" />
         <option value="$PROJECT_DIR$/spider/index.js" />
@@ -199,6 +200,7 @@
         <option value="$PROJECT_DIR$/spider/deal/index.js" />
         <option value="$PROJECT_DIR$/spider/socket/test.js" />
         <option value="$PROJECT_DIR$/spider/socket/conection.js" />
+        <option value="$PROJECT_DIR$/spider/socket/log.js" />
       </list>
     </option>
   </component>
@@ -455,14 +457,7 @@
       <workItem from="1471847472222" duration="14000" />
       <workItem from="1474008666444" duration="31172000" />
       <workItem from="1474337923580" duration="30215000" />
-      <workItem from="1474604950023" duration="11137000" />
-    </task>
-    <task id="LOCAL-00004" summary="房点评">
-      <created>1470828293762</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1470828293762</updated>
+      <workItem from="1474604950023" duration="11881000" />
     </task>
     <task id="LOCAL-00005" summary="房点评">
       <created>1470879388138</created>
@@ -800,11 +795,18 @@
       <option name="project" value="LOCAL" />
       <updated>1474619990029</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="房点评">
+      <created>1474620132970</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1474620132970</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="130988000" />
+    <option name="totallyTimeSpent" value="131732000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -1041,16 +1043,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="6" column="35" selection-start-line="6" selection-start-column="35" selection-end-line="6" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#38#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tools/config/lianjia/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="630">
@@ -1163,22 +1155,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spider/socket/update.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="2" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="2" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spider/socket/log.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="41" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/spider/socket/reset.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -1238,6 +1214,32 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" column="37" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spider/socket/update.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="2" selection-start-line="0" selection-start-column="0" selection-end-line="10" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="6" column="35" selection-start-line="6" selection-start-column="35" selection-end-line="6" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#38#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spider/socket/log.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="41" selection-start-line="9" selection-start-column="41" selection-end-line="9" selection-end-column="41" />
           <folding />
         </state>
       </provider>
