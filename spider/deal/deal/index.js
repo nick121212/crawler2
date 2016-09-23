@@ -45,12 +45,14 @@ module.exports = (app) => {
             };
 
             // 处理area
-            this.deals.area.doDeal(queueItem, rule.area).then((results) => {
-                _.forEach(rule.fields, (area) => {
-                    promiseAll = promiseAll.concat(this.doDealData.call(this, queueItem, area.data, dataResults, results[area.key] ? results[area.key].$cur : null));
+            this.deals.area.doDeal(queueItem, rule.areas).then((results) => {
+                _.forEach(rule.fields, (field, key) => {
+                    promiseAll = promiseAll.concat(this.doDealData.call(this, queueItem, field.data, dataResults, results[key] ? results[key].$cur : null));
                 });
 
-                return Promise.all(promiseAll).then(check);
+                return Promise.all(promiseAll).then(check, (err)=> {
+                    defer.reject(err);
+                });
             }, defer.reject);
 
             return defer.promise;

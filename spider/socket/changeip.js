@@ -76,11 +76,11 @@ module.exports = exports = (app, core, socket) => {
         });
     };
 
-    return ()=> {
+    if (process.env.NODE_CHIP) {
         scheduleJob();
         socket.on('crawler:chip', (params, cb)=> {
             !isRunning && scheduleJob();
             cb && cb({ret: 0});
         });
-    };
+    }
 };

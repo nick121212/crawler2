@@ -28,9 +28,9 @@ module.exports = (app, core) => {
          */
         findRule(url) {
             return _.filter(this.pages, (page) => {
-                return _.some(page.rule, (rule) => {
-                    return rule.test(url);
-                });
+                return _.filter(page.rule, (rule)=> {
+                        return rule.test(url);
+                    }).length > 0;
             });
         }
 

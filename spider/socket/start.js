@@ -44,7 +44,7 @@ module.exports = exports = (app, core, socket) => {
                 options.startCrawler && core.downloadInstance.doStart();
                 options.startDeal && core.downloadInstance.doInitHtmlDeal();
                 options.startDownload && core.downloadInstance.doInitDownloadDeal();
-                options.startChip && app.spider.socket.changeip();
+                // options.startChip && app.spider.socket.changeip();
 
                 cb({
                     ret: 0,

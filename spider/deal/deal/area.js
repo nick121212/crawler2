@@ -14,9 +14,9 @@ module.exports = (app)=> {
             let defer = Promise.defer();
 
             // 遍历
-            _.forEach(areas, (area, key) => {
+            _.each(areas, (area, key) => {
                 let strategy = app.spider.deal.html.index.getOne(area.htmlStrategy);
-                area.key = key;
+                // area.key = key;
                 strategy && promises.push(strategy.doDeal(queueItem, area));
             });
             // 执行
