@@ -11,6 +11,7 @@ module.exports = exports = (app, core, socket) => {
             pid: process.pid,
             hostname: ipInfo["hostname"],
             uptime: process.uptime(),
+            chip: process.ENV.NODE_CHIP,
             ip: ipInfo.ips["IPv4"] || ipInfo.ips["IPv6"],
             downloader: core.downloadInstance || {},
             now: Date.now(),
