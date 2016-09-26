@@ -15,10 +15,6 @@ module.exports = (app)=> {
             let matchs = result.match(regexp);
             let index = data.index || 0;
 
-            // _.each(matchs, (match) => {
-            // console.log(matchs);
-            // });
-
             if (matchs.length > index) {
                 result = matchs[index];
             }
