@@ -41,9 +41,6 @@ module.exports = (core) => {
                     data: [
                         core.utils.data_builder.switchs([], [], [
                             core.utils.data_builder.cases(".name", [], "楼盘名称", [
-                                core.utils.data_builder.normal("status", [".des i"])
-                            ]),
-                            core.utils.data_builder.cases(".name", [], "楼盘名称", [
                                 core.utils.data_builder.normal("name", [".des"], ["i"])
                             ]),
                             core.utils.data_builder.cases(".name", [], "楼盘特点", [

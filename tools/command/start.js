@@ -2,6 +2,9 @@
  * Created by NICK on 16/7/1.
  */
 
+const _ = require("lodash");
+const fs = require("fs");
+
 module.exports = exports = (core, program) => {
     let action = (configKey, options) => {
         let config = core.config[configKey];
@@ -10,7 +13,12 @@ module.exports = exports = (core, program) => {
             console.error("没有找到配置数据");
             return process.exit(1);
         }
-        console.log(JSON.stringify(config.index.pages.error));
+
+        _.forEach(config.index.pages, (page, key)=> {
+            "use strict";
+            fs.writeFileSync("file/" + key + '.json', JSON.stringify(page));
+        });
+
         // core.func.start(config.index, options).then(process.exit, process.exit);
     };
 

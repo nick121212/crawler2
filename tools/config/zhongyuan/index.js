@@ -16,7 +16,7 @@ module.exports = exports = (core) => {
         timeout: 5000
     };
     // 白名单
-    // config.addWhitePath(/^\/ershoufang(?:\/\D+|\/.+\.html|)(?:|\/g\d+)\/?$/);
+    config.addWhitePath(/^\/ershoufang(?:\/\D+|\/.+\.html|)(?:|\/g\d+)\/?$/);
     // 中原经纪人
     config.addWhitePath(/^\/xiaoqu\/g\d+\/?$/);
 

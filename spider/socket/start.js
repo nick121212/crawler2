@@ -32,7 +32,10 @@ module.exports = exports = (app, core, socket) => {
             config.blackPathList = config.blackPathList.map((path) => {
                 return new RegExp(app.spider.utils.tools.replaceRegexp(path.regexp), path.scope);
             });
-
+            // 查找enable是true的白名单
+            config.whitePathList = _.filter(config.whitePathList, (list)=> {
+                return list.enable === true;
+            });
             config.whitePathList = config.whitePathList.map((path) => {
                 return new RegExp(app.spider.utils.tools.replaceRegexp(path.regexp), path.scope);
             });

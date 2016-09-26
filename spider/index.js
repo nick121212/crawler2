@@ -206,7 +206,6 @@ module.exports = (app, core, socket) => {
                     } else {
                         errors[queueItem.urlId]++;
                     }
-
                     // 如果错误数超过200，丢弃掉消息
                     if (errors[queueItem.urlId] >= 200) {
                         delete errors[queueItem.urlId];

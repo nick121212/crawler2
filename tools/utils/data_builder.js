@@ -6,13 +6,13 @@ module.exports = () => {
         constructor() {
             this.formats = {
                 str: {
-                    str: []
+                    "str": []
                 },
                 num: {
-                    num: []
+                    "num": []
                 },
                 match: {
-                    price: {match: {regexp: /\d+(?:.\d+|)/.toString(), index: 0}},
+                    "price": {"match": {"regexp": /\d+(?:.\d+|)/.toString(), "index": 0}},
                 }
             };
         }

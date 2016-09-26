@@ -1,6 +1,6 @@
 module.exports = (core) => {
     return (config) => {
-        config.pages.communitySHIJING = {
+        config.pages.communitySj = {
             key: "crawler.community_shijing",
             rule: [{
                 regexp: /\/community\/photos2\/b\/\d+/.toString(),
