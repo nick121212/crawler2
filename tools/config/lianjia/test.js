@@ -12,6 +12,17 @@ let regexs = {
             "http://sh.lianjia.com/ershoufang/ganquanyichuan/a4",
             "http://sh.lianjia.com/ershoufang/ganquanyichuan/a4/d6"
         ]
+    },
+    house: {
+        regexp: /\/loupan(?:\/pg\d+|\/[a-z]*(?:\/pg\d+|)|\/[a-z]_.*|)\/?$/i,
+        data: [
+            "http://zs.fang.lianjia.com/loupan/",
+            "http://zs.fang.lianjia.com/loupan/sanxiangzhen/",
+            "http://zs.fang.lianjia.com/loupan/shiqiqu/",
+            "http://zs.fang.lianjia.com/loupan/shiqiqu/pg2/",
+            "http://zs.fang.lianjia.com/loupan/pg3/",
+            "http://zs.fang.lianjia.com/loupan/wuguishanzhen/p2/"
+        ]
     }
 };
 
