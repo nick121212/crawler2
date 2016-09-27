@@ -12,7 +12,11 @@ module.exports = (app)=> {
          * @returns {String}
          */
         doDeal(result) {
-            return moment(result, 'YYYY-MM-DD');
+            let res = moment(result, 'YYYY-MM-DD').toString();
+
+            console.log(res);
+
+            return res;
         }
     }
     return new Strategy();
