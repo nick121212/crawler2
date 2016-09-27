@@ -16,16 +16,16 @@ class Downloader {
         //     horsemanSetting.proxy = `http://${ipInfo.host}:${ipInfo.port}`;
         //     horsemanSetting.proxyType = "http";
         // }
-        // if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
-        //     horsemanSetting.proxy = `${settings.ipInfo.host}:${settings.ipInfo.port}`;
-        //     horsemanSetting.proxyType = "http";
-        // }
+        if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
+            horsemanSetting.proxy = `http://${settings.ipInfo.host}:${settings.ipInfo.port}`;
+            horsemanSetting.proxyType = "http";
+        }
 
         horseman = new Horseman(horsemanSetting);
 
-        if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
-            horseman.setProxy(settings.ipInfo.host, settings.ipInfo.port, "http");
-        }
+        // if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
+        //     horseman.setProxy(settings.ipInfo.host, settings.ipInfo.port, "http");
+        // }
 
         horseman
             .userAgent(settings.ua || "")

@@ -9,7 +9,8 @@ module.exports = exports = (app, core, socket) => {
     socket.on("crawler:test", (params, cb)=> {
         let config = params.key;
 
-        app.spider.download.index.start("superagent", uri(params.options.url).normalize(), config.proxySettings || {}).then((result) => {
+        console.log("start test:" + params.options.url);
+        app.spider.download.index.start(config.downloader, uri(params.options.url).normalize(), config.proxySettings || {}).then((result) => {
             if (result.res && result.res.status !== 200) {
                 cb({
                     ret: -1,
