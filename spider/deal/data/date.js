@@ -18,7 +18,7 @@ module.exports = (app)=> {
                 return res.format(settings.format || "YYYY-MM-DD");
             }
 
-            return "";
+            return "1990-01-01";
         }
     }
     return new Strategy();
