@@ -5,12 +5,14 @@ let shell = require("shelljs");
 
 module.exports = exports = (app, core, socket) => {
     let kill = (params, cb) => {
-        if (params.type) {
-            if (params.pid === "all") {
-                params.pid = process.pid;
+        let options = params.options;
+
+        if (options.type) {
+            if (options.pid === "all") {
+                options.pid = process.pid;
             }
-            if (params.type === "forever") {
-                return shell.exec(`forever stop ${params.pid}`, function (code, stdout, stderr) {
+            if (options.type === "forever") {
+                return shell.exec(`forever stop ${options.pid}`, function (code, stdout, stderr) {
                     cb({
                         ret: 0,
                         pid: process.pid
