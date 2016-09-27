@@ -11,11 +11,11 @@ module.exports = (app)=> {
          * @param reseult {Any}
          * @returns {String}
          */
-        doDeal(result) {
-            let res = moment(result, 'YYYY-MM-DD');
+        doDeal(result, settings) {
+            let res = moment(result, settings.format || 'YYYY-MM-DD');
 
             if (res.isValid()) {
-                return res.toString();
+                return res.format(settings.format || "YYYY-MM-DD");
             }
 
             return "";
