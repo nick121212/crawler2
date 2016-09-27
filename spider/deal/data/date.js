@@ -12,13 +12,14 @@ module.exports = (app)=> {
          * @returns {String}
          */
         doDeal(result) {
-            let res = moment(result, 'YYYY-MM-DD').toString();
+            let res = moment(result, 'YYYY-MM-DD');
 
-            console.log(res);
+            if (res.isValid()) {
+                return res.toString();
+            }
 
-            return res;
+            return "";
         }
     }
     return new Strategy();
 };
-// module.exports = exports = new Strategy();
