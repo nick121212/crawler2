@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="3ae7234b-a18e-4c01-9014-8f3d454f359a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/deal/data/date.js" afterPath="$PROJECT_DIR$/spider/deal/data/date.js" />
     </list>
     <ignored path="crawler.2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,8 +48,8 @@
       <file leaf-file-name="date.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spider/deal/data/date.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="9" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
+            <state relative-caret-position="300">
+              <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -406,14 +405,7 @@
       <workItem from="1474337923580" duration="30215000" />
       <workItem from="1474604950023" duration="12469000" />
       <workItem from="1474855832027" duration="12009000" />
-      <workItem from="1474959664680" duration="4808000" />
-    </task>
-    <task id="LOCAL-00013" summary="房点评">
-      <created>1470907298025</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1470907298025</updated>
+      <workItem from="1474959664680" duration="4848000" />
     </task>
     <task id="LOCAL-00014" summary="房点评">
       <created>1470965029401</created>
@@ -751,11 +743,18 @@
       <option name="project" value="LOCAL" />
       <updated>1474975216166</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="房点评">
+      <created>1474975643744</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1474975643744</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="149137000" />
+    <option name="totallyTimeSpent" value="149177000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -1129,8 +1128,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/spider/deal/data/date.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="9" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
+        <state relative-caret-position="300">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding />
         </state>
       </provider>
