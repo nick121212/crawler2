@@ -22,7 +22,7 @@ module.exports = exports = (app, core, socket) => {
     let scheduleJob1 = () => {
         // 5s后重启nginx
         setTimeout(() => {
-            shell.exec(commands.pon, {silent: false});
+            // shell.exec(commands.pon, {silent: false});
             shell.exec(commands.nginxRestart, {silent: false});
             retryCount = 0;
             isRunning = false;
