@@ -37,14 +37,6 @@ module.exports = exports = (app, core, socket) => {
             console.log("success----------", lastIp, route);
             if (route.indexOf(lastIp) > 0) {
                 scheduleJob1();
-            } else {
-                if (retryCount > 5) {
-                    return scheduleJob1();
-                }
-                setTimeout(function () {
-                    isRunning = false;
-                    scheduleJob();
-                }, 10);
             }
         }, 1000);
     };
