@@ -184,18 +184,7 @@ module.exports = (app, core, socket) => {
                     // 可能是页面封锁机制,爬取到的页面是错误的
                     console.error(err.status, err.code, err.message, errors[queueItem.urlId]);
 
-                    if ((err.status === 601 && this.proxySettings.useProxy) || (err.code === "ECONNABORTED" && this.proxySettings.useProxy)) {
-                        // 重启更换ip服务
-                        console.log("-----------------在此更改ip。。。--------------");
-                        app.spider.socket.log({
-                            message: `发送更换IP请求！！`,
-                            isError: true,
-                            date: Date.now()
-                        });
-                        socket.emit("crawler:chip");
 
-                        return next(msg, true, 1000 * 60 * (process.env.NODE_CHIPS ? 0.3 : (~~this.proxySettings.errorInterval || 1)));
-                    }
                     // 错误重试机制
                     if (!errors[queueItem.urlId]) {
                         errors[queueItem.urlId] = 0;
@@ -206,6 +195,22 @@ module.exports = (app, core, socket) => {
                     } else {
                         errors[queueItem.urlId]++;
                     }
+
+                    if ((err.status === 502 && this.proxySettings.useProxy) || (err.status === 601 && this.proxySettings.useProxy) || (err.code === "ECONNABORTED" && this.proxySettings.useProxy)) {
+                        // 重启更换ip服务
+                        if (err.status === 601 || errors[queueItem.urlId] > 150) {
+                            console.log("-----------------在此更改ip。。。--------------");
+                            app.spider.socket.log({
+                                message: `发送更换IP请求！！`,
+                                isError: true,
+                                date: Date.now()
+                            });
+                            socket.emit("crawler:chip");
+                        }
+
+                        return next(msg, true, 1000 * 60 * (~~this.proxySettings.errorInterval || 0.5));
+                    }
+
                     // 如果错误数超过200，丢弃掉消息
                     if (errors[queueItem.urlId] >= 200) {
                         delete errors[queueItem.urlId];
