@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3ae7234b-a18e-4c01-9014-8f3d454f359a" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/index.js" afterPath="$PROJECT_DIR$/spider/index.js" />
     </list>
     <ignored path="crawler.2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,16 +26,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="stop.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/spider/socket/stop.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="14" column="57" selection-start-line="14" selection-start-column="57" selection-end-line="14" selection-end-column="57" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="date.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spider/deal/data/date.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -118,7 +108,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spider/index.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="226">
@@ -129,6 +119,16 @@
                 <element signature="e#11952#13023#0" expanded="false" />
                 <element signature="e#13136#14343#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -190,7 +190,6 @@
         <option value="$PROJECT_DIR$/tools/file/room.json" />
         <option value="$PROJECT_DIR$/tools/file/loupanDetail.json" />
         <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/core/config/index.js" />
         <option value="$PROJECT_DIR$/spider/deal/data/regexp.js" />
         <option value="$PROJECT_DIR$/spider/download/phantom.js" />
@@ -199,6 +198,7 @@
         <option value="$PROJECT_DIR$/spider/socket/test.js" />
         <option value="$PROJECT_DIR$/spider/download/superagent.js" />
         <option value="$PROJECT_DIR$/spider/index.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -255,38 +255,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="crawler.2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="crawler.2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="crawler.2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="spider" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="crawler.2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="crawler.2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="spider" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="socket" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -439,14 +407,7 @@
       <workItem from="1474337923580" duration="30215000" />
       <workItem from="1474604950023" duration="12469000" />
       <workItem from="1474855832027" duration="12009000" />
-      <workItem from="1474959664680" duration="9940000" />
-    </task>
-    <task id="LOCAL-00017" summary="房点评">
-      <created>1470977741592</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1470977741592</updated>
+      <workItem from="1474959664680" duration="10085000" />
     </task>
     <task id="LOCAL-00018" summary="房点评">
       <created>1470982250206</created>
@@ -784,11 +745,18 @@
       <option name="project" value="LOCAL" />
       <updated>1475051320881</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="更改了错误处理机制，加强了更改ip的判定">
+      <created>1475052140535</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1475052140535</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="154269000" />
+    <option name="totallyTimeSpent" value="154414000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -826,7 +794,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="房点评" />
-    <option name="LAST_COMMIT_MESSAGE" value="房点评" />
+    <MESSAGE value="更改了错误处理机制，加强了更改ip的判定" />
+    <option name="LAST_COMMIT_MESSAGE" value="更改了错误处理机制，加强了更改ip的判定" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -948,14 +917,6 @@
     <entry file="file://$PROJECT_DIR$/tools/file/loupan.json" />
     <entry file="file://$PROJECT_DIR$/tools/file/room.json" />
     <entry file="file://$PROJECT_DIR$/tools/file/loupanDetail.json" />
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -1177,6 +1138,14 @@
             <element signature="e#11952#13023#0" expanded="false" />
             <element signature="e#13136#14343#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
