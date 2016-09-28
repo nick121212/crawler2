@@ -10,6 +10,7 @@ module.exports = exports = (app, core, socket) => {
         let config = params.key;
 
         console.log("start test:" + params.options.url);
+        config.proxySettings.useProxy = false;
         app.spider.download.index.start(config.downloader, uri(params.options.url).normalize(), config.proxySettings || {}).then((result) => {
             if (result.res && result.res.status !== 200) {
                 cb({

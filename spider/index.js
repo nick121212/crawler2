@@ -184,7 +184,7 @@ module.exports = (app, core, socket) => {
                     // 可能是页面封锁机制,爬取到的页面是错误的
                     console.error(err.status, err.code, err.message, errors[queueItem.urlId]);
 
-                    if (err.status === 601) {
+                    if ((err.status === 601 && this.proxySettings.useProxy) || (err.code === "ECONNABORTED" && this.proxySettings.useProxy)) {
                         // 重启更换ip服务
                         console.log("-----------------在此更改ip。。。--------------");
                         app.spider.socket.log({

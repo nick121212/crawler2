@@ -10,9 +10,6 @@ class Downloader {
         try {
             let req = request.get(uri.toString());
 
-            if (settings.useProxy && ipInfo && ipInfo.port && ipInfo.port) {
-                req.proxy(`http://${ipInfo.host}:${ipInfo.port}`);
-            }
             if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
                 req.proxy(`http://${settings.ipInfo.host}:${settings.ipInfo.port}`);
             }
