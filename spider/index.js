@@ -208,7 +208,7 @@ module.exports = (app, core, socket) => {
                             socket.emit("crawler:chip");
                         }
 
-                        return next(msg, true, 1000 * 60 * (~~this.proxySettings.errorInterval || 0.5));
+                        return next(msg, true, 1000 * 60 * (~~this.proxySettings.errorInterval || 0.1));
                     }
 
                     // 如果错误数超过200，丢弃掉消息

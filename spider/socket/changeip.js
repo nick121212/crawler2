@@ -29,20 +29,24 @@ module.exports = exports = (app, core, socket) => {
         }, 5000);
     };
     let success = () => {
-        shell.exec(commands.routeAdd + lastIp, {silent: false});
-        let route = shell.exec(commands.route, {silent: false}).stdout;
+        setTimeout(() => {
+            "use strict";
+            shell.exec(commands.routeAdd + lastIp, {silent: false});
+            let route = shell.exec(commands.route, {silent: false}).stdout;
 
-        if (route.indexOf(lastIp) > 0) {
-            scheduleJob1();
-        } else {
-            if (retryCount > 5) {
-                return scheduleJob1();
+            console.log("success----------", lastIp, route);
+            if (route.indexOf(lastIp) > 0) {
+                scheduleJob1();
+            } else {
+                if (retryCount > 5) {
+                    return scheduleJob1();
+                }
+                setTimeout(function () {
+                    isRunning = false;
+                    scheduleJob();
+                }, 10);
             }
-            setTimeout(function () {
-                isRunning = false;
-                scheduleJob();
-            }, 10);
-        }
+        }, 1000);
     };
     let scheduleJob = () => {
         let isSuccess, localhostIp, pptpsetup, datas = [];
@@ -68,7 +72,7 @@ module.exports = exports = (app, core, socket) => {
 
                 if (isSuccess && localhostIp.length > 1) {
                     lastIp = localhostIp[0];
-                    success();
+                    return success();
                 }
             }
         });
