@@ -48,6 +48,10 @@ module.exports = (app, core, socket) => {
             this.queueStore = new app.spider.lib.queue_store_es(this.key);
             this.discover = new app.spider.lib.discover(settings, this.queue);
             this.deal = new app.spider.deal.index(settings, this.queueStore.addCompleteData.bind(this.queueStore), this.queueStore.rollbackCompleteData.bind(this.queueStore));
+
+            app.spider.socket.update({
+                downloader: core.downloadInstance
+            });
         }
 
         /**
@@ -402,10 +406,6 @@ module.exports = (app, core, socket) => {
                 this.doLoop().then(next.bind(this));
             });
             this.isStart = true;
-
-            app.spider.socket.update({
-                downloader: core.downloadInstance
-            });
         }
     }
 
