@@ -50,7 +50,7 @@ module.exports = (app, core, socket) => {
             this.deal = new app.spider.deal.index(settings, this.queueStore.addCompleteData.bind(this.queueStore), this.queueStore.rollbackCompleteData.bind(this.queueStore));
 
             app.spider.socket.update({
-                downloader: core.downloadInstance
+                downloader: this
             });
         }
 
