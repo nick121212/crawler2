@@ -19,6 +19,7 @@ module.exports = (app) => {
 
             app.spider.deal.html.index.getOne(data.htmlStrategy).doDeal(queueItem, data, $, index).then((res) => {
                 let promises = [];
+
                 for (let i = 0; i < res.len; i++) {
                     promises = promises.concat(this.doDealData(queueItem, data.data.concat([]), results, res.$cur, i));
                 }

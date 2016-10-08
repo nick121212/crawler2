@@ -121,9 +121,7 @@ module.exports = (app, core, socket) => {
                 }
 
                 currentInterval = interval;
-                // setTimeout(function () {
                 reject ? result.ch.reject(msg) : result.ch.ack(msg);
-                // }, interval);
             };
 
             try {
@@ -207,6 +205,8 @@ module.exports = (app, core, socket) => {
                             });
                             socket.emit("crawler:chip");
                         }
+
+                        errors[queueItem.urlId] = 50;
 
                         return next(msg, true, 1000 * 60 * (~~this.proxySettings.errorInterval || 0.1));
                     }

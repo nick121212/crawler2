@@ -3,7 +3,7 @@
 let _ = require("lodash");
 let jpp = require("json-path-processor");
 
-module.exports = (app, core) => {
+module.exports = (app) => {
     class DealHtml {
         constructor(settings, saveFunc, rollbackFunc) {
             this.settings = settings;
@@ -78,7 +78,7 @@ module.exports = (app, core) => {
                 if (!result.rule.test) {
                     // 合并数据，将配置好的静态数据和解析得来的数据合并
                     result.result = _.extend({}, result.rule.extendData || {}, result.result);
-                    // 更新下信息
+                    // 处理成功
                     app.spider.socket.log({
                         message: "处理成功",
                         data: result.result
@@ -126,17 +126,20 @@ module.exports = (app, core) => {
                         return Promise.all(this.checkStatus(queueItem, results, ch));
                     }).then(() => {
                         console.log(`deal complete ${queueItem.url} at ${new Date()}`);
-
-                        // core.spilder.socket.update({
-                        //     deal: {
-                        //         queueItem: queueItem,
-                        //         message: `deal complete ${queueItem.url} at ${new Date()}`
-                        //     }
-                        // });
-
+                        // 更新下信息
+                        app.spider.socket.log({
+                            message: "保存处理结果成功",
+                            // data: result.result
+                        });
                         defer.resolve();
                     }).catch((err) => {
                         console.error(err);
+                        // 更新下信息
+                        app.spider.socket.log({
+                            message: "保存处理结果失败",
+                            isError: true,
+                            data: err.message
+                        });
                         defer.reject(err);
                     });
                 } catch (err) {
