@@ -17,6 +17,8 @@ module.exports = (app)=> {
 
             if (matchs.length > index) {
                 result = matchs[index];
+            } else {
+                result = "";
             }
 
             return result;
