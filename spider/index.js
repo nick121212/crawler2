@@ -258,6 +258,15 @@ module.exports = (app, core, socket) => {
          * 初始化html处理部分的queue
          */
         doInitHtmlDeal() {
+            let next = (queueItem, result, msg)=> {
+                this.deal.consumeQueue(queueItem, result.ch).then(() => {
+                    result.ch.ack(msg);
+                }, (err) => {
+                    console.log(err);
+                    result.ch.reject(msg);
+                });
+            };
+
             this.isStartDeal = true;
             core.q.getQueue(`crawler.deals.${this.key}`, {durable: true}).then((result) => {
                 Promise.all([
@@ -276,12 +285,21 @@ module.exports = (app, core, socket) => {
                         }
                         try {
                             if (queueItem) {
-                                this.deal.consumeQueue(queueItem, result.ch).then(() => {
-                                    result.ch.ack(msg);
-                                }, (err) => {
-                                    console.log(err);
-                                    result.ch.reject(msg);
-                                });
+                                if (queueItem.responseBody) {
+                                    next(queueItem, result, msg);
+                                } else {
+                                    this.queueStore.getRsBody(queueItem).then((response)=> {
+                                        if (response.found) {
+                                            queueItem.responseBody = response._source.text;
+                                            return next(queueItem, result, msg);
+                                        }
+
+                                        result.ch.reject(msg);
+                                    }, ()=> {
+                                        console.log(err);
+                                        result.ch.reject(msg);
+                                    });
+                                }
                             }
                         } catch (e) {
                             console.log(e);

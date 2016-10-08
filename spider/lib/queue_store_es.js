@@ -18,6 +18,14 @@ module.exports = (app, core) => {
             this.esTypeQueueUrls = "mqurls";
         }
 
+        getRsBody(queueItem) {
+            return core.elastic.get({
+                index: this.esIndex,
+                type: this.esTypeRsbody,
+                id: queueItem.urlId
+            });
+        }
+
         /**
          * 获取id为queueItem.url的urls和queuqUrls中的详情信息
          * @param ququeItem {object} 数据
@@ -390,8 +398,8 @@ module.exports = (app, core) => {
             core.elastic.bulk({
                 body: [
 
-                    { delete: { _index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId } },
-                    { index: { _index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId } },
+                    {delete: {_index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId}},
+                    {index: {_index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId}},
                     saveQueueItem
                 ]
             }).then(() => {
