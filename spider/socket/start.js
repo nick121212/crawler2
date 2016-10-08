@@ -49,6 +49,10 @@ module.exports = exports = (app, core, socket) => {
                 options.startDownload && core.downloadInstance.doInitDownloadDeal();
                 // options.startChip && app.spider.socket.changeip();
 
+                app.spider.socket.update({
+                    downloader: core.downloadInstance
+                });
+
                 cb({
                     ret: 0,
                     pid: process.pid
