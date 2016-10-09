@@ -43,7 +43,7 @@ module.exports = exports = (core) => {
                     if (_.isArray(res[field]) || _.isObject(res[field])) {
                         strs.push(JSON.stringify(res[field]));
                     } else {
-                        strs.push(res[field] || "无");
+                        strs.push("\"" + res[field] + "\"" || "无");
                     }
                 });
                 if (!setHeader && header.length) {
