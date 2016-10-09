@@ -12,5 +12,5 @@
 
 
     ENV=production node . export excel -i crawler.community_layouts -t all -f community_layouts.anjuke.txt -F name,layouts
-    ENV=production node . export excel -i crawler.community -t anjuke-1 -f community.anjuke.txt -F name,address,city,area,averagePriceUnit,averagePrice,buildingTime,propertyFee,propertyCompany,developerName,roomAmount,buildingAmount,volumeRate,greeningRate,tags
-    ENV=production node . export excel -i community -t lianjia -f community.lianjia.txt -F name,address,plate,city,area,averagePriceUnit,averagePrice,refPriceUnit,refPrice,buildingTime,propertyFee,propertyCompany,developerName,roomAmount,buildingAmount,volumeRate,greeningRate
+    ENV=production node . export excel -i crawler.community -t anjuke-1 -f community.anjuke.txt -F name,address,type,parkingAmount,buildingAmount,desc
+    ENV=production node . export excel -i community -t lianjia -f community.lianjia.txt -F name,plate,address,type,propertyFee,propertyCompany,developerCompany,averagePrice,refAveragePrice

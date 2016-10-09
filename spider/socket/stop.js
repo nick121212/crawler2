@@ -8,11 +8,8 @@ module.exports = exports = (app, core, socket) => {
         let options = params.options;
 
         if (options.type) {
-            if (options.pid === "all") {
-                options.pid = process.pid;
-            }
             if (options.type === "forever") {
-                return shell.exec(`forever stop ${options.pid}`, function (code, stdout, stderr) {
+                return shell.exec(`forever stop ${process.pid}`, function (code, stdout, stderr) {
                     cb({
                         ret: 0,
                         pid: process.pid
