@@ -1,4 +1,4 @@
-const ip = "192.168.222.90";
+const ip = process.env.NODE_IP || "192.168.222.90";
 
 module.exports = exports = {
     elastic: {
@@ -9,20 +9,6 @@ module.exports = exports = {
         host: ip,
         user: "nick",
         password: "111111"
-    },
-    database: {
-        name: "longyan_online_20160629_09",
-        username: "admin",
-        password: "dbadmin@#",
-        settings: {
-            host: "192.168.221.11",
-            dialect: 'mysql',
-            pool: {
-                max: 5,
-                min: 0,
-                idle: 10000
-            }
-        }
     },
     socket: {
         host: "localhost",
