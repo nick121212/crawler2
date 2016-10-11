@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3ae7234b-a18e-4c01-9014-8f3d454f359a" name="Default" comment="更改了错误处理机制，加强了更改ip的判定">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/spider/lib/error.js" />
+    <list default="true" id="3ae7234b-a18e-4c01-9014-8f3d454f359a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/index.js" afterPath="$PROJECT_DIR$/spider/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tools/readme.md" afterPath="$PROJECT_DIR$/tools/readme.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/lib/error.js" afterPath="$PROJECT_DIR$/spider/lib/error.js" />
     </list>
     <ignored path="crawler.2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,11 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spider/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="466">
-              <caret line="172" column="75" selection-start-line="172" selection-start-column="75" selection-end-line="172" selection-end-column="75" />
+            <state relative-caret-position="210">
+              <caret line="173" column="90" selection-start-line="173" selection-start-column="90" selection-end-line="173" selection-end-column="90" />
               <folding />
             </state>
           </provider>
@@ -78,11 +77,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="error.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="error.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spider/lib/error.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="630">
-              <caret line="44" column="26" selection-start-line="44" selection-start-column="25" selection-end-line="44" selection-end-column="26" />
+            <state relative-caret-position="273">
+              <caret line="57" column="21" selection-start-line="57" selection-start-column="21" selection-end-line="57" selection-end-column="21" />
               <folding>
                 <element signature="e#0#39#0" expanded="false" />
               </folding>
@@ -164,8 +163,8 @@
         <option value="$PROJECT_DIR$/aaa.js" />
         <option value="$PROJECT_DIR$/jlkjlk" />
         <option value="$PROJECT_DIR$/spider/deal/index.js" />
-        <option value="$PROJECT_DIR$/spider/lib/error.js" />
         <option value="$PROJECT_DIR$/spider/index.js" />
+        <option value="$PROJECT_DIR$/spider/lib/error.js" />
       </list>
     </option>
   </component>
@@ -179,8 +178,8 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="width" value="1280" />
+    <option name="height" value="800" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -410,21 +409,7 @@
       <workItem from="1475128856636" duration="1339000" />
       <workItem from="1475672625979" duration="317000" />
       <workItem from="1475893850485" duration="16514000" />
-      <workItem from="1476002053424" duration="9036000" />
-    </task>
-    <task id="LOCAL-00034" summary="房点评">
-      <created>1474019754916</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1474019754916</updated>
-    </task>
-    <task id="LOCAL-00035" summary="房点评">
-      <created>1474019772352</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1474019772352</updated>
+      <workItem from="1476002053424" duration="12090000" />
     </task>
     <task id="LOCAL-00036" summary="房点评">
       <created>1474038148197</created>
@@ -755,17 +740,31 @@
       <option name="project" value="LOCAL" />
       <updated>1476021001255</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="更改了错误处理机制，加强了更改ip的判定">
+      <created>1476112432979</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1476112432979</updated>
+    </task>
+    <task id="LOCAL-00084" summary="增加了error文件">
+      <created>1476171221482</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1476171221482</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="184848000" />
+    <option name="totallyTimeSpent" value="187902000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21071176" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23749007" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -773,7 +772,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3192771" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43012047" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46849316" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -798,14 +797,23 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="房点评" />
     <MESSAGE value="更改了错误处理机制，加强了更改ip的判定" />
-    <option name="LAST_COMMIT_MESSAGE" value="更改了错误处理机制，加强了更改ip的判定" />
+    <MESSAGE value="增加了error文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加了error文件" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/spider/lib/error.js</url>
+          <line>36</line>
+          <properties />
+          <option name="timeStamp" value="245" />
+        </line-breakpoint>
+      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="236" />
+      <option name="time" value="247" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1160,21 +1168,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spider/lib/error.js">
+    <entry file="file://$PROJECT_DIR$/spider/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="44" column="26" selection-start-line="44" selection-start-column="25" selection-end-line="44" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#39#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="210">
+          <caret line="173" column="90" selection-start-line="173" selection-start-column="90" selection-end-line="173" selection-end-column="90" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spider/index.js">
+    <entry file="file://$PROJECT_DIR$/spider/lib/error.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="466">
-          <caret line="172" column="75" selection-start-line="172" selection-start-column="75" selection-end-line="172" selection-end-column="75" />
-          <folding />
+        <state relative-caret-position="273">
+          <caret line="57" column="21" selection-start-line="57" selection-start-column="21" selection-end-line="57" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#39#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

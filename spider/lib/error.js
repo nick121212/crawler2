@@ -4,15 +4,15 @@
 
 let _ = require("lodash");
 
-module.exports = (app) => {
+module.exports = (app, core) => {
     let errors = {};
 
     return {
-        success: (queueItem, next, msg)=> {
+        success: (queueItem, next)=> {
             delete errors[queueItem.urlId];
-            next(msg);
+            next();
         },
-        error: (err, queueItem, next, msg)=> {
+        error: (err, queueItem, next)=> {
             // 推送错误信息
             app.spider.socket.log({
                 message: `${queueItem.url}--${err.message}--${err.status}--${err.code}`,
@@ -46,14 +46,16 @@ module.exports = (app) => {
                     socket.emit("crawler:chip");
                 }
 
-                return next(msg, true, 1000 * 60 * (~~core.downloadInstance.proxySettings.errorInterval || 0.1));
+                return next(true, 1000 * 60 * (~~core.downloadInstance.proxySettings.errorInterval || 0.1));
             }
 
             // 如果错误数超过200，丢弃掉消息
             if (errors[queueItem.urlId] >= 200) {
                 delete errors[queueItem.urlId];
-                return core.downloadInstance.queueStore.addCompleteQueueItem(queueItem, "", core.downloadInstance.key, "error").then(next.bind(core.downloadInstance, msg), next.bind(core.downloadInstance, msg));
+                return core.downloadInstance.queueStore.addCompleteQueueItem(queueItem, "", core.downloadInstance.key, "error").then(next, next);
             }
+
+            next(true);
         }
     }
 };

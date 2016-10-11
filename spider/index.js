@@ -125,6 +125,7 @@ module.exports = (app, core, socket) => {
 
             try {
                 queueItem = JSON.parse(msg.content.toString());
+
                 if (!queueItem || typeof queueItem.url !== "string") {
                     return this.queueStore.addCompleteQueueItem(queueItem, "", this.key, "error").then(next.bind(this, msg), next.bind(this, msg));
                 }
@@ -168,9 +169,9 @@ module.exports = (app, core, socket) => {
                         return this.queueStore.addUrlsToEsUrls(urls, this.key);
                     }
                 }).then(() => {
-                    return app.spider.lib.error.success(queueItem, next, msg);
+                    return app.spider.lib.error.success(queueItem, next.bind(this, msg));
                 }).catch((err) => {
-                    return app.spider.lib.error.error(err, queueItem, next, msg);
+                    return app.spider.lib.error.error(err, queueItem, next.bind(this, msg));
                 });
             } catch (err) {
                 next(msg);
