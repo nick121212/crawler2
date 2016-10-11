@@ -235,9 +235,10 @@ module.exports = (app, core, socket) => {
                         try {
                             queueItem = JSON.parse(msg.content.toString());
                         } catch (e) {
-                            result.ch.reject(msg);
+                            return result.ch.reject(msg);
                         }
                         try {
+                            // 判定，如果message中不存在responseBody，则直接从数据库中提取
                             if (queueItem) {
                                 if (queueItem.responseBody) {
                                     next(queueItem, result, msg);

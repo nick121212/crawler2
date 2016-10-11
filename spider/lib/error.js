@@ -2,6 +2,7 @@
  * Created by NICK on 16/10/10.
  */
 
+let _ = require("lodash");
 
 module.exports = (app) => {
     let errors = {};
