@@ -323,16 +323,28 @@ module.exports = (app, core) => {
         addQueueItemsToQueue(queueItems, key, priority = 1) {
             let defer = Promise.defer();
 
-            core.q.getQueue(`crawler.urls.${key}`, {}).then((result) => {
-                _.each(queueItems, (queueItem) => {
-                    result.ch.publish("amq.topic", `${result.q.queue}.urls`, new Buffer(JSON.stringify(queueItem)), {
-                        priority: priority,
-                        persistent: true
+            // 建立请求队列
+            core.q.getQueue(`crawler.urls.${this.key}`, {}).then((result) => {
+                Promise.all([
+                    // 绑定queue到exchange
+                    result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}.urls`),
+                    // 每次消费1条queue
+                    result.ch.prefetch(1)
+                ]).then(() => {
+                    _.each(queueItems, (queueItem) => {
+                        result.ch.publish("amq.topic", `${result.q.queue}.urls`, new Buffer(JSON.stringify(queueItem)), {
+                            priority: priority,
+                            persistent: true
+                        });
                     });
+                    result.ch.close();
+                    defer.resolve(true);
                 });
-                result.ch.close();
-                defer.resolve(true);
-            }, defer.resolve);
+            }, defer.reject);
+
+            // core.q.getQueue(`crawler.urls.${key}`, {}).then((result) => {
+            //
+            // }, defer.resolve);
 
             return defer.promise;
         }
