@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start_f":"NODE_IP=106.75.78.203 ENV=production forever start .",
+    "start":"NODE_IP=106.75.78.203 ENV=production node .",
+    "chip":"NODE_IP=106.75.78.203 NODE_CHIP=true ENV=production forever start ."
   },
   "author": "",
   "license": "ISC",
