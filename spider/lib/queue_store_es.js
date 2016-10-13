@@ -324,7 +324,7 @@ module.exports = (app, core) => {
             let defer = Promise.defer();
 
             // 建立请求队列
-            core.q.getQueue(`crawler.urls.${this.key}`, {}).then((result) => {
+            core.q.getQueue(`crawler.urls.${key}`, {}).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
                     result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}.urls`),
