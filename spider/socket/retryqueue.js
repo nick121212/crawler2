@@ -1,6 +1,9 @@
 /**
  * Created by NICK on 16/7/1.
  */
+
+const _ = require("locash");
+
 module.exports = exports = (app, core, socket) => {
     socket.on("crawler:retryqueue", (params, cb)=> {
         let config = params.key;
@@ -18,10 +21,13 @@ module.exports = exports = (app, core, socket) => {
                     message: err.message
                 });
             }
-            response.hits.hits.forEach(function (res) {
-                res = res._source;
-                promises.push(queueEs.addQueueItemsToQueue(res, config.key));
-            });
+
+
+            promises.push(queueEs.addQueueItemsToQueue(_.map(response.hits.hits, (hit)=> {
+                return hit._source;
+            }), config.key));
+
+
             total += response.hits.hits.length;
             app.spider.socket.log({
                 message: `当前scroll：{${response._scroll_id}},数量：${total},总数量：${response.hits.total}`,
