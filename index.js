@@ -10,7 +10,7 @@ const socket = io(`http://${core.config.socket.host}:${core.config.socket.port}/
 
 consign({verbose: false})
     .include("spider/utils")
-    .include("spider/func")
+    // .include("spider/func")
     .include("spider/socket")
     .include("spider/deal/data")
     .include("spider/deal/html")

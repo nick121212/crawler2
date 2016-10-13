@@ -3,9 +3,9 @@ let connectionStr = `amqp://${config.q.user}:${config.q.password}@${config.q.hos
 let amqplib = require('amqplib');
 let connPromise = amqplib.connect(connectionStr);
 
-let rpc = require('amqp-rpc').factory({
-    url: connectionStr
-});
+// let rpc = require('amqp-rpc').factory({
+//     url: connectionStr
+// });
 let _ = require("lodash");
 
 let channel = null;
@@ -64,6 +64,6 @@ process.on("exit", () => {
 
 module.exports = exports = {
     getQueue: getQueue,
-    deleteQueue: deleteQueue,
-    rpc: rpc
+    deleteQueue: deleteQueue
+    // rpc: rpc
 };
