@@ -2,7 +2,7 @@
  * Created by NICK on 16/7/1.
  */
 
-const _ = require("locash");
+const _ = require("lodash");
 
 module.exports = exports = (app, core, socket) => {
     socket.on("crawler:retryqueue", (params, cb)=> {
