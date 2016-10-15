@@ -10,7 +10,7 @@ class Downloader {
                 ignoreSSLErrors: true
             },
             result = {},
-            resources = [];
+            resources = {};
 
         // if (settings.useProxy && ipInfo && ipInfo.port && ipInfo.port) {
         //     horsemanSetting.proxy = `http://${ipInfo.host}:${ipInfo.port}`;

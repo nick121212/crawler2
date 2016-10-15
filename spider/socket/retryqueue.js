@@ -52,7 +52,6 @@ module.exports = exports = (app, core, socket) => {
             }
         };
 
-
         Promise.all([
             core.q.deleteQueue(`crawler.urls.${config.key}`),
         ]).then(() => {
