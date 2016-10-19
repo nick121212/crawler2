@@ -39,7 +39,7 @@ module.exports = (app, core, socket) => {
             this.interval = settings.interval || 500;
             this.proxySettings = settings.proxySettings || {};
             this.initDomain = settings.initDomain || {};
-            this.ignoreStatusCode = settings.ignoreStatusCode || [301, 302, 400, 404, 500, "ENOTFOUND", "ECONNABORTED"];
+            this.ignoreStatusCode = settings.ignoreStatusCode || [301, 302, 400, 404, 500, "ENOTFOUND"];
             this.limitMinLinks = settings.limitMinLinks || 0;
 
             this.queue = new app.spider.lib.queue(settings);
