@@ -3,7 +3,7 @@
  */
 let _ = require("lodash");
 
-module.exports = exports = (app, core, socket) => {
+module.exports = exports = (app, core, sockets) => {
     // let ipInfo = app.spider.utils.ipinfo;
     let start = (params, cb) => {
         // let config = typeof params.config === "object" ? params.config : JSON.parse(params.config);
@@ -74,43 +74,45 @@ module.exports = exports = (app, core, socket) => {
         }
     };
 
-    // 启动爬虫实例
-    socket.on("crawler:start", (params, cb)=> {
-        start(params, cb);
-    });
+    _.each(sockets, (socket)=> {
+        // 启动爬虫实例
+        socket.on("crawler:start", (params, cb)=> {
+            start(params, cb);
+        });
 
-    // 启动爬虫分析html部分代码
-    socket.on("crawler:start:html", (params, cb)=> {
-        if (!core.downloadInstance) {
-            return cb({
-                ret: -1,
-                pid: process.pid,
-                msg: `还未初始化爬虫！`
-            });
-        }
+        // 启动爬虫分析html部分代码
+        socket.on("crawler:start:html", (params, cb)=> {
+            if (!core.downloadInstance) {
+                return cb({
+                    ret: -1,
+                    pid: process.pid,
+                    msg: `还未初始化爬虫！`
+                });
+            }
 
-        if (!core.downloadInstance.isStartDeal) {
-            core.downloadInstance.doInitHtmlDeal();
-        }
+            if (!core.downloadInstance.isStartDeal) {
+                core.downloadInstance.doInitHtmlDeal();
+            }
 
-        return cb({ret: 0});
-    });
+            return cb({ret: 0});
+        });
 
-    // 启动下载图片代码
-    socket.on("crawler:start:picture", (params, cb)=> {
-        if (!core.downloadInstance) {
-            return cb({
-                ret: -1,
-                pid: process.pid,
-                msg: `还未初始化爬虫！`
-            });
-        }
+        // 启动下载图片代码
+        socket.on("crawler:start:picture", (params, cb)=> {
+            if (!core.downloadInstance) {
+                return cb({
+                    ret: -1,
+                    pid: process.pid,
+                    msg: `还未初始化爬虫！`
+                });
+            }
 
-        if (!core.downloadInstance.isStartDownload) {
-            core.downloadInstance.doInitDownloadDeal();
-        }
+            if (!core.downloadInstance.isStartDownload) {
+                core.downloadInstance.doInitDownloadDeal();
+            }
 
-        return cb({ret: 0});
+            return cb({ret: 0});
+        });
     });
 
 };

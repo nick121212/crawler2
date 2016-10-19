@@ -8,7 +8,7 @@ let isRunning = false,
     retryCount = 0;
 
 
-module.exports = exports = (app, core, socket, socketMain) => {
+module.exports = exports = (app, core, sockets) => {
     let commands = {
         poff: "poff nicv",
         pon: "pon nicv",
@@ -72,7 +72,6 @@ module.exports = exports = (app, core, socket, socketMain) => {
             }
         });
     };
-
     let changeIp = (params, cb)=> {
         "use strict";
         if (_.some(ipInfo.ips["IPv4"] || ipInfo.ips["IPv6"], (ip)=> {
@@ -85,11 +84,10 @@ module.exports = exports = (app, core, socket, socketMain) => {
 
     if (process.env.NODE_CHIP) {
         scheduleJob();
-        socket.on('crawler:chip', (params, cb)=> {
-            changeIp(params, cb);
-        });
-        socketMain.on('crawler:chip', (params, cb)=> {
-            changeIp(params, cb);
+        _.each(sockets, (s)=> {
+            s.on('crawler:chip', (params, cb)=> {
+                changeIp(params, cb);
+            });
         });
     }
 };

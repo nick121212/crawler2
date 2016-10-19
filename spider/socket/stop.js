@@ -2,8 +2,9 @@
  * Created by NICK on 16/7/1.
  */
 let shell = require("shelljs");
+let _ = require("lodash");
 
-module.exports = exports = (app, core, socket) => {
+module.exports = exports = (app, core, sockets) => {
     let kill = (params, cb) => {
         let options = params.options;
 
@@ -25,9 +26,9 @@ module.exports = exports = (app, core, socket) => {
             process.exit(1);
         }
     };
-
-    socket.on('crawler:stop', (params, cb)=> {
-        kill(params, cb);
+    _.each(sockets, (socket)=> {
+        socket.on('crawler:stop', (params, cb)=> {
+            kill(params, cb);
+        });
     });
-
 };
