@@ -7,6 +7,7 @@ const core = require('./core');
 const consign = require("consign");
 const app = {};
 const socket = io(`http://${core.config.socket.host}:${core.config.socket.port}/crawler`);
+const socketMain = io(`http://${core.config.socketChip.host}:${core.config.socketChip.port}/crawler`);
 
 consign({verbose: false})
     .include("spider/utils")
@@ -18,6 +19,6 @@ consign({verbose: false})
     .include("spider/download")
     .include("spider/main")
     .include("spider")
-    .into(app, core, socket);
+    .into(app, core, socket, socketMain);
 
 console.log(`pid:${process.pid};ENV:${process.env.ENV}`);

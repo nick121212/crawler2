@@ -24,7 +24,6 @@ module.exports = (app, core, socket) => {
          *   cluster           boolean 是否是从
          **/
         constructor(settings) {
-
             this.isStart = false;
             this.isStartDeal = false;
             this.isStartDownload = false;
@@ -115,12 +114,12 @@ module.exports = (app, core, socket) => {
         consumeQueue(msg, result) {
             let urls = [],
                 queueItem;
-            let next = (msg, reject = false, interval = this.interval) => {
+            let next = (queueMsg, reject = false, interval = this.interval) => {
                 if (interval == this.interval) {
                     interval = ~~(Math.random() * (interval - 500) + 500);
                 }
                 currentInterval = interval;
-                reject ? result.ch.reject(msg) : result.ch.ack(msg);
+                reject ? result.ch.reject(queueMsg) : result.ch.ack(queueMsg);
             };
 
             try {
@@ -169,9 +168,9 @@ module.exports = (app, core, socket) => {
                         return this.queueStore.addUrlsToEsUrls(urls, this.key);
                     }
                 }).then(() => {
-                    return app.spider.lib.error.success(queueItem, next.bind(this, msg));
+                    app.spider.lib.error.success(queueItem, next.bind(this, msg));
                 }).catch((err) => {
-                    return app.spider.lib.error.error(err, queueItem, next.bind(this, msg));
+                    app.spider.lib.error.error(err, queueItem, next.bind(this, msg));
                 });
             } catch (err) {
                 next(msg);

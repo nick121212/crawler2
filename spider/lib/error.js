@@ -10,7 +10,7 @@ module.exports = (app, core) => {
     return {
         success: (queueItem, next)=> {
             delete errors[queueItem.urlId];
-            next();
+            next(false);
         },
         error: (err, queueItem, next)=> {
             // 推送错误信息
@@ -43,7 +43,7 @@ module.exports = (app, core) => {
                         isError: true,
                         date: Date.now()
                     });
-                    socket.emit("crawler:chip");
+                    socket.emit("crawler:chip", {ipInfo: core.downloadInstance.proxySettings.ipInfo});
                 }
 
                 return next(true, 1000 * 60 * (~~core.downloadInstance.proxySettings.errorInterval || 0.1));

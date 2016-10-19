@@ -312,7 +312,6 @@ module.exports = (app) => {
          * @returns {*}
          */
         discoverResources(resourceText, queueItem) {
-            // Convert to UTF-8
             if (!queueItem) {
                 queueItem = {};
             }

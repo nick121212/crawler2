@@ -2,11 +2,13 @@
  * Created by NICK on 16/7/1.
  */
 let shell = require("shelljs");
+let _ = require("lodash");
 let isRunning = false,
     lastIp,
     retryCount = 0;
 
-module.exports = exports = (app, core, socket) => {
+
+module.exports = exports = (app, core, socket, socketMain) => {
     let commands = {
         poff: "poff nicv",
         pon: "pon nicv",
@@ -18,6 +20,7 @@ module.exports = exports = (app, core, socket) => {
         route: "route",
         routeDelete: "route delete default gw all"
     };
+    let ipInfo = app.spider.utils.ipinfo;
 
     let scheduleJob1 = () => {
         // 5s后重启nginx
@@ -70,11 +73,23 @@ module.exports = exports = (app, core, socket) => {
         });
     };
 
+    let changeIp = (params, cb)=> {
+        "use strict";
+        if (_.some(ipInfo.ips["IPv4"] || ipInfo.ips["IPv6"], (ip)=> {
+                return ip === params.ipInfo.host;
+            })) {
+            scheduleJob();
+            cb && cb({ret: 0});
+        }
+    };
+
     if (process.env.NODE_CHIP) {
         scheduleJob();
         socket.on('crawler:chip', (params, cb)=> {
-            scheduleJob();
-            cb && cb({ret: 0});
+            changeIp(params, cb);
+        });
+        socketMain.on('crawler:chip', (params, cb)=> {
+            changeIp(params, cb);
         });
     }
 };

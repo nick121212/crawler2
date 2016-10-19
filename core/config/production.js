@@ -1,4 +1,5 @@
 let ip = process.env.NODE_IP || "114.55.146.215";
+let port = process.env.NODE_PORT || 3000;
 
 module.exports = exports = {
     elastic: {
@@ -12,6 +13,10 @@ module.exports = exports = {
     },
     socket: {
         host: ip,
-        port: 3000
+        port: port
+    },
+    socketChip: {
+        host: process.env.NODE_CHIP || "114.55.146.215",
+        port: process.env.NODE_CHPORT || 3000
     }
 };
