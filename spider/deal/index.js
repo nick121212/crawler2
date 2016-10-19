@@ -79,8 +79,10 @@ module.exports = (app) => {
                     // 合并数据，将配置好的静态数据和解析得来的数据合并
                     result.result = _.extend({}, result.rule.extendData || {}, result.result);
                     // 判断验证模式，如果验证字段为空，则回滚数据，否则保存数据
-                    if (result.rule.strict && result.rule.strictField) {
-                        if (result.result[result.rule.strictField]) {
+                    if (result.rule.strict && result.rule.strictFields) {
+                        if (_.reduce(result.rule.strictFields, (field, res)=> {
+                                return res && result.result[result.rule.strictField];
+                            }, true)) {
                             save(queueItem, result.result, result.rule);
                         } else {
                             console.log(`回滚:${queueItem.url},_id:${queueItem.urlId}`);
