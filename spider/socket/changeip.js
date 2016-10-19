@@ -12,7 +12,7 @@ module.exports = exports = (app, core, sockets) => {
     let commands = {
         poff: "poff nicv",
         pon: "pon nicv",
-        pptpsetup: "pptpsetup --create nicv --server czpptp.webok.net --user cz003 --password 111 --start",
+        pptpsetup: `pptpsetup --create nicv --server czpptp.webok.net --user ${process.env.NODE_USER || "cz003"} --password ${process.env.NODE_PWD || "111"} --start`,
         routeAdd: "route add default gw ",
         nginxRestart: "service nginx restart",
         nginxStop: "service nginx stop",
