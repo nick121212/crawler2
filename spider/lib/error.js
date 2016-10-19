@@ -4,7 +4,7 @@
 
 let _ = require("lodash");
 
-module.exports = (app, core) => {
+module.exports = (app, core, socket) => {
     let errors = {};
 
     return {
