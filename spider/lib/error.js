@@ -4,7 +4,7 @@
 
 let _ = require("lodash");
 
-module.exports = (app, core, socket) => {
+module.exports = (app, core, sockets) => {
     let errors = {};
 
     return {
@@ -43,7 +43,9 @@ module.exports = (app, core, socket) => {
                         isError: true,
                         date: Date.now()
                     });
-                    socket.emit("crawler:chip", {ipInfo: core.downloadInstance.proxySettings.ipInfo});
+                    _.each(sockets, (socket)=> {
+                        socket.emit("crawler:chip", {ipInfo: core.downloadInstance.proxySettings.ipInfo});
+                    });
                 }
 
                 return next(true, 1000 * 60 * (~~core.downloadInstance.proxySettings.errorInterval || 0.1));
