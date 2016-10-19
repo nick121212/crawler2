@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start_f":"NODE_QUEUE=106.75.78.203 NODE_IP=106.75.78.203 ENV=production forever start .",
-    "start":"NODE_QUEUE=106.75.78.203 NODE_IP=106.75.78.203 ENV=production node .",
-    "chip":"NODE_QUEUE=106.75.78.203 NODE_IP=106.75.78.203 ENV=production forever start ."
+    "start_f":"NODE_QUEUE=106.75.78.203 NODE_IPS=106.75.78.203:3000 ENV=production forever start .",
+    "chip":"ENV=production NODE_IPS=106.75.78.203:3000,106.75.76.203:3000 NODE_CHIP=true forever start ."
   },
   "author": "",
   "license": "ISC",
