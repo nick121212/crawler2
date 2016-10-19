@@ -74,6 +74,7 @@ module.exports = exports = (app, core, sockets) => {
     };
     let changeIp = (params, cb)=> {
         "use strict";
+        console.log("-------",ipInfo.hostname, params.ipInfo.hostname);
         if (ipInfo.hostname == params.ipInfo.hostname) {
             scheduleJob();
             cb && cb({ret: 0});
