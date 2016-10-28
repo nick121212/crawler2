@@ -409,13 +409,12 @@ module.exports = (app, core) => {
             saveQueueItem.responseBody = "";
             core.elastic.bulk({
                 body: [
-
                     {delete: {_index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId}},
                     {index: {_index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId}},
                     saveQueueItem
                 ]
             }).then(() => {
-                this.addQueueItemsToQueue(queueItem, key, 2).then(defer.resolve, defer.reject);
+                this.addQueueItemsToQueue([queueItem], key, 2).then(defer.resolve, defer.reject);
             }).catch(defer.reject);
 
             return defer.promise;

@@ -10,5 +10,5 @@ module.exports = exports = {
         user: "nick",
         password: "111111"
     },
-    hosts: process.env.NODE_IPS.split(',')
+    hosts: process.env.NODE_IPS ? process.env.NODE_IPS.split(',') : []
 };

@@ -76,6 +76,6 @@ module.exports = exports = (core) => {
         }
         fs.writeFileSync(filename, "");
 
-        return search(index, type, filename, fields, key, 0, 1000);
+        return search(index, type, filename, fields, key, 0, 100);
     };
 };
