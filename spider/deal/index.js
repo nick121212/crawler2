@@ -86,7 +86,7 @@ module.exports = (app) => {
                             save(queueItem, result.result, result.rule);
                         } else {
                             console.log(`回滚:${queueItem.url},_id:${queueItem.urlId}`);
-                            promises.push(this.rollbackFunc(queueItem));
+                            promises.push(this.rollbackFunc(queueItem, this.dealKey));
                         }
                     } else {
                         save(queueItem, result.result, result.rule);
