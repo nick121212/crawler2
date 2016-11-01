@@ -4,7 +4,7 @@
 
 const request = require("superagent");
 
-module.exports = ()=> {
+module.exports = () => {
     "use strict";
     let req = request.post("http://res.hhhuo.net/Login.aspx");
     let defer = Promise.defer();
@@ -43,7 +43,7 @@ module.exports = ()=> {
                     return defer.reject(new Error(result.Error));
                 }
 
-                if (cookieId.length == 0) {
+                if (cookieId.length === 0) {
                     return defer.reject(new Error("没有cookie的信息"));
                 }
 
@@ -57,4 +57,3 @@ module.exports = ()=> {
 
     return defer.promise;
 };
-

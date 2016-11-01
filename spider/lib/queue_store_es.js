@@ -16,8 +16,14 @@ module.exports = (app, core) => {
             this.esTypeUrls = "urls";
             this.esTypeRsbody = "rsbody";
             this.esTypeQueueUrls = "mqurls";
+            this.esIndexAllIn = "crawler-allin-test";
         }
 
+        /**
+         * 获取一个数据的详细信息
+         * @param queueItem
+         * @returns {*}
+         */
         getRsBody(queueItem) {
             return core.elastic.get({
                 index: this.esIndex,
@@ -169,16 +175,25 @@ module.exports = (app, core) => {
          * @param urls {Array} 链接数组
          * @returns {Promise}
          */
-        addUrlsToEsUrls(urls, key) {
+        addUrlsToEsUrls(urls, key, keyAlias) {
             let queueItems = {};
             let defer = Promise.defer();
-            let esMgetBody = [];
+            let esMgetBody = [],
+                esAllInBody = [];
 
             // 检查url在es中是否存在
             _.each(urls, (url) => {
                 let queueItem = this.getQueueItemInfo(url.protocol, url.host, url.port, url.path, url.depth, url.query);
                 queueItems[queueItem.urlId] = queueItem;
+                queueItem.needFetch = true;
+                // 赋值KEY
+                url.rule && (queueItem.type = url.rule.key);
+                // 是否需要下载
+                url.rule && (queueItem.needFetch = url.rule.needFetch);
+                // 是否需要保存链接到总库
+                url.rule && (queueItem.needSaveToAllIn = url.rule.needSaveToAllIn);
             }, this);
+
             // mget一下数据
             _.each(queueItems, (queueItem) => {
                 esMgetBody.push({
@@ -193,6 +208,12 @@ module.exports = (app, core) => {
                     _id: queueItem.urlId,
                     fields: ["fetched"]
                 });
+                esMgetBody.push({
+                    _index: this.esIndexAllIn,
+                    _type: keyAlias || key,
+                    _id: queueItem.urlId,
+                    fields: ["createdAt"]
+                });
             });
 
             // 处理数据,先判断queueUrl中是否存在,存在则不添加到queue
@@ -202,11 +223,12 @@ module.exports = (app, core) => {
                     docs: esMgetBody
                 }
             }).then((results) => {
-                let urlRes, queueUrlRes, esBulkBody = [];
+                let urlRes, queueUrlRes, allInUrlRes, esBulkBody = [];
 
-                for (let i = 0, n = results.docs.length; i < n; i += 2) {
-                    urlRes = results.docs[i];
-                    queueUrlRes = results.docs[i + 1];
+                for (let i = 0, n = results.docs.length; i < n; i += 3) {
+                    urlRes = results.docs[i]; // url中type的数据
+                    queueUrlRes = results.docs[i + 1]; // queueUrl中的type的数据
+                    allInUrlRes = results.docs[i + 2]; // allIn中的数据
 
                     // queue数据库中是否存在
                     if (queueUrlRes.found) { // && queueUrlRes.fields["fetched"].length && !queueUrlRes.fields["fetched"][0]) {
@@ -216,17 +238,49 @@ module.exports = (app, core) => {
                     if (urlRes.found && urlRes.fields["fetched"].length && urlRes.fields["fetched"][0]) {
                         continue;
                     }
-                    // 存储需要新建到queue里的数据数组
+                    // 存储需要新建到queue里的数据数组，判断是否需要入到queue
                     if (queueItems[urlRes._id]) {
-                        esBulkBody.push({
-                            create: {
-                                _index: this.esIndex,
-                                _type: this.esTypeQueueUrls,
-                                _id: urlRes._id
+                        if (queueItems[urlRes._id].needFetch === true) {
+                            esBulkBody.push({
+                                create: {
+                                    _index: this.esIndex,
+                                    _type: this.esTypeQueueUrls,
+                                    _id: urlRes._id
+                                }
+                            });
+                            esBulkBody.push(queueItems[urlRes._id]);
+                        }
+                        // 数据添加到总库中,先判断是否已经存在，如果已经存在，则更新updatedAt，否则新建数据
+                        if (queueItems[urlRes._id].needSaveToAllIn === true) {
+                            if (allInUrlRes.found) {
+                                esBulkBody.push({
+                                    index: {
+                                        _index: this.esIndexAllIn,
+                                        _type: keyAlias || key,
+                                        _id: urlRes._id
+                                    }
+                                });
+                                esBulkBody.push({
+                                    updatedAt: Date.now()
+                                });
+                            } else {
+                                let now = Date.now();
+                                esBulkBody.push({
+                                    create: {
+                                        _index: this.esIndexAllIn,
+                                        _type: keyAlias || key,
+                                        _id: urlRes._id
+                                    }
+                                });
+                                esBulkBody.push({
+                                    url: queueItems[urlRes._id].url,
+                                    createdAt: now,
+                                    updatedAt: now
+                                });
                             }
-                        });
-                        esBulkBody.push(queueItems[urlRes._id]);
+                        }
                     }
+
                 }
 
                 return esBulkBody;
@@ -241,9 +295,17 @@ module.exports = (app, core) => {
             }).then((response) => {
                 let newQueueItems = [];
 
+                // 判断成功的数据，添加到queue中
                 _.each(response.items, (createResult) => {
                     createResult = createResult.create;
-                    (createResult.status === 201) && queueItems[createResult._id] && newQueueItems.push(queueItems[createResult._id]);
+                    // 如果创建成功，则加入到queue中等待下载
+                    if (createResult && (createResult.status === 201) && queueItems[createResult._id]) {
+                        if (!_.filter(newQueueItems, (item) => {
+                                return item.urlId == createResult._id;
+                            }).length) {
+                            newQueueItems.push(queueItems[createResult._id]);
+                        }
+                    }
                 });
                 if (newQueueItems.length) {
                     return this.addQueueItemsToQueue(newQueueItems, key);
@@ -342,10 +404,6 @@ module.exports = (app, core) => {
                 });
             }, defer.reject);
 
-            // core.q.getQueue(`crawler.urls.${key}`, {}).then((result) => {
-            //
-            // }, defer.resolve);
-
             return defer.promise;
         }
 
@@ -397,6 +455,77 @@ module.exports = (app, core) => {
         }
 
         /**
+         * 添加多个数据到es，并进行数据的脏值检测
+         * @param results
+         * @param field
+         * @param type
+         * @param index
+         * @param keyField
+         * @returns {Promise}
+         */
+        addMutipleCompleteData(results, field, type, index, keyField = "urlId") {
+            const defer = Promise.defer();
+            let esMgetBody = [];
+            let queueItemsNew = {};
+
+            _.each(results, (result) => {
+                let queueItem = this.getQueueItemInfo(result.protocol, result.host, result.port, result.path, result.depth, result.query);
+
+                queueItemsNew[queueItem[keyField]] = result.res;
+                esMgetBody.push({
+                    _index: index,
+                    _type: type,
+                    _id: queueItem[keyField]
+                });
+            });
+
+            if (esMgetBody.length) {
+                core.elastic.mget({
+                    body: {
+                        docs: esMgetBody
+                    }
+                }).then((results) => {
+                    let updateDocs = [];
+
+                    _.each(results.docs, (doc) => {
+                        let res = doc._source || {};
+                        let cur = queueItemsNew[doc._id];
+
+                        if (doc.found && _.reduce(_.keys(cur), (key, equal) => {
+                                return equal && res[key] == cur[key];
+                            }, true)) {
+                            updateDocs.push({
+                                update: {
+                                    _index: index,
+                                    _type: type,
+                                    _id: doc._id
+                                }
+                            });
+                            updateDocs.push({
+                                doc: _.extend({
+                                    updatedAt: Date.now()
+                                }, queueItemsNew[doc._id] || {})
+                            });
+                        }
+                    });
+
+                    return updateDocs;
+                }).then((updateDocs) => {
+                    if (!updateDocs || !updateDocs.length) {
+                        return;
+                    }
+
+                    return core.elastic.bulk({ body: updateDocs });
+                }).then(defer.resolve, defer.reject);
+            } else {
+                defer.resolve();
+            }
+
+
+            return defer.promise;
+        }
+
+        /**
          * 将数据回滚到待下载状态
          * @param queueItem {Object}
          * @param key {String}
@@ -409,8 +538,8 @@ module.exports = (app, core) => {
             saveQueueItem.responseBody = "";
             core.elastic.bulk({
                 body: [
-                    {delete: {_index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId}},
-                    {index: {_index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId}},
+                    { delete: { _index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId } },
+                    { index: { _index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId } },
                     saveQueueItem
                 ]
             }).then(() => {

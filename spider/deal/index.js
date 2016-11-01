@@ -3,16 +3,18 @@
 let _ = require("lodash");
 let jpp = require("json-path-processor");
 
-module.exports = (app) => {
+module.exports = (app, core) => {
     class DealHtml {
-        constructor(settings, saveFunc, rollbackFunc) {
+        constructor(settings, queue, getQueueItemInfo, mutiSaveFunc, saveFunc, rollbackFunc) {
             this.settings = settings;
             this.pages = settings.pages;
             this.dealKey = settings.key || "";
-            this.saveFunc = saveFunc || function () {
-                };
-            this.rollbackFunc = rollbackFunc || function () {
-                };
+            this.dealAliasKey = settings.aliasKey || "";
+            this.queue = queue;
+            this.saveFunc = saveFunc || function() {};
+            this.rollbackFunc = rollbackFunc || function() {};
+            this.mutiSaveFunc = mutiSaveFunc || function() {};
+            this.getQueueItemInfo = getQueueItemInfo;
 
             _.forEach(this.pages, (page) => {
                 page.rule = _.map(page.rule, (rule) => {
@@ -28,28 +30,40 @@ module.exports = (app) => {
          */
         findRule(url) {
             return _.filter(this.pages, (page) => {
-                return _.filter(page.rule, (rule)=> {
-                        return rule.test(url);
-                    }).length > 0;
+                return _.filter(page.rule, (rule) => {
+                    return rule.test(url);
+                }).length > 0;
             });
         }
 
         /**
-         * 下载图片设置
-         * @param rule
-         * @param result
-         * @param ch
+         * 保存数据
+         * @param queueItem
+         * @param result 分析完成的数据值
+         * @param rule   分析的规则
+         * @returns {*}
          */
-        dealDownload(rule, result, ch) {
-            _.each(rule.download, (d) => {
-                if (d.each) {
-                    _.map(jpp(result, d.each), (v) => {
-                        v[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(v[d.field]), {persistent: true});
+        save(queueItem, result, rule) {
+            if (rule.checkDiff) {
+                let queueItems = [];
+                let results = jpp(result).get(rule.checkDiffPath).value();
+
+                if (results) {
+                    _.each(results, (res) => {
+                        let queueItemNew = this.queue.queueURL(res.url, queueItem);
+
+                        queueItemNew && (queueItemNew.res = res) && queueItems.push(queueItemNew);
                     });
-                } else {
-                    result[d.field] && ch.sendToQueue(`crawler.downloader.picture`, new Buffer(result[d.field]), {persistent: true});
                 }
-            });
+
+                return this.mutiSaveFunc(queueItems, result, this.dealAliasKey || this.dealKey, rule.aliasKey || rule.key, rule.fieldKey);
+            }
+
+            if (rule.fieldKey && (result[rule.fieldKey] || queueItem[rule.fieldKey])) {
+                return this.saveFunc(queueItem, result, this.dealKey, rule.key, rule.fieldKey);
+            } else {
+                return this.saveFunc(queueItem, result, this.dealKey, rule.key);
+            }
         }
 
         /**
@@ -59,20 +73,8 @@ module.exports = (app) => {
          * @param ch {Object} queue的channel
          * @return {Array<promise>}
          */
-        checkStatus(queueItem, results, ch) {
+        checkStatus(queueItem, results) {
             let promises = [];
-
-            let save = (queueItem, result, rule) => {
-                if (rule.download) {
-                    this.dealDownload(rule, result, ch);
-                }
-
-                if (rule.fieldKey && (result[rule.fieldKey] || queueItem[rule.fieldKey])) {
-                    promises.push(this.saveFunc(queueItem, result, this.dealKey, rule.key, rule.fieldKey));
-                } else {
-                    promises.push(this.saveFunc(queueItem, result, this.dealKey, rule.key));
-                }
-            };
 
             _.each(results, (result) => {
                 if (!result.rule.test) {
@@ -80,16 +82,16 @@ module.exports = (app) => {
                     result.result = _.extend({}, result.rule.extendData || {}, result.result);
                     // 判断验证模式，如果验证字段为空，则回滚数据，否则保存数据
                     if (result.rule.strict && result.rule.strictFields) {
-                        if (_.reduce(result.rule.strictFields, (field, res)=> {
-                                return res && result.result[result.rule.strictField];
+                        if (_.reduce(result.rule.strictFields, (res, field) => {
+                                return res && result.result[field];
                             }, true)) {
-                            save(queueItem, result.result, result.rule);
+                            promises = promises.concat(this.save(queueItem, result.result, result.rule));
                         } else {
                             console.log(`回滚:${queueItem.url},_id:${queueItem.urlId}`);
                             promises.push(this.rollbackFunc(queueItem, this.dealKey));
                         }
                     } else {
-                        save(queueItem, result.result, result.rule);
+                        promises = promises.concat(this.save(queueItem, result.result, result.rule));
                     }
                 } else {
                     console.log(result.result);
@@ -124,10 +126,10 @@ module.exports = (app) => {
                     }).then(() => {
                         console.log(`deal complete ${queueItem.url} at ${new Date()}`);
                         // 更新下信息
-                        app.spider.socket.log({
-                            message: "保存处理结果成功",
-                            // data: result.result
-                        });
+                        // app.spider.socket.log({
+                        //     message: `保存处理结果成功`,
+                        //     // data: result.result
+                        // });
                         defer.resolve();
                     }).catch((err) => {
                         console.error(err);

@@ -5,7 +5,7 @@ let _ = require("lodash");
 let robotsTxtParser = require("robots-parser");
 let currentInterval = 0;
 
-module.exports = (app, core, socket) => {
+module.exports = (app, core) => {
     const errPage = () => {
         let err = new Error("下载的页面不正确!");
         err.status = 601;
@@ -26,13 +26,15 @@ module.exports = (app, core, socket) => {
         constructor(settings) {
             this.isStart = false;
             this.isStartDeal = false;
-            this.isStartDownload = false;
+            this.isDispatch = false;
+            this.consumerTags = [];
 
             this.initialPath = settings.initialPath || "/";
             this.initialPort = settings.initialPort || 80;
             this.initialProtocol = settings.initialPort || "http";
             this.host = settings.host;
             this.key = settings.key;
+            this.aliasKey = settings.aliasKey;
             this.robotsHost = settings.robotsHost;
 
             this.downloader = settings.downloader || "superagent";
@@ -45,7 +47,7 @@ module.exports = (app, core, socket) => {
             this.queue = new app.spider.lib.queue(settings);
             this.queueStore = new app.spider.lib.queue_store_es(this.key);
             this.discover = new app.spider.lib.discover(settings, this.queue);
-            this.deal = new app.spider.deal.index(settings, this.queueStore.addCompleteData.bind(this.queueStore), this.queueStore.rollbackCompleteData.bind(this.queueStore));
+            this.deal = new app.spider.deal.index(settings, this.queue, this.queueStore.getQueueItemInfo.bind(this.queueStore), this.queueStore.addMutipleCompleteData.bind(this.queueStore), this.queueStore.addCompleteData.bind(this.queueStore), this.queueStore.rollbackCompleteData.bind(this.queueStore));
         }
 
         /**
@@ -71,7 +73,7 @@ module.exports = (app, core, socket) => {
                     let defer = Promise.defer();
 
                     // 检测下下载的页面是否有error
-                    let errorDeal = _.filter(this.deal.pages, (page)=> {
+                    let errorDeal = _.filter(this.deal.pages, (page) => {
                         return page.key === "error";
                     });
 
@@ -129,6 +131,7 @@ module.exports = (app, core, socket) => {
                     return this.queueStore.addCompleteQueueItem(queueItem, "", this.key, "error").then(next.bind(this, msg), next.bind(this, msg));
                 }
 
+                // 判断路径是否支持，不支持则不处理该链接
                 if (!this.discover.pathSUpported(decodeURIComponent(queueItem.path))) {
                     return next(msg);
                 }
@@ -140,7 +143,7 @@ module.exports = (app, core, socket) => {
                 this.fetchQueueItem(queueItem).then((data) => {
                     // 处理页面中的链接
                     let discoverUrls = this.discover.discoverResources(data.responseBody, queueItem) || [];
-
+                    // 发送日志
                     app.spider.socket.log({
                         message: `${queueItem.url}--处理链接数量{${discoverUrls.length}}`,
                         isError: false,
@@ -154,7 +157,7 @@ module.exports = (app, core, socket) => {
                     discoverUrls.map((url) => {
                         url = this.queue.queueURL(decodeURIComponent(url), queueItem);
                         if (url) {
-                            let rules = this.deal.findRule(decodeURIComponent(url.url));
+                            let rules = this.deal.findRule(decodeURIComponent(url.path));
 
                             if (rules.length) {
                                 url.priority = rules[0].priority || 1;
@@ -165,7 +168,7 @@ module.exports = (app, core, socket) => {
                     }, this);
                     // 把搜索到的地址存入到es
                     if (urls.length) {
-                        return this.queueStore.addUrlsToEsUrls(urls, this.key);
+                        return this.queueStore.addUrlsToEsUrls(urls, this.key, this.aliasKey);
                     }
                 }).then(() => {
                     app.spider.lib.error.success(queueItem, next.bind(this, msg));
@@ -180,39 +183,49 @@ module.exports = (app, core, socket) => {
         /**
          * 循环获取链接
          */
-        doLoop() {
-            let defer = Promise.defer();
+        doInitDownloadDeal() {
+            let result;
 
             // 建立请求队列
-            core.q.getQueue(`crawler.urls.${this.key}`, {}).then((result) => {
-                Promise.all([
+            return core.q.getQueue(`crawler.urls.${this.key}`, {}).then((res) => {
+                result = res;
+
+                return Promise.all([
                     // 绑定queue到exchange
                     result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}.urls`),
                     // 每次消费1条queue
                     result.ch.prefetch(1)
-                ]).then(() => {
-                    // 添加消费监听
-                    result.ch.consume(result.q.queue, (msg) => {
-                        console.log(`等待${currentInterval}毫秒！！！！`);
-                        setTimeout(()=> {
-                            this.consumeQueue(msg, result);
-                        }, currentInterval);
-                    }, {
-                        noAck: false
-                    });
+                ]);
+            }).then(() => {
+                // 发送日志消息
 
-                    defer.resolve();
+                // 添加消费监听
+                return result.ch.consume(result.q.queue, (msg) => {
+                    this.isStart = true;
+                    console.log(`等待${currentInterval}毫秒！！！！`);
+                    setTimeout(() => {
+                        this.consumeQueue(msg, result);
+                    }, currentInterval);
+                }, {
+                    noAck: false
                 });
-            }, console.error);
+            }).then((qres) => {
+                app.spider.lib.dispatch.checkQueue(result.q.queue);
+                this.dealConsumer(qres.consumerTag);
+            }).catch(console.error);
+        }
 
-            return defer.promise;
+        // 保存所有的消费者tag
+        dealConsumer(consumerTag) {
+            this.consumerTags.push(consumerTag);
+            this.consumerTags = _.uniq(this.consumerTags);
         }
 
         /**
          * 初始化html处理部分的queue
          */
         doInitHtmlDeal() {
-            let next = (queueItem, result, msg)=> {
+            let next = (queueItem, result, msg) => {
                 this.deal.consumeQueue(queueItem, result.ch).then(() => {
                     result.ch.ack(msg);
                 }, (err) => {
@@ -222,7 +235,7 @@ module.exports = (app, core, socket) => {
             };
 
             this.isStartDeal = true;
-            core.q.getQueue(`crawler.deals.${this.key}`, {durable: true}).then((result) => {
+            core.q.getQueue(`crawler.deals.${this.key}`, { durable: true }).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
                     result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}.bodys`),
@@ -230,68 +243,34 @@ module.exports = (app, core, socket) => {
                     result.ch.prefetch(1)
                 ]).then(() => {
                     // 开始消费
-                    result.ch.consume(result.q.queue, (msg) => {
+                    return result.ch.consume(result.q.queue, (msg) => {
                         let queueItem;
+
+                        this.dealConsumer(msg.fields.consumerTag);
                         try {
                             queueItem = JSON.parse(msg.content.toString());
-                        } catch (e) {
-                            return result.ch.reject(msg);
-                        }
-                        try {
                             // 判定，如果message中不存在responseBody，则直接从数据库中提取
-                            if (queueItem) {
-                                if (queueItem.responseBody) {
-                                    next(queueItem, result, msg);
-                                } else {
-                                    this.queueStore.getRsBody(queueItem).then((response)=> {
-                                        if (response.found) {
-                                            queueItem.responseBody = response._source.text;
-                                            return next(queueItem, result, msg);
-                                        }
-
-                                        result.ch.reject(msg);
-                                    }, ()=> {
-                                        console.log(err);
-                                        result.ch.reject(msg);
-                                    });
-                                }
+                            if (queueItem.responseBody) {
+                                return next(queueItem, result, msg);
                             }
+
+                            this.queueStore.getRsBody(queueItem).then((response) => {
+                                if (response.found) {
+                                    queueItem.responseBody = response._source.text;
+                                    return next(queueItem, result, msg);
+                                }
+                                result.ch.reject(msg);
+                            }, (err) => {
+                                console.log(err);
+                                result.ch.reject(msg);
+                            });
                         } catch (e) {
                             console.log(e);
                             result.ch.reject(msg);
                         }
-                    });
-                }, (e)=> {
-                    this.isStartDownload = false;
-                    console.error(e);
-                });
-            });
-        }
 
-        /**
-         * 初始化下载图片的queue
-         */
-        doInitDownloadDeal() {
-            this.isStartDownload = true;
-            core.q.getQueue(`crawler.downloader.picture`, {durable: true}).then((result) => {
-                Promise.all([
-                    // 绑定queue到exchange
-                    result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}`),
-                    // 每次消费1条queue
-                    result.ch.prefetch(1)
-                ]).then(() => {
-                    // 开始消费
-                    result.ch.consume(result.q.queue, (msg) => {
-                        let URL = msg.content.toString();
-
-                        app.spider.download.index.start("request", URL, this.proxySettings || {}).then(() => {
-                            result.ch.ack(msg);
-                        }).catch((err) => {
-                            result.ch.reject(msg);
-                            console.log(err);
-                        });
                     });
-                }, (e)=> {
+                }).catch((e) => {
                     this.isStartDownload = false;
                     console.error(e);
                 });
@@ -335,10 +314,13 @@ module.exports = (app, core, socket) => {
             if (!this.host) {
                 throw new Error("host不能为空！");
             }
+            if (this.isStart) {
+                return;
+            }
 
             let robotsTxtUrl = uri(this.host).pathname("/robots.txt");
             let next = () => {
-                setTimeout(function () {
+                setTimeout(function() {
                     this.queueStore.addUrlsToEsUrls([{
                         protocol: this.initialProtocol,
                         host: this.initDomain || this.host,
@@ -351,12 +333,41 @@ module.exports = (app, core, socket) => {
             // 获得机器人信息
             this.getRobotsTxt(robotsTxtUrl).then((robots) => {
                 this.discover._robotsTxts = robots;
-                this.doLoop().then(next.bind(this));
-            }, (err) => {
-                console.error(err);
-                this.doLoop().then(next.bind(this));
+            }, console.error).chain(() => {
+                this.doInitDownloadDeal().then(next.bind(this));
             });
             this.isStart = true;
+        }
+
+        /**
+         * 停止爬取数据
+         */
+        doStop() {
+            let promises = [];
+            if (this.isStart) {
+                _.each(this.consumerTags, (tag) => {
+                    promises.push(core.q.cancel(tag));
+                });
+
+                return Promise.all(promises).then(() => {
+                    this.isStart = false;
+                    this.isStartDeal = false;
+                    app.spider.socket.log({
+                        message: "已经停止爬虫"
+                    });
+                    app.spider.socket.update({
+                        downloader: core.downloadInstance
+                    });
+                }).catch(console.error);
+            }
+        }
+
+        /**
+         * 调度模式
+         */
+        doDispatch() {
+            app.spider.lib.dispatch.scheduleJob();
+            this.isDispatch = true;
         }
     }
 

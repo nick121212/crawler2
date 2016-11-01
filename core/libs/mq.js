@@ -3,21 +3,20 @@ let connectionStr = `amqp://${config.q.user}:${config.q.password}@${config.q.hos
 let amqplib = require('amqplib');
 let connPromise = amqplib.connect(connectionStr);
 
-// let rpc = require('amqp-rpc').factory({
-//     url: connectionStr
-// });
 let _ = require("lodash");
-
 let channel = null;
+let connection = null;
 
 function getQueue(qName, qSetting) {
     let defer = Promise.defer(),
         ch = null;
 
     connPromise.then(conn => {
+        connection = conn;
+
         return conn.createChannel();
     }).then((c) => {
-        ch = c;
+        channel = ch = c;
         return c.assertQueue(qName, _.extend({
             durable: true,
             exclusive: false,
@@ -58,12 +57,22 @@ function deleteQueue(qName, qSetting) {
     return defer.promise;
 }
 
+function closeChannel() {
+    if (connection) {
+        return connection.close();
+    }
+}
+
 process.on("exit", () => {
     console.log("exit");
 });
 
 module.exports = exports = {
     getQueue: getQueue,
-    deleteQueue: deleteQueue
-    // rpc: rpc
+    deleteQueue: deleteQueue,
+    close: closeChannel,
+    cancel: function(tag) {
+            return channel.cancel(tag);
+        }
+        // rpc: rpc
 };
