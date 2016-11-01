@@ -22,7 +22,7 @@ module.exports = exports = (app, core, sockets) => {
             // 启动调试器
             app.spider.lib.dispatch.scheduleJob(config);
             app.spider.socket.update({
-                downloader: {},
+                downloader: { key: "定时任务" },
                 isDispatch: true
             });
             cb({
