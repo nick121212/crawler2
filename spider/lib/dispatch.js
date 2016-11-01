@@ -31,33 +31,36 @@ module.exports = (app, core) => {
         });
     }
 
+    let startSchedule = (config) => {
+        let now = new Date();
+        const key = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${config.key}`;
+        let configNew = _.extend({ aliasKey: config.key }, config, { key: key });
+        let promises = [];
+
+        console.log("开始定时任务！！！！！！！！");
+        core.downloadInstance = new app.spider.index(config);
+        core.downloadInstance.doStart();
+        core.downloadInstance.doInitHtmlDeal();
+        app.spider.socket.update({
+            downloader: core.downloadInstance
+        });
+
+        if (core.downloadInstance) {
+            promises.push(core.downloadInstance.doStop());
+        }
+        // promises.push(app.spider.socket.reset(configNew));
+        Promise.all(promises).then(startSchedule.bind(this, configNew), startSchedule.bind(this, configNew));
+    };
+
     return {
         checkQueue: checkQueue,
         cancelCheckQueue: cancelCheckQueue,
         scheduleJob: (config) => {
             schedule.scheduleJob({ hour: 1, minute: 30 }, function() {
-                let now = new Date();
-                const key = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${config.key}`;
-                let configNew = _.extend({ aliasKey: config.key }, config, { key: key });
-
-                let startSchedule = (config) => {
-                    core.downloadInstance = new app.spider.index(config);
-                    core.downloadInstance.doStart();
-                    core.downloadInstance.doInitHtmlDeal();
-                    app.spider.socket.update({
-                        downloader: core.downloadInstance
-                    });
-                };
-                let promises = [];
-
-                console.log("开始定时任务！！！！！！！！");
-
-                if (core.downloadInstance) {
-                    promises.push(core.downloadInstance.doStop());
-                }
-                // promises.push(app.spider.socket.reset(configNew));
-                Promise.all(promises).then(startSchedule.bind(this, configNew), startSchedule.bind(this, configNew));
+                startSchedule(config);
             });
+
+            startSchedule(config);
         }
     };
 };
