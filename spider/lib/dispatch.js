@@ -38,18 +38,24 @@ module.exports = (app, core) => {
         let promises = [];
 
         console.log("开始定时任务！！！！！！！！");
-        core.downloadInstance = new app.spider.index(config);
-        core.downloadInstance.doStart();
-        core.downloadInstance.doInitHtmlDeal();
-        app.spider.socket.update({
-            downloader: core.downloadInstance
-        });
 
         if (core.downloadInstance) {
             promises.push(core.downloadInstance.doStop());
         }
         // promises.push(app.spider.socket.reset(configNew));
-        Promise.all(promises).then(startSchedule.bind(this, configNew), startSchedule.bind(this, configNew));
+        Promise.all(promises).then(() => {
+            core.downloadInstance = new app.spider.index(configNew);
+            core.downloadInstance.doStart();
+            core.downloadInstance.doInitHtmlDeal();
+            app.spider.socket.update({
+                downloader: core.downloadInstance
+            });
+        }).catch((err) => {
+            app.spider.socket.log({
+                message: err.message,
+                isError: true
+            });
+        });
     };
 
     return {
@@ -60,6 +66,7 @@ module.exports = (app, core) => {
                 app.spider.socket.log({
                     message: `${new Date()}定时任务启动`
                 });
+                // core.downloadInstance = new app.spider.index(config);
                 startSchedule(config);
             });
 
