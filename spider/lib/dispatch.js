@@ -16,7 +16,7 @@ module.exports = (app, core) => {
         checkQueueSchdule = schedule.scheduleJob('30 * * * * *', function() {
             core.q.getQueue(queue).then((result) => {
                 app.spider.socket.log({
-                    message: `还剩下${result.q.messageCount}条数据！共有${result.q.consumerCount}个消费者！`,
+                    message: `${queue}还剩下${result.q.messageCount}条数据！共有${result.q.consumerCount}个消费者！`,
                     isError: false
                 });
                 if (result.q.messageCount > 0) {
