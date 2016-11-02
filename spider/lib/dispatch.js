@@ -56,7 +56,10 @@ module.exports = (app, core) => {
         checkQueue: checkQueue,
         cancelCheckQueue: cancelCheckQueue,
         scheduleJob: (config) => {
-            schedule.scheduleJob({ hour: 1, minute: 30 }, function() {
+            schedule.scheduleJob({ hour: 10, minute: 30 }, function() {
+                app.spider.socket.log({
+                    message: `${new Date()}定时任务启动`
+                });
                 startSchedule(config);
             });
 
