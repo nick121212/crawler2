@@ -16,7 +16,7 @@ module.exports = (app, core) => {
             this.esTypeUrls = "urls";
             this.esTypeRsbody = "rsbody";
             this.esTypeQueueUrls = "mqurls";
-            this.esIndexAllIn = "crawler-allin-test";
+            this.esIndexAllIn = "crawler-allin";
         }
 
         /**
