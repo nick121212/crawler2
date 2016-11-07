@@ -5,7 +5,7 @@ const uri = require("urijs");
 const qs = require("qs");
 const _ = require("lodash");
 
-module.exports = ()=> {
+module.exports = () => {
     const QUEUE_ITEM_INITIAL_DEPTH = 1;
 
     class Queue extends EventEmitter {
@@ -26,16 +26,16 @@ module.exports = ()=> {
         constructor(settings) {
             super();
 
-            this.ignoreWWWDomain = settings.ignoreWWWDomain == null ? true : settings.ignoreWWWDomain;
-            this.scanSubdomains = settings.scanSubdomains == null ? false : settings.scanSubdomains;
-            this.stripWWWDomain = settings.stripWWWDomain == null ? true : settings.stripWWWDomain;
+            this.ignoreWWWDomain = settings.ignoreWWWDomain === null ? true : settings.ignoreWWWDomain;
+            this.scanSubdomains = settings.scanSubdomains === null ? false : settings.scanSubdomains;
+            this.stripWWWDomain = settings.stripWWWDomain === null ? true : settings.stripWWWDomain;
             this.host = settings.host || "";
             this.initialProtocol = settings.initialProtocol || "http";
             this.domainWhiteList = settings.domainWhiteList;
             this.initialPort = settings.initialPort || 80;
             this._fetchConditions = settings.fetchConditions || [];
-            this.filterByDomain = settings.filterByDomain == null ? true : settings.filterByDomain;
-            this.stripQuerystring = settings.stripQuerystring == null ? true : settings.stripQuerystring;
+            this.filterByDomain = settings.filterByDomain === null ? true : settings.filterByDomain;
+            this.stripQuerystring = settings.stripQuerystring === null ? true : settings.stripQuerystring;
             this.allowQueryParams = settings.allowQueryParams || [];
             this.urlEncoding = "iso8859";
         }
@@ -81,8 +81,8 @@ module.exports = ()=> {
             if (!context || typeof context !== "object") {
                 context = {
                     url: this.initialProtocol + "://" +
-                    this.host + ":" +
-                    this.initialPort + "/",
+                        this.host + ":" +
+                        this.initialPort + "/",
                     depth: QUEUE_ITEM_INITIAL_DEPTH
                 };
             }
@@ -109,7 +109,7 @@ module.exports = ()=> {
                     let noSparse = qs.parse(queryString);
 
                     newURL.query("");
-                    _.each(this.allowQueryParams, (qp)=> {
+                    _.each(this.allowQueryParams, (qp) => {
                         if (noSparse[qp]) {
                             newURL.addQuery(qp, noSparse[qp]);
                         }

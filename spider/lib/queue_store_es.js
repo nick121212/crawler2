@@ -274,8 +274,7 @@ module.exports = (app, core) => {
                                 });
                                 esBulkBody.push({
                                     url: queueItems[urlRes._id].url,
-                                    createdAt: now,
-                                    updatedAt: now
+                                    createdAt: now
                                 });
                             }
                         }
@@ -491,6 +490,7 @@ module.exports = (app, core) => {
                         let res = doc._source || {};
                         let cur = queueItemsNew[doc._id];
 
+                        // 如果字段有更新，更新数据，更新总的数据表
                         if (doc.found && _.reduce(_.keys(cur), (key, equal) => {
                                 return equal && res[key] == cur[key];
                             }, true)) {
@@ -505,6 +505,19 @@ module.exports = (app, core) => {
                                 doc: _.extend({
                                     updatedAt: Date.now()
                                 }, queueItemsNew[doc._id] || {})
+                            });
+
+                            updateDocs.push({
+                                update: {
+                                    _index: this.esIndexAllIn,
+                                    _type: type,
+                                    _id: doc._id
+                                }
+                            });
+                            updateDocs.push({
+                                doc: _.extend({
+                                    updatedAt: Date.now()
+                                }, {})
                             });
                         }
                     });
