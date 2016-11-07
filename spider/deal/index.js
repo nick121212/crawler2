@@ -60,9 +60,9 @@ module.exports = (app, core) => {
             }
 
             if (rule.fieldKey && (result[rule.fieldKey] || queueItem[rule.fieldKey])) {
-                return this.saveFunc(queueItem, result, this.dealKey, rule.key, rule.fieldKey);
+                return this.saveFunc(queueItem, result, this.dealAliasKey || this.dealKey, rule.key, rule.fieldKey);
             } else {
-                return this.saveFunc(queueItem, result, this.dealKey, rule.key);
+                return this.saveFunc(queueItem, result, this.dealAliasKey || this.dealKey, rule.key);
             }
         }
 
