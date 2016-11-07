@@ -235,7 +235,7 @@ module.exports = (app, core) => {
             };
 
             this.isStartDeal = true;
-            core.q.getQueue(`crawler.deals.${this.key}`, { durable: true }).then((result) => {
+            core.q.getQueue(`crawler.deals.${this.key}`, {durable: true}).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
                     result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}.bodys`),
@@ -320,7 +320,7 @@ module.exports = (app, core) => {
 
             let robotsTxtUrl = uri(this.host).pathname("/robots.txt");
             let next = () => {
-                setTimeout(function() {
+                setTimeout(function () {
                     this.queueStore.addUrlsToEsUrls([{
                         protocol: this.initialProtocol,
                         host: this.initDomain || this.host,
@@ -352,6 +352,7 @@ module.exports = (app, core) => {
                 return Promise.all(promises).then(() => {
                     this.isStart = false;
                     this.isStartDeal = false;
+                    this.consumerTags.length = 0;
                     app.spider.socket.log({
                         message: "已经停止爬虫"
                     });
