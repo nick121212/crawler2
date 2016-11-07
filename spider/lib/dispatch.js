@@ -21,6 +21,7 @@ module.exports = (app, core) => {
                 });
                 if (result.q.messageCount > 0) {
                     !core.downloadInstance.isStart && core.downloadInstance.doStart();
+                    !core.downloadInstance.isStartDeal && core.downloadInstance.doInitHtmlDeal();
                 } else {
                     core.downloadInstance.doStop();
                 }
