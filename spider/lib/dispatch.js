@@ -42,6 +42,9 @@ module.exports = (app, core) => {
         if (core.downloadInstance) {
             promises.push(core.downloadInstance.doStop());
         }
+
+        promises.push(app.spider.socket.reset(`${now.getFullYear()}-${now.getMonth()}-${now.getDate()-1}-${config.key}`));
+
         // promises.push(app.spider.socket.reset(configNew));
         Promise.all(promises).then(() => {
             core.downloadInstance = new app.spider.index(configNew);
