@@ -6,13 +6,14 @@ let _ = require("lodash");
 
 module.exports = (app, core, sockets) => {
     let errors = {};
+    let err502 = 0;
 
     return {
-        success: (queueItem, next)=> {
+        success: (queueItem, next) => {
             delete errors[queueItem.urlId];
             next(false);
         },
-        error: (err, queueItem, next)=> {
+        error: (err, queueItem, next) => {
             // 推送错误信息
             app.spider.socket.log({
                 message: `${queueItem.url}--${err.message}--${err.status}--${err.code}`,
@@ -34,17 +35,22 @@ module.exports = (app, core, sockets) => {
                 errors[queueItem.urlId]++;
             }
 
+            if (err.status === 502) {
+                err502++;
+            }
+
             if ((err.status === 502 && core.downloadInstance.proxySettings.useProxy) || (err.status === 601 && core.downloadInstance.proxySettings.useProxy) || (err.code === "ECONNABORTED" && core.downloadInstance.proxySettings.useProxy)) {
                 // 重启更换ip服务
-                if (err.status === 601 || errors[queueItem.urlId] > 150) {
+                if (err502 > 50 || err.status === 601 || errors[queueItem.urlId] > 150) {
                     errors[queueItem.urlId] = 0;
+                    err502 = 0;
                     app.spider.socket.log({
                         message: `发送更换IP请求！！`,
                         isError: true,
                         date: Date.now()
                     });
-                    _.each(sockets, (socket)=> {
-                        socket.emit("crawler:chip", {ipInfo: core.downloadInstance.proxySettings.ipInfo});
+                    _.each(sockets, (socket) => {
+                        socket.emit("crawler:chip", { ipInfo: core.downloadInstance.proxySettings.ipInfo });
                     });
                 }
 
