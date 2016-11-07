@@ -1,5 +1,6 @@
 let qs = require("qs");
 let moment = require("moment");
+let _ = require("lodash");
 
 module.exports = (app)=> {
     /**
@@ -12,7 +13,7 @@ module.exports = (app)=> {
          * @returns {String}
          */
         doDeal(result, settings) {
-            let res = moment(result, settings.format || 'YYYY-MM-DD');
+            let res = moment(_.trim(result), settings.format || 'YYYY-MM-DD');
 
             if (res.isValid()) {
                 return res.format(settings.format || "YYYY-MM-DD");
