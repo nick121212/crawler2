@@ -26,16 +26,16 @@ module.exports = () => {
         constructor(settings) {
             super();
 
-            this.ignoreWWWDomain = settings.ignoreWWWDomain === null ? true : settings.ignoreWWWDomain;
-            this.scanSubdomains = settings.scanSubdomains === null ? false : settings.scanSubdomains;
-            this.stripWWWDomain = settings.stripWWWDomain === null ? true : settings.stripWWWDomain;
+            this.ignoreWWWDomain = settings.ignoreWWWDomain == null ? true : settings.ignoreWWWDomain;
+            this.scanSubdomains = settings.scanSubdomains == null ? false : settings.scanSubdomains;
+            this.stripWWWDomain = settings.stripWWWDomain == null ? true : settings.stripWWWDomain;
             this.host = settings.host || "";
             this.initialProtocol = settings.initialProtocol || "http";
             this.domainWhiteList = settings.domainWhiteList;
             this.initialPort = settings.initialPort || 80;
             this._fetchConditions = settings.fetchConditions || [];
-            this.filterByDomain = settings.filterByDomain === null ? true : settings.filterByDomain;
-            this.stripQuerystring = settings.stripQuerystring === null ? true : settings.stripQuerystring;
+            this.filterByDomain = settings.filterByDomain == null ? true : settings.filterByDomain;
+            this.stripQuerystring = settings.stripQuerystring == null ? true : settings.stripQuerystring;
             this.allowQueryParams = settings.allowQueryParams || [];
             this.urlEncoding = "iso8859";
         }
