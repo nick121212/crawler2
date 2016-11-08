@@ -254,14 +254,16 @@ module.exports = (app, core) => {
                         if (queueItems[urlRes._id].needSaveToAllIn === true) {
                             if (allInUrlRes.found) {
                                 esBulkBody.push({
-                                    index: {
+                                    update: {
                                         _index: this.esIndexAllIn,
                                         _type: keyAlias || key,
                                         _id: urlRes._id
                                     }
                                 });
                                 esBulkBody.push({
-                                    updatedAt: Date.now()
+                                    doc: {
+                                        updatedAt: Date.now()
+                                    }
                                 });
                             } else {
                                 let now = Date.now();
@@ -507,18 +509,18 @@ module.exports = (app, core) => {
                                 }, queueItemsNew[doc._id] || {})
                             });
 
-                            updateDocs.push({
-                                update: {
-                                    _index: this.esIndexAllIn,
-                                    _type: type,
-                                    _id: doc._id
-                                }
-                            });
-                            updateDocs.push({
-                                doc: _.extend({
-                                    updatedAt: Date.now()
-                                }, {})
-                            });
+                            // updateDocs.push({
+                            //     update: {
+                            //         _index: this.esIndexAllIn,
+                            //         _type: type,
+                            //         _id: doc._id
+                            //     }
+                            // });
+                            // updateDocs.push({
+                            //     doc: _.extend({
+                            //         updatedAt: Date.now()
+                            //     }, {})
+                            // });
                         }
                     });
 
@@ -533,7 +535,6 @@ module.exports = (app, core) => {
             } else {
                 defer.resolve();
             }
-
 
             return defer.promise;
         }
