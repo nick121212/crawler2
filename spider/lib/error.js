@@ -41,7 +41,7 @@ module.exports = (app, core, sockets) => {
 
             if ((err.status === 502 && core.downloadInstance.proxySettings.useProxy) || (err.status === 601 && core.downloadInstance.proxySettings.useProxy) || (err.code === "ECONNABORTED" && core.downloadInstance.proxySettings.useProxy)) {
                 // 重启更换ip服务
-                if (err502 > 50 || err.status === 601 || errors[queueItem.urlId] > 150) {
+                if (err502 > 100 || err.status === 601 || errors[queueItem.urlId] > 150) {
                     // errors[queueItem.urlId] = 0;
                     err502 = 0;
                     app.spider.socket.log({
@@ -54,7 +54,7 @@ module.exports = (app, core, sockets) => {
                     });
                 }
 
-                return next(true, 1000 * 60 * (~~core.downloadInstance.proxySettings.errorInterval || 0.1));
+                return next(true, 1000 * 60 * (~~core.downloadInstance.proxySettings.errorInterval || 1));
             }
 
             // 如果错误数超过200，丢弃掉消息

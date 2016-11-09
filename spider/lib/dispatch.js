@@ -24,14 +24,19 @@ module.exports = (app, core) => {
                         core.downloadInstance.doStop().then(()=> {
                             core.downloadInstance.doStart();
                             core.downloadInstance.doInitHtmlDeal();
+
+                            app.spider.socket.update({
+                                downloader: core.downloadInstance
+                            });
                         });
                     }
                 } else {
-                    core.downloadInstance.doStop();
+                    core.downloadInstance.doStop().chain(()=> {
+                        app.spider.socket.update({
+                            downloader: core.downloadInstance
+                        });
+                    });
                 }
-                app.spider.socket.update({
-                    downloader: core.downloadInstance
-                });
             });
         });
     }
