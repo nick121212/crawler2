@@ -15,8 +15,8 @@ module.exports = exports = (app, core, sockets) => {
         pptpsetup: `pptpsetup --create nicv --server czpptp.webok.net --user ${process.env.NODE_USER || "cz003"} --password ${process.env.NODE_PWD || "111"} --start`,
         routeAdd: "route add default gw ",
         nginxRestart: "service nginx restart",
-        nginxStop: "service nginx stop",
-        nginxStart: "service nginx start",
+        nginxStop: " nginx -s stop",
+        nginxStart: " nginx ",
         route: "route",
         routeDelete: "route delete default gw all"
     };
@@ -26,6 +26,9 @@ module.exports = exports = (app, core, sockets) => {
         // 5s后重启nginx
         setTimeout(() => {
             // shell.exec(commands.pon, {silent: false});
+
+            console.log("nginx stop and start");
+
             shell.exec(commands.nginxStop, {silent: false});
             shell.exec(commands.nginxStart, {silent: false});
             retryCount = 0;
