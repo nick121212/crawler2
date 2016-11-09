@@ -178,8 +178,7 @@ module.exports = (app, core) => {
         addUrlsToEsUrls(urls, key, keyAlias) {
             let queueItems = {};
             let defer = Promise.defer();
-            let esMgetBody = [],
-                esAllInBody = [];
+            let esMgetBody = [];
 
             // 检查url在es中是否存在
             _.each(urls, (url) => {
@@ -281,7 +280,6 @@ module.exports = (app, core) => {
                             }
                         }
                     }
-
                 }
 
                 return esBulkBody;
@@ -300,7 +298,7 @@ module.exports = (app, core) => {
                 _.each(response.items, (createResult) => {
                     createResult = createResult.create;
                     // 如果创建成功，则加入到queue中等待下载
-                    if (createResult && (createResult.status === 201) && queueItems[createResult._id]) {
+                    if (createResult && createResult._type === this.esTypeQueueUrls && (createResult.status === 201) && queueItems[createResult._id]) {
                         if (!_.filter(newQueueItems, (item) => {
                                 return item.urlId == createResult._id;
                             }).length) {
@@ -464,10 +462,11 @@ module.exports = (app, core) => {
          * @param keyField
          * @returns {Promise}
          */
-        addMutipleCompleteData(results, field, type, index, keyField = "urlId") {
+        addMutipleCompleteData(results, field, key, type, index, keyField = "urlId") {
             const defer = Promise.defer();
             let esMgetBody = [];
             let queueItemsNew = {};
+            let notFoundqueueItems = [];
 
             _.each(results, (result) => {
                 let queueItem = this.getQueueItemInfo(result.protocol, result.host, result.port, result.path, result.depth, result.query);
@@ -492,37 +491,30 @@ module.exports = (app, core) => {
                         let res = doc._source || {};
                         let cur = queueItemsNew[doc._id];
 
-                        // 如果字段有更新，更新数据，更新总的数据表
-                        if (doc.found && _.reduce(_.keys(cur), (key, equal) => {
-                                return equal && res[key] == cur[key];
-                            }, true)) {
-                            updateDocs.push({
-                                update: {
-                                    _index: index,
-                                    _type: type,
-                                    _id: doc._id
-                                }
-                            });
-                            updateDocs.push({
-                                doc: _.extend({
-                                    updatedAt: Date.now()
-                                }, queueItemsNew[doc._id] || {})
-                            });
-
-                            // updateDocs.push({
-                            //     update: {
-                            //         _index: this.esIndexAllIn,
-                            //         _type: type,
-                            //         _id: doc._id
-                            //     }
-                            // });
-                            // updateDocs.push({
-                            //     doc: _.extend({
-                            //         updatedAt: Date.now()
-                            //     }, {})
-                            // });
+                        if (!doc.found) {
+                            notFoundqueueItems.push(queueItemsNew[doc._id]);
+                        } else {
+                            // 如果字段有更新，更新数据，更新总的数据表
+                            if (_.reduce(_.keys(cur), (key, equal) => {
+                                    return equal && res[key] == cur[key];
+                                }, true)) {
+                                updateDocs.push({
+                                    update: {
+                                        _index: index,
+                                        _type: type,
+                                        _id: doc._id
+                                    }
+                                });
+                                updateDocs.push({
+                                    doc: _.extend({
+                                        updatedAt: Date.now()
+                                    }, queueItemsNew[doc._id] || {})
+                                });
+                            }
                         }
                     });
+
+                    this.addQueueItemsToQueue(notFoundqueueItems, key);
 
                     return updateDocs;
                 }).then((updateDocs) => {
@@ -530,7 +522,7 @@ module.exports = (app, core) => {
                         return;
                     }
 
-                    return core.elastic.bulk({ body: updateDocs });
+                    return core.elastic.bulk({body: updateDocs});
                 }).then(defer.resolve, defer.reject);
             } else {
                 defer.resolve();
@@ -552,8 +544,8 @@ module.exports = (app, core) => {
             saveQueueItem.responseBody = "";
             core.elastic.bulk({
                 body: [
-                    { delete: { _index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId } },
-                    { index: { _index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId } },
+                    {delete: {_index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId}},
+                    {index: {_index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId}},
                     saveQueueItem
                 ]
             }).then(() => {
