@@ -50,9 +50,12 @@ module.exports = exports = (app, core, sockets) => {
     let scheduleJob = () => {
         let isSuccess, localhostIp, pptpsetup, datas = [];
 
-        console.log("dfd");
+
 
         if (isRunning) return;
+
+
+        console.log("dfd");
 
         lastIp = "";
         retryCount = 0;
