@@ -79,7 +79,6 @@ module.exports = (app, core) => {
                 app.spider.socket.log({
                     message: `${new Date()}定时任务启动`
                 });
-                // core.downloadInstance = new app.spider.index(config);
                 startSchedule(config);
             });
 

@@ -39,8 +39,8 @@
       <file leaf-file-name="queue_store_es.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spider/lib/queue_store_es.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="470">
-              <caret line="271" column="50" selection-start-line="268" selection-start-column="32" selection-end-line="278" selection-end-column="35" />
+            <state relative-caret-position="455">
+              <caret line="516" column="49" selection-start-line="516" selection-start-column="49" selection-end-line="516" selection-end-column="49" />
               <folding>
                 <element signature="e#648#827#0" expanded="false" />
                 <element signature="e#1013#2054#0" expanded="false" />
@@ -126,8 +126,8 @@
       <file leaf-file-name="dispatch.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spider/lib/dispatch.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="552">
-              <caret line="86" column="0" selection-start-line="86" selection-start-column="0" selection-end-line="86" selection-end-column="0" />
+            <state relative-caret-position="222">
+              <caret line="29" column="31" selection-start-line="29" selection-start-column="31" selection-end-line="29" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -469,14 +469,7 @@
       <workItem from="1477877262154" duration="885000" />
       <workItem from="1478486509289" duration="426000" />
       <workItem from="1478505108164" duration="220000" />
-      <workItem from="1478659004358" duration="4323000" />
-    </task>
-    <task id="LOCAL-00069" summary="更改了错误处理机制，加强了更改ip的判定">
-      <created>1475063336624</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1475063336624</updated>
+      <workItem from="1478659004358" duration="4557000" />
     </task>
     <task id="LOCAL-00070" summary="更改了错误处理机制，加强了更改ip的判定">
       <created>1475063472963</created>
@@ -814,11 +807,18 @@
       <option name="project" value="LOCAL" />
       <updated>1478667291347</updated>
     </task>
-    <option name="localTasksCounter" value="118" />
+    <task id="LOCAL-00118" summary="修改了，回滚的时候，queueItem存入的错误">
+      <created>1478667814178</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1478667814178</updated>
+    </task>
+    <option name="localTasksCounter" value="119" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="234151000" />
+    <option name="totallyTimeSpent" value="234385000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -1156,10 +1156,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/spider/deal/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="334">
+          <caret line="61" column="74" selection-start-line="61" selection-start-column="74" selection-end-line="61" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/spider/lib/queue_store_es.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="470">
-          <caret line="271" column="50" selection-start-line="268" selection-start-column="32" selection-end-line="278" selection-end-column="35" />
+        <state relative-caret-position="455">
+          <caret line="516" column="49" selection-start-line="516" selection-start-column="49" selection-end-line="516" selection-end-column="49" />
           <folding>
             <element signature="e#648#827#0" expanded="false" />
             <element signature="e#1013#2054#0" expanded="false" />
@@ -1174,18 +1182,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spider/deal/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="61" column="74" selection-start-line="61" selection-start-column="74" selection-end-line="61" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/spider/lib/dispatch.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="86" column="0" selection-start-line="86" selection-start-column="0" selection-end-line="86" selection-end-column="0" />
+        <state relative-caret-position="222">
+          <caret line="29" column="31" selection-start-line="29" selection-start-column="31" selection-end-line="29" selection-end-column="31" />
           <folding />
         </state>
       </provider>
