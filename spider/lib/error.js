@@ -16,7 +16,7 @@ module.exports = (app, core, sockets) => {
         error: (err, queueItem, next) => {
             // 推送错误信息
             app.spider.socket.log({
-                message: `${queueItem.url}--${err.message}--${err.status}--${err.code}`,
+                message: `${queueItem.url}--${err.message}--${err.status}--${err.code}--${errors[queueItem.urlId]}`,
                 isError: true,
                 date: Date.now()
             });

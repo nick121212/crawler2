@@ -13,7 +13,7 @@ module.exports = (app, core) => {
     const checkQueue = (queue) => {
         cancelCheckQueue();
         // 1分钟检测一下queue
-        checkQueueSchdule = schedule.scheduleJob('30 * * * * *', function() {
+        checkQueueSchdule = schedule.scheduleJob('30 * * * * *', function () {
             core.q.getQueue(queue).then((result) => {
                 app.spider.socket.log({
                     message: `${queue}还剩下${result.q.messageCount}条数据！共有${result.q.consumerCount}个消费者！`,
@@ -35,7 +35,7 @@ module.exports = (app, core) => {
     let startSchedule = (config) => {
         let now = new Date();
         const key = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${config.key}`;
-        let configNew = _.extend({ aliasKey: config.key }, config, { key: key });
+        let configNew = _.extend({aliasKey: config.key}, config, {key: key});
         let promises = [];
 
         console.log("开始定时任务！！！！！！！！");
@@ -44,7 +44,7 @@ module.exports = (app, core) => {
             promises.push(core.downloadInstance.doStop());
         }
 
-        promises.push(app.spider.socket.reset(`${now.getFullYear()}-${now.getMonth()}-${now.getDate()-1}-${config.key}`));
+        promises.push(app.spider.socket.reset(`${now.getFullYear()}-${now.getMonth()}-${now.getDate() - 3}-${config.key}`));
 
         // promises.push(app.spider.socket.reset(configNew));
         Promise.all(promises).then(() => {
@@ -66,7 +66,7 @@ module.exports = (app, core) => {
         checkQueue: checkQueue,
         cancelCheckQueue: cancelCheckQueue,
         scheduleJob: (config) => {
-            schedule.scheduleJob({ hour: 10, minute: 30 }, function() {
+            schedule.scheduleJob({hour: 10, minute: 30}, function () {
                 app.spider.socket.log({
                     message: `${new Date()}定时任务启动`
                 });
