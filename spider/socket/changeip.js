@@ -26,7 +26,8 @@ module.exports = exports = (app, core, sockets) => {
         // 5s后重启nginx
         setTimeout(() => {
             // shell.exec(commands.pon, {silent: false});
-            shell.exec(commands.nginxRestart, {silent: false});
+            shell.exec(commands.nginxStop, {silent: false});
+            shell.exec(commands.nginxStart, {silent: false});
             retryCount = 0;
             isRunning = false;
         }, 5000);
