@@ -119,8 +119,8 @@
       <file leaf-file-name="changeip.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spider/socket/changeip.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="26" column="26" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
+            <state relative-caret-position="109">
+              <caret line="52" column="24" selection-start-line="52" selection-start-column="24" selection-end-line="52" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -457,14 +457,7 @@
       <workItem from="1478486509289" duration="426000" />
       <workItem from="1478505108164" duration="220000" />
       <workItem from="1478659004358" duration="5175000" />
-      <workItem from="1478689235112" duration="585000" />
-    </task>
-    <task id="LOCAL-00075" summary="更改了错误处理机制，加强了更改ip的判定">
-      <created>1475920946791</created>
-      <option name="number" value="00075" />
-      <option name="presentableId" value="LOCAL-00075" />
-      <option name="project" value="LOCAL" />
-      <updated>1475920946791</updated>
+      <workItem from="1478689235112" duration="799000" />
     </task>
     <task id="LOCAL-00076" summary="更改了错误处理机制，加强了更改ip的判定">
       <created>1475924819154</created>
@@ -802,11 +795,18 @@
       <option name="project" value="LOCAL" />
       <updated>1478689715173</updated>
     </task>
-    <option name="localTasksCounter" value="124" />
+    <task id="LOCAL-00124" summary="修改了，回滚的时候，queueItem存入的错误">
+      <created>1478689842637</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1478689842637</updated>
+    </task>
+    <option name="localTasksCounter" value="125" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="235588000" />
+    <option name="totallyTimeSpent" value="235802000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="21" y="12" width="1238" height="777" extended-state="0" />
@@ -1170,8 +1170,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/spider/socket/changeip.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="26" column="26" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
+        <state relative-caret-position="109">
+          <caret line="52" column="24" selection-start-line="52" selection-start-column="24" selection-end-line="52" selection-end-column="24" />
           <folding />
         </state>
       </provider>
