@@ -30,6 +30,9 @@ module.exports = (app, core) => {
                             });
                         });
                     }
+                    app.spider.socket.update({
+                        downloader: core.downloadInstance
+                    });
                 } else {
                     core.downloadInstance.doStop().chain(()=> {
                         app.spider.socket.update({

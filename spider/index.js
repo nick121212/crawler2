@@ -271,7 +271,7 @@ module.exports = (app, core) => {
 
                     });
                 }).catch((e) => {
-                    this.isStartDownload = false;
+                    this.isStartDeal = false;
                     console.error(e);
                 });
             });
