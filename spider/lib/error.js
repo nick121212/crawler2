@@ -52,9 +52,11 @@ module.exports = (app, core, sockets) => {
                     _.each(sockets, (socket) => {
                         socket.emit("crawler:chip", {ipInfo: core.downloadInstance.proxySettings.ipInfo});
                     });
+
+                    return next(true, 1000 * 60 * (~~core.downloadInstance.proxySettings.errorInterval || 1));
                 }
 
-                return next(true, 1000 * 60 * (~~core.downloadInstance.proxySettings.errorInterval || 1));
+                return next(true, 1000 * 60 * (~~core.downloadInstance.proxySettings.errorInterval || 0.2));
             }
 
             // 如果错误数超过200，丢弃掉消息
