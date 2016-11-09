@@ -20,8 +20,12 @@ module.exports = (app, core) => {
                     isError: false
                 });
                 if (result.q.messageCount > 0) {
-                    !core.downloadInstance.isStart && core.downloadInstance.doStart();
-                    !core.downloadInstance.isStartDeal && core.downloadInstance.doInitHtmlDeal();
+                    if (!core.downloadInstance.isStart) {
+                        core.downloadInstance.doStop().then(()=> {
+                            core.downloadInstance.doStart();
+                            core.downloadInstance.doInitHtmlDeal();
+                        });
+                    }
                 } else {
                     core.downloadInstance.doStop();
                 }
