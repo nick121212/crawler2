@@ -26,7 +26,7 @@ module.exports = exports = (app, core, sockets) => {
         // 5s后重启nginx
         setTimeout(() => {
             // shell.exec(commands.pon, {silent: false});
-            shell.exec(commands.nginxRestart, { silent: false });
+            shell.exec(commands.nginxRestart, {silent: false});
             retryCount = 0;
             isRunning = false;
         }, 5000);
@@ -34,8 +34,8 @@ module.exports = exports = (app, core, sockets) => {
     let success = () => {
         setTimeout(() => {
             "use strict";
-            shell.exec(commands.routeAdd + lastIp, { silent: false });
-            let route = shell.exec(commands.route, { silent: false }).stdout;
+            shell.exec(commands.routeAdd + lastIp, {silent: false});
+            let route = shell.exec(commands.route, {silent: false}).stdout;
 
             console.log("success----------", lastIp, route);
             if (route.indexOf(lastIp) > 0) {
@@ -52,13 +52,13 @@ module.exports = exports = (app, core, sockets) => {
         retryCount = 0;
         isRunning = true;
         // 关闭nginx
-        shell.exec(commands.nginxStop, { silent: false });
+        shell.exec(commands.nginxStop, {silent: false});
         // 关闭poff
-        shell.exec(commands.poff, { silent: false });
+        shell.exec(commands.poff, {silent: false});
         // 次数+1
         retryCount++;
         // 登陆vpn
-        pptpsetup = shell.exec(commands.pptpsetup, { silent: true, async: true });
+        pptpsetup = shell.exec(commands.pptpsetup, {silent: true, async: true});
         pptpsetup.stdout.on("data", (data) => {
             datas.push(data);
             if (/remote/i.test(datas.join(""))) {
@@ -76,8 +76,10 @@ module.exports = exports = (app, core, sockets) => {
         "use strict";
         console.log("-------", ipInfo.hostname, params.ipInfo.hostname);
         if (ipInfo.hostname == params.ipInfo.hostname) {
-            scheduleJob();
-            cb && cb({ ret: 0 });
+            setTimeout(()=> {
+                scheduleJob();
+            }, 1000);
+            cb && cb({ret: 0});
         }
     };
 
