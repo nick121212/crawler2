@@ -15,8 +15,8 @@ module.exports = exports = (app, core, sockets) => {
         pptpsetup: `pptpsetup --create nicv --server czpptp.webok.net --user ${process.env.NODE_USER || "cz003"} --password ${process.env.NODE_PWD || "111"} --start`,
         routeAdd: "route add default gw ",
         nginxRestart: "service nginx restart",
-        nginxStop: " nginx -s stop",
-        nginxStart: " nginx ",
+        nginxStop: "service nginx stop",
+        nginxStart: "service nginx start",
         route: "route",
         routeDelete: "route delete default gw all"
     };
