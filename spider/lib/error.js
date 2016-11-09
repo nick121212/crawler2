@@ -35,14 +35,14 @@ module.exports = (app, core, sockets) => {
                 errors[queueItem.urlId]++;
             }
 
-            if (err.status === 502) {
+            if (err.code == 502) {
                 err502++;
             }
 
             if ((err.status === 502 && core.downloadInstance.proxySettings.useProxy) || (err.status === 601 && core.downloadInstance.proxySettings.useProxy) || (err.code === "ECONNABORTED" && core.downloadInstance.proxySettings.useProxy)) {
                 // 重启更换ip服务
                 if (err502 > 50 || err.status === 601 || errors[queueItem.urlId] > 150) {
-                    errors[queueItem.urlId] = 0;
+                    // errors[queueItem.urlId] = 0;
                     err502 = 0;
                     app.spider.socket.log({
                         message: `发送更换IP请求！！`,
@@ -50,7 +50,7 @@ module.exports = (app, core, sockets) => {
                         date: Date.now()
                     });
                     _.each(sockets, (socket) => {
-                        socket.emit("crawler:chip", { ipInfo: core.downloadInstance.proxySettings.ipInfo });
+                        socket.emit("crawler:chip", {ipInfo: core.downloadInstance.proxySettings.ipInfo});
                     });
                 }
 
