@@ -59,7 +59,7 @@ module.exports = (app, core) => {
                     });
                 }
 
-                return this.mutiSaveFunc(queueItems, result, this.dealKey, this.dealAliasKey || this.dealKey, rule.aliasKey || rule.key, rule.fieldKey);
+                return this.mutiSaveFunc(queueItems, this.dealKey, this.dealAliasKey || this.dealKey, rule.aliasKey || rule.key, rule.fieldKey);
             }
 
             if (rule.fieldKey && (result[rule.fieldKey] || queueItem[rule.fieldKey])) {

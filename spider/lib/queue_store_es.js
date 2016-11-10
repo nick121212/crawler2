@@ -456,25 +456,24 @@ module.exports = (app, core) => {
         /**
          * 添加多个数据到es，并进行数据的脏值检测
          * @param results
-         * @param field
          * @param type
          * @param index
          * @param keyField
          * @returns {Promise}
          */
-        addMutipleCompleteData(results, field, key, type, index, keyField = "urlId") {
+        addMutipleCompleteData(results, key, aliasKey, index, keyField = "urlId") {
             const defer = Promise.defer();
             let esMgetBody = [];
             let queueItemsNew = {};
-            let notFoundqueueItems = [];
+            let notFoundQueueItems = [];
 
             _.each(results, (result) => {
                 let queueItem = this.getQueueItemInfo(result.protocol, result.host, result.port, result.path, result.depth, result.query);
 
-                queueItemsNew[queueItem[keyField]] = result.res;
+                queueItemsNew[queueItem[keyField]] = result;
                 esMgetBody.push({
                     _index: index,
-                    _type: type,
+                    _type: aliasKey,
                     _id: queueItem[keyField]
                 });
             });
@@ -484,15 +483,15 @@ module.exports = (app, core) => {
                     body: {
                         docs: esMgetBody
                     }
-                }).then((results) => {
+                }).then((getRes) => {
                     let updateDocs = [];
 
-                    _.each(results.docs, (doc) => {
+                    _.each(getRes.docs, (doc) => {
                         let res = doc._source || {};
                         let cur = queueItemsNew[doc._id];
 
                         if (!doc.found) {
-                            notFoundqueueItems.push(queueItemsNew[doc._id]);
+                            notFoundQueueItems.push(queueItemsNew[doc._id]);
                         } else {
                             // 如果字段有更新，更新数据，更新总的数据表
                             if (_.reduce(_.keys(cur), (key, equal) => {
@@ -501,20 +500,22 @@ module.exports = (app, core) => {
                                 updateDocs.push({
                                     update: {
                                         _index: index,
-                                        _type: type,
+                                        _type: aliasKey,
                                         _id: doc._id
                                     }
                                 });
                                 updateDocs.push({
                                     doc: _.extend({
                                         updatedAt: Date.now()
-                                    }, queueItemsNew[doc._id] || {})
+                                    }, queueItemsNew[doc._id].res || {})
                                 });
                             }
                         }
                     });
 
-                    this.addQueueItemsToQueue(notFoundqueueItems, key);
+                    this.addUrlsToEsUrls(notFoundQueueItems, key, aliasKey);
+
+                    // this.addQueueItemsToQueue(notFoundqueueItems, key);
 
                     return updateDocs;
                 }).then((updateDocs) => {
