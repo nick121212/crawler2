@@ -85,7 +85,7 @@ module.exports = (app, core) => {
                 startSchedule(config);
             });
 
-            config.proxySettings.useProxy = false;
+            // config.proxySettings.useProxy = false;
 
             startSchedule(config);
         }

@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3ae7234b-a18e-4c01-9014-8f3d454f359a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/deal/index.js" afterPath="$PROJECT_DIR$/spider/deal/index.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/lib/dispatch.js" afterPath="$PROJECT_DIR$/spider/lib/dispatch.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider/lib/queue_store_es.js" afterPath="$PROJECT_DIR$/spider/lib/queue_store_es.js" />
     </list>
     <ignored path="crawler.2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,11 +38,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="queue_store_es.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="queue_store_es.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spider/lib/queue_store_es.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="572">
-              <caret line="512" column="25" selection-start-line="512" selection-start-column="25" selection-end-line="512" selection-end-column="25" />
+            <state relative-caret-position="227">
+              <caret line="489" column="52" selection-start-line="489" selection-start-column="52" selection-end-line="489" selection-end-column="52" />
               <folding>
                 <element signature="e#648#827#0" expanded="false" />
                 <element signature="e#1013#2054#0" expanded="false" />
@@ -127,14 +125,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dispatch.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="dispatch.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/spider/lib/dispatch.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="92" column="2" selection-start-line="92" selection-start-column="2" selection-end-line="92" selection-end-column="2" />
-              <folding>
-                <marker date="1478745620000" expanded="true" signature="2823:3184" ph="//..." />
-              </folding>
+            <state relative-caret-position="333">
+              <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -202,9 +198,9 @@
         <option value="internal/process/next_tick.js" />
         <option value="$PROJECT_DIR$/spider/index.js" />
         <option value="$PROJECT_DIR$/spider/socket/changeip.js" />
-        <option value="$PROJECT_DIR$/spider/lib/dispatch.js" />
         <option value="$PROJECT_DIR$/spider/deal/index.js" />
         <option value="$PROJECT_DIR$/spider/lib/queue_store_es.js" />
+        <option value="$PROJECT_DIR$/spider/lib/dispatch.js" />
       </list>
     </option>
   </component>
@@ -479,14 +475,7 @@
       <workItem from="1478505108164" duration="220000" />
       <workItem from="1478659004358" duration="5175000" />
       <workItem from="1478689235112" duration="1688000" />
-      <workItem from="1478745257074" duration="2159000" />
-    </task>
-    <task id="LOCAL-00078" summary="更改了错误处理机制，加强了更改ip的判定">
-      <created>1475943428338</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1475943428338</updated>
+      <workItem from="1478745257074" duration="2341000" />
     </task>
     <task id="LOCAL-00079" summary="更改了错误处理机制，加强了更改ip的判定">
       <created>1475944154097</created>
@@ -824,11 +813,18 @@
       <option name="project" value="LOCAL" />
       <updated>1478691790522</updated>
     </task>
-    <option name="localTasksCounter" value="127" />
+    <task id="LOCAL-00127" summary="修改了，回滚的时候，queueItem存入的错误">
+      <created>1478747595422</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1478747595424</updated>
+    </task>
+    <option name="localTasksCounter" value="128" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="238850000" />
+    <option name="totallyTimeSpent" value="239032000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="21" y="12" width="1237" height="777" extended-state="0" />
@@ -842,7 +838,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27534246" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27722773" sideWeight="0.4940429" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27722773" sideWeight="0.4940429" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1148,16 +1144,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spider/lib/dispatch.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="92" column="2" selection-start-line="92" selection-start-column="2" selection-end-line="92" selection-end-column="2" />
-          <folding>
-            <marker date="1478745620000" expanded="true" signature="2823:3184" ph="//..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/spider/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-725">
@@ -1186,8 +1172,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/spider/lib/queue_store_es.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="572">
-          <caret line="512" column="25" selection-start-line="512" selection-start-column="25" selection-end-line="512" selection-end-column="25" />
+        <state relative-caret-position="227">
+          <caret line="489" column="52" selection-start-line="489" selection-start-column="52" selection-end-line="489" selection-end-column="52" />
           <folding>
             <element signature="e#648#827#0" expanded="false" />
             <element signature="e#1013#2054#0" expanded="false" />
@@ -1196,6 +1182,14 @@
             <element signature="e#4626#5160#0" expanded="false" />
             <element signature="e#15025#15650#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spider/lib/dispatch.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
