@@ -161,8 +161,8 @@ module.exports = (app, core) => {
                 config.id = data[idField];
             }
 
-            core.elastic.index(config).then(() => {
-                defer.resolve(data);
+            core.elastic.index(config).then((res) => {
+                defer.resolve(res);
             }, (err) => {
                 defer.reject(err);
             });

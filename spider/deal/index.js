@@ -126,8 +126,8 @@ module.exports = (app, core) => {
                     // 所有的处理完后，保存结果
                     Promise.all(promises).then((results) => {
                         return Promise.all(this.checkStatus(queueItem, results, ch));
-                    }).then(() => {
-                        console.log(`deal complete ${queueItem.url} at ${new Date()}`);
+                    }).then((res) => {
+                        console.log(`deal complete ${queueItem.url} data ${JSON.stringify(res)} at ${new Date()}`);
                         // 更新下信息
                         // app.spider.socket.log({
                         //     message: `保存处理结果成功`,
