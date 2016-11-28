@@ -14,7 +14,7 @@ module.exports = (app, core) => {
     const checkQueue = (queue, config) => {
         cancelCheckQueue();
         // 1分钟检测一下queue
-        checkQueueSchdule = schedule.scheduleJob('10 * * * * *', function () {
+        checkQueueSchdule = schedule.scheduleJob('10 * * * * *', function() {
             core.q.getQueue(queue).then((result) => {
                 app.spider.socket.log({
                     message: `${queue}还剩下${result.q.messageCount}条数据！共有${result.q.consumerCount}个消费者！${fsm.current}`,
@@ -36,7 +36,7 @@ module.exports = (app, core) => {
     const startSchedule = (config) => {
         const now = new Date();
         const key = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${config.key}`;
-        const configNew = _.extend({aliasKey: config.key}, config, {key: key});
+        const configNew = _.extend({ aliasKey: config.key }, config, { key: key });
         const promises = [];
 
         console.log("开始定时任务！！！！！！！！");
@@ -65,49 +65,49 @@ module.exports = (app, core) => {
     const fsm = StateMachine.create({
         initial: 'red',
         events: [
-            {name: 'starting', from: 'red', to: 'yellow'},
-            {name: 'started', from: 'yellow', to: 'green'},
-            {name: 'looping', from: 'green', to: 'green'},
-            {name: 'looping', from: 'red', to: 'green'},
-            {name: 'stopping', from: 'green', to: 'yellow'},
-            {name: 'stopping', from: 'green', to: 'red'},
-            {name: 'stopped', from: 'yellow', to: 'red'},
-            {name: 'stopped', from: 'red', to: 'red'}
+            { name: 'starting', from: 'red', to: 'yellow' },
+            { name: 'started', from: 'yellow', to: 'green' },
+            { name: 'looping', from: 'green', to: 'green' },
+            { name: 'looping', from: 'red', to: 'green' },
+            { name: 'stopping', from: 'green', to: 'yellow' },
+            { name: 'stopping', from: 'green', to: 'red' },
+            { name: 'stopped', from: 'yellow', to: 'red' },
+            { name: 'stopped', from: 'red', to: 'red' }
 
         ],
         callbacks: {
-            error: function (eventName, from, to, args, errorCode, errorMessage, originalException) {
+            error: function(eventName, from, to, args, errorCode, errorMessage, originalException) {
                 return 'event ' + eventName + ' was naughty :- ' + errorMessage;
             },
-            onstarting: (event, from, to, config)=> {
+            onstarting: (event, from, to, config) => {
                 startSchedule(config);
             },
-            onstarted: (event, from, to, config)=> {
+            onstarted: (event, from, to, config) => {
                 app.spider.socket.update({
                     downloader: core.downloadInstance
                 });
                 fsm.looping(`crawler.urls.${core.downloadInstance.key}`, config);
             },
-            onlooping: (event, from, to, msg, config)=> {
+            onlooping: (event, from, to, msg, config) => {
                 checkQueue(msg, config);
             },
-            onstopping: (event, from, to, config)=> {
+            onstopping: (event, from, to, config) => {
                 cancelCheckQueue();
-                if (scheduleObj)scheduleObj.cancel();
-                core.downloadInstance.doStop().then(()=> {
+                if (scheduleObj) scheduleObj.cancel();
+                core.downloadInstance.doStop().then(() => {
                     fsm.stopped(config);
-                }).catch(()=> {
+                }).catch(() => {
                     fsm.stopping(config);
                 });
             },
-            onstopped: (event, from, to, config)=> {
-                scheduleObj = schedule.scheduleJob({hour: 10, minute: 30}, function () {
+            onstopped: (event, from, to, config) => {
+                scheduleObj = schedule.scheduleJob({ hour: 10, minute: 30 }, function() {
                     app.spider.socket.log({
                         message: `${new Date()}定时任务启动`
                     });
                     startSchedule(config);
                 });
-                if(core.downloadInstance) {
+                if (core.downloadInstance) {
                     fsm.looping(`crawler.urls.${core.downloadInstance.key}`, config);
                 }
             }

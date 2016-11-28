@@ -32,7 +32,7 @@ function getQueue(qName, qSetting) {
     return defer.promise;
 }
 
-function deleteQueue(qName, qSetting) {
+function deleteQueue(qName, qSetting, isClsose = true) {
     let defer = Promise.defer(),
         ch = null,
         connec;
@@ -46,10 +46,14 @@ function deleteQueue(qName, qSetting) {
             return ch.deleteQueue(qName, qSetting || {});
         })
         .then(() => {
-            return ch.close();
+            if (isClsose)
+                return ch.close();
+            return true;
         })
         .then(() => {
-            connec.close();
+            if (isClsose)
+                connec.close();
+            return true;
         })
         .then(defer.resolve)
         .catch(defer.reject);
