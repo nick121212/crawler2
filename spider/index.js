@@ -26,7 +26,6 @@ module.exports = (app, core) => {
         constructor(settings) {
             this.isStart = false;
             this.isStartDeal = false;
-            this.isDispatch = false;
             this.consumerTags = [];
 
             this.initialPath = settings.initialPath || "/";
@@ -117,11 +116,13 @@ module.exports = (app, core) => {
             let urls = [],
                 queueItem;
             let next = (queueMsg, reject = false, interval = this.interval) => {
-                if (interval == this.interval) {
-                    interval = ~~(Math.random() * (interval - 500) + 500);
+                if (this.isStart) {
+                    if (interval == this.interval) {
+                        interval = ~~(Math.random() * (interval - 500) + 500);
+                    }
+                    currentInterval = interval;
+                    reject ? result.ch.reject(queueMsg) : result.ch.ack(queueMsg);
                 }
-                currentInterval = interval;
-                reject ? result.ch.reject(queueMsg) : result.ch.ack(queueMsg);
             };
 
             try {
@@ -150,9 +151,6 @@ module.exports = (app, core) => {
                         url: queueItem.url
                     });
 
-                    if (discoverUrls.length < this.limitMinLinks) {
-                        throw errPage();
-                    }
                     // 发现并过滤页面中的urls
                     discoverUrls.map((url) => {
                         url = this.queue.queueURL(decodeURIComponent(url), queueItem);
@@ -197,11 +195,9 @@ module.exports = (app, core) => {
                     result.ch.prefetch(1)
                 ]);
             }).then(() => {
-                // 发送日志消息
-
                 // 添加消费监听
+                this.isStart = true;
                 return result.ch.consume(result.q.queue, (msg) => {
-                    this.isStart = true;
                     console.log(`等待${currentInterval}毫秒！！！！`);
                     setTimeout(() => {
                         this.consumeQueue(msg, result);
@@ -210,9 +206,12 @@ module.exports = (app, core) => {
                     noAck: false
                 });
             }).then((qres) => {
-                app.spider.lib.dispatch.checkQueue(result.q.queue);
+                // app.spider.lib.dispatch.checkQueue(result.q.queue);
                 this.dealConsumer(qres.consumerTag);
-            }).catch(console.error);
+            }).catch((err)=> {
+                this.isStart = false;
+                console.error(err);
+            });
         }
 
         // 保存所有的消费者tag
@@ -226,15 +225,17 @@ module.exports = (app, core) => {
          */
         doInitHtmlDeal() {
             let next = (queueItem, result, msg) => {
-                this.deal.consumeQueue(queueItem, result.ch).then(() => {
-                    result.ch.ack(msg);
-                }, (err) => {
-                    console.log(err);
-                    result.ch.reject(msg);
-                });
+                if (this.isStartDeal) {
+                    this.deal.consumeQueue(queueItem, result.ch).then(() => {
+                        result.ch.ack(msg);
+                    }, (err) => {
+                        console.log(err);
+                        result.ch.reject(msg);
+                    });
+                }
             };
 
-            this.isStartDeal = true;
+
             core.q.getQueue(`crawler.deals.${this.key}`, {durable: true}).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
@@ -243,6 +244,7 @@ module.exports = (app, core) => {
                     result.ch.prefetch(1)
                 ]).then(() => {
                     // 开始消费
+                    this.isStartDeal = true;
                     return result.ch.consume(result.q.queue, (msg) => {
                         let queueItem;
 
@@ -336,7 +338,6 @@ module.exports = (app, core) => {
             }, console.error).chain(() => {
                 this.doInitDownloadDeal().then(next.bind(this));
             });
-            this.isStart = true;
         }
 
         /**
@@ -344,6 +345,7 @@ module.exports = (app, core) => {
          */
         doStop() {
             let promises = [];
+
             if (this.isStart) {
                 _.each(this.consumerTags, (tag) => {
                     promises.push(core.q.cancel(tag));
@@ -357,18 +359,10 @@ module.exports = (app, core) => {
                         message: "已经停止爬虫"
                     });
                     app.spider.socket.update({
-                        downloader: core.downloadInstance
+                        downloader: this
                     });
                 }).catch(console.error);
             }
-        }
-
-        /**
-         * 调度模式
-         */
-        doDispatch() {
-            app.spider.lib.dispatch.scheduleJob();
-            this.isDispatch = true;
         }
     }
 
