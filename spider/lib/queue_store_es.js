@@ -523,7 +523,7 @@ module.exports = (app, core) => {
                         return;
                     }
 
-                    return core.elastic.bulk({body: updateDocs});
+                    return core.elastic.bulk({ body: updateDocs });
                 }).then(defer.resolve, defer.reject);
             } else {
                 defer.resolve();
@@ -545,8 +545,8 @@ module.exports = (app, core) => {
             saveQueueItem.responseBody = "";
             core.elastic.bulk({
                 body: [
-                    {delete: {_index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId}},
-                    {index: {_index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId}},
+                    { delete: { _index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId } },
+                    { index: { _index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId } },
                     saveQueueItem
                 ]
             }).then(() => {

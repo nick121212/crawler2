@@ -11,12 +11,9 @@ module.exports = (app, core) => {
             this.dealKey = settings.key || "";
             this.dealAliasKey = settings.aliasKey || "";
             this.queue = queue;
-            this.saveFunc = saveFunc || function () {
-                };
-            this.rollbackFunc = rollbackFunc || function () {
-                };
-            this.mutiSaveFunc = mutiSaveFunc || function () {
-                };
+            this.saveFunc = saveFunc || function() {};
+            this.rollbackFunc = rollbackFunc || function() {};
+            this.mutiSaveFunc = mutiSaveFunc || function() {};
             this.getQueueItemInfo = getQueueItemInfo;
 
             _.forEach(this.pages, (page) => {
@@ -34,8 +31,8 @@ module.exports = (app, core) => {
         findRule(url) {
             return _.filter(this.pages, (page) => {
                 return _.filter(page.rule, (rule) => {
-                        return rule.test(url);
-                    }).length > 0;
+                    return rule.test(url);
+                }).length > 0;
             });
         }
 
@@ -55,6 +52,7 @@ module.exports = (app, core) => {
                     _.each(results, (res) => {
                         let queueItemNew = this.queue.queueURL(res.url, queueItem);
 
+                        res.url = queueItemNew.url;
                         queueItemNew && (queueItemNew.res = res) && queueItems.push(queueItemNew);
                     });
                 }

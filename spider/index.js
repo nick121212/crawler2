@@ -208,7 +208,7 @@ module.exports = (app, core) => {
             }).then((qres) => {
                 // app.spider.lib.dispatch.checkQueue(result.q.queue);
                 this.dealConsumer(qres.consumerTag);
-            }).catch((err)=> {
+            }).catch((err) => {
                 this.isStart = false;
                 console.error(err);
             });
@@ -236,7 +236,7 @@ module.exports = (app, core) => {
             };
 
 
-            core.q.getQueue(`crawler.deals.${this.key}`, {durable: true}).then((result) => {
+            core.q.getQueue(`crawler.deals.${this.key}`, { durable: true }).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
                     result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}.bodys`),
@@ -322,7 +322,7 @@ module.exports = (app, core) => {
 
             let robotsTxtUrl = uri(this.host).pathname("/robots.txt");
             let next = () => {
-                setTimeout(function () {
+                setTimeout(function() {
                     this.queueStore.addUrlsToEsUrls([{
                         protocol: this.initialProtocol,
                         host: this.initDomain || this.host,
@@ -350,19 +350,18 @@ module.exports = (app, core) => {
                 _.each(this.consumerTags, (tag) => {
                     promises.push(core.q.cancel(tag));
                 });
-
-                return Promise.all(promises).then(() => {
-                    this.isStart = false;
-                    this.isStartDeal = false;
-                    this.consumerTags.length = 0;
-                    app.spider.socket.log({
-                        message: "已经停止爬虫"
-                    });
-                    app.spider.socket.update({
-                        downloader: this
-                    });
-                }).catch(console.error);
             }
+            return Promise.all(promises).then(() => {
+                this.isStart = false;
+                this.isStartDeal = false;
+                this.consumerTags.length = 0;
+                app.spider.socket.log({
+                    message: "已经停止爬虫"
+                });
+                app.spider.socket.update({
+                    downloader: this
+                });
+            }).catch(console.error);
         }
     }
 

@@ -128,7 +128,8 @@ module.exports = () => {
                 path: newURL.path(),
                 uriPath: newURL.path(),
                 query: newURL.query(),
-                depth: context.depth + 1
+                depth: context.depth + 1,
+                url: newURL.toString()
             };
         }
 
@@ -162,7 +163,8 @@ module.exports = () => {
                     query: parsedURL.query,
                     port: parsedURL.port,
                     path: parsedURL.path,
-                    depth: parsedURL.depth
+                    depth: parsedURL.depth,
+                    url: parsedURL.url
                 };
             }
 
