@@ -10,12 +10,11 @@ const _ = require('lodash');
 function getEsf(page, perPage, cookie) {
     let total = 0;
 
-    console.log(page, perPage, cookie);
-    return esfAction(cookie, page, perPage).then((results)=> {
+    return esfAction(cookie, page, perPage).then((results) => {
         let bodies = [];
 
         total = results.total;
-        _.each(results.rows, (res)=> {
+        _.each(results.rows, (res) => {
             bodies.push({
                 index: {
                     _index: "lansi",
@@ -30,7 +29,7 @@ function getEsf(page, perPage, cookie) {
             body: bodies
         });
 
-    }).then(()=> {
+    }).then(() => {
         page++;
 
         console.log("totalPage:", total / perPage);
@@ -45,7 +44,7 @@ function getEsf(page, perPage, cookie) {
 }
 
 
-loginAction().then((cookie)=> {
+loginAction().then((cookie) => {
     let page = 1;
     let perPage = 100;
 

@@ -10,8 +10,5 @@ module.exports = exports = {
         user: "nick",
         password: "111111"
     },
-    socket: {
-        host: "localhost",
-        port: 3000
-    }
+    hosts: process.env.NODE_IPS ? process.env.NODE_IPS.split(',') : []
 };

@@ -493,22 +493,27 @@ module.exports = (app, core) => {
                         if (!doc.found) {
                             notFoundQueueItems.push(queueItemsNew[doc._id]);
                         } else {
-                            // 如果字段有更新，更新数据，更新总的数据表
-                            if (_.reduce(_.keys(cur), (key, equal) => {
-                                    return equal && res[key] == cur[key];
-                                }, true)) {
-                                updateDocs.push({
-                                    update: {
-                                        _index: index,
-                                        _type: aliasKey,
-                                        _id: doc._id
-                                    }
-                                });
-                                updateDocs.push({
-                                    doc: _.extend({
-                                        updatedAt: Date.now()
-                                    }, queueItemsNew[doc._id].res || {})
-                                });
+                            // 如果图片字段不存在，或者长度小于2
+                            if (!res.pictures || !_.isArray(res.pictures) || res.pictures.length < 2) {
+                                notFoundQueueItems.push(queueItemsNew[doc._id]);
+                            } else {
+                                // 如果字段有更新，更新数据，更新总的数据表
+                                if (_.reduce(_.keys(cur), (key, equal) => {
+                                        return equal && res[key] == cur[key];
+                                    }, true)) {
+                                    updateDocs.push({
+                                        update: {
+                                            _index: index,
+                                            _type: aliasKey,
+                                            _id: doc._id
+                                        }
+                                    });
+                                    updateDocs.push({
+                                        doc: _.extend({
+                                            updatedAt: Date.now()
+                                        }, queueItemsNew[doc._id].res || {})
+                                    });
+                                }
                             }
                         }
                     });

@@ -1,6 +1,6 @@
 const request = require("superagent");
 
-module.exports = (cookie, page, rows = 100)=> {
+module.exports = (cookie, page, rows = 100) => {
     let defer = Promise.defer();
     let req1 = request.post("http://res.hhhuo.net/Hand/SelectQueryList.ashx");
 
@@ -18,6 +18,7 @@ module.exports = (cookie, page, rows = 100)=> {
             order: "ASC"
         })
         .end((err, res) => {
+            console.log(err);
             if (err) {
                 defer.reject(err);
             }
@@ -32,4 +33,3 @@ module.exports = (cookie, page, rows = 100)=> {
 
     return defer.promise;
 };
-

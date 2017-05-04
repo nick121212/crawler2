@@ -23,6 +23,8 @@ module.exports = () => {
             hdLoginType: true
         })
         .end((err, res) => {
+
+            console.log("error:", err);
             if (err) {
                 return defer.reject(err);
             }
@@ -37,7 +39,7 @@ module.exports = () => {
                 let result = JSON.parse(res.text);
                 let cookieId = res.headers["set-cookie"][0].split(";");
 
-                console.log(result);
+                console.log("result:", result);
 
                 if (result.state !== 1) {
                     return defer.reject(new Error(result.Error));
