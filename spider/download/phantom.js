@@ -1,5 +1,5 @@
 const Horseman = require('node-horseman');
-
+global.Promise = require("bluebird");
 class Downloader {
     start(uri, settings = {}, ipInfo = {}) {
         let horseman,

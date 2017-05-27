@@ -1,6 +1,7 @@
 const request = require("superagent");
 const requestProxy = require("superagent-proxy")(request);
 const superagent_charset = require("superagent-charset")(request);
+global.Promise = require("bluebird");
 
 class Downloader {
     start(uri, settings = {}, ipInfo = {}) {

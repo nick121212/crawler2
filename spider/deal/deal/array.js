@@ -1,5 +1,6 @@
 let _ = require("lodash");
 let jpp = require("json-path-processor");
+global.Promise = require("bluebird");
 
 module.exports = (app) => {
     class Strategy extends app.spider.deal.deal.abase {

@@ -2,7 +2,7 @@
 
 let _ = require("lodash");
 let jpp = require("json-path-processor");
-
+global.Promise = require("bluebird");
 module.exports = (app, core) => {
     class DealHtml {
         constructor(settings, queue, getQueueItemInfo, mutiSaveFunc, saveFunc, rollbackFunc) {

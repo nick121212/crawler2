@@ -1,5 +1,5 @@
 let _ = require("lodash");
-
+global.Promise = require("bluebird");
 /**
  * 处理html文本策越
  */
@@ -50,7 +50,7 @@ module.exports = (app) => {
                     promiseAll = promiseAll.concat(this.doDealData.call(this, queueItem, field.data, dataResults, results[key] ? results[key].$cur : null));
                 });
 
-                return Promise.all(promiseAll).then(check, (err)=> {
+                return Promise.all(promiseAll).then(check, (err) => {
                     defer.reject(err);
                 });
             }, defer.reject);

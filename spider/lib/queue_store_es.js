@@ -2,6 +2,7 @@
 
 const _ = require("lodash");
 const md5 = require("blueimp-md5");
+global.Promise = require("bluebird");
 
 module.exports = (app, core) => {
     /**

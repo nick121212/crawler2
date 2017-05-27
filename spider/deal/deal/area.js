@@ -1,4 +1,5 @@
 let _ = require("lodash");
+global.Promise = require("bluebird");
 
 module.exports = (app) => {
 

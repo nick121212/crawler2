@@ -2,7 +2,7 @@ let jsdom = require("jsdom");
 let _ = require("lodash");
 let fs = require("fs");
 let jquery = fs.readFileSync(`${__dirname}/../../../jquery.js`, "utf-8");
-
+global.Promise = require("bluebird");
 module.exports = (app) => {
     class CheerDealStrategy {
         /**

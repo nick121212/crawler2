@@ -8,6 +8,7 @@ const URI = require("urijs");
 const md5 = require("blueimp-md5");
 const request = require("superagent");
 const requestProxy = require("superagent-proxy")(request);
+global.Promise = require("bluebird");
 
 //递归创建目录 同步方法
 function mkdirsSync(dirname, mode) {
@@ -43,13 +44,13 @@ class Download {
                 if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
                     req.proxy(`http://${settings.ipInfo.host}:${settings.ipInfo.port}`);
                 }
-                req.on('response', function (res) {
+                req.on('response', function(res) {
                     console.log(res.status);
                 });
-                req.on('error', function (err) {
+                req.on('error', function(err) {
                     defer.reject(err);
                 });
-                stream.on('finish', function () {
+                stream.on('finish', function() {
                     console.log(`fetch picture complete ${uri.toString()} at ${new Date()}`);
                     defer.resolve();
                 });
@@ -63,6 +64,6 @@ class Download {
     }
 }
 
-module.exports = ()=> {
+module.exports = () => {
     return new Download();
 };

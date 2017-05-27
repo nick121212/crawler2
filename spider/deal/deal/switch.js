@@ -1,5 +1,5 @@
 let _ = require("lodash");
-
+global.Promise = require("bluebird");
 module.exports = (app) => {
     class Strategy extends app.spider.deal.deal.abase {
         /**

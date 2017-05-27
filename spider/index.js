@@ -5,6 +5,7 @@ let _ = require("lodash");
 let robotsTxtParser = require("robots-parser");
 let currentInterval = 0;
 
+global.Promise = require("bluebird");
 
 // console.log();
 
