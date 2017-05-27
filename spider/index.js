@@ -5,6 +5,10 @@ let _ = require("lodash");
 let robotsTxtParser = require("robots-parser");
 let currentInterval = 0;
 
+
+// console.log();
+
+
 module.exports = (app, core) => {
     const errPage = () => {
         let err = new Error("下载的页面不正确!");

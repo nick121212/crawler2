@@ -11,12 +11,15 @@ const app = {};
 // const socketMain = io(`http://${core.config.socketChip.host}:${core.config.socketChip.port}/crawler`);
 const sockets = [];
 
-_.each(core.config.hosts, (host)=> {
+global.Promise = require("bluebird");
+// console.log(Promise.defer());
+
+_.each(core.config.hosts, (host) => {
     sockets.push(io(`http://${host}/crawler`));
 });
 
 
-consign({verbose: false})
+consign({ verbose: false })
     .include("spider/utils")
     // .include("spider/func")
     .include("spider/socket")

@@ -12,6 +12,7 @@
   "dependencies": {
     "amqp-rpc": "0.0.8",
     "amqplib": "^0.4.1",
+    "bluebird": "^3.5.0",
     "blueimp-md5": "^2.3.0",
     "cheerio": "^0.20.0",
     "commander": "^2.9.0",
