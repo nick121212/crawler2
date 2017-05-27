@@ -2,7 +2,10 @@
 
 let _ = require("lodash");
 let jpp = require("json-path-processor");
+
+
 global.Promise = require("bluebird");
+
 module.exports = (app, core) => {
     class DealHtml {
         constructor(settings, queue, getQueueItemInfo, mutiSaveFunc, saveFunc, rollbackFunc) {
@@ -110,44 +113,48 @@ module.exports = (app, core) => {
          */
         consumeQueue(queueItem, ch) {
             let rules = this.findRule(decodeURIComponent(queueItem.url)),
-                defer = Promise.defer(),
+                // defer = Promise.defer(),
                 promises = [];
 
-            if (!rules.length || !queueItem.responseBody) {
-                defer.resolve();
-            } else {
-                try {
-                    // 遍历处理html文本
-                    _.each(rules, (rule) => {
-                        promises.push(app.spider.deal.deal.index.doDeal(queueItem, rule));
-                    });
-                    // 所有的处理完后，保存结果
-                    Promise.all(promises).then((results) => {
-                        return Promise.all(this.checkStatus(queueItem, results, ch));
-                    }).then((res) => {
-                        console.log(`deal complete ${queueItem.url} data ${JSON.stringify(res)} at ${new Date()}`);
-                        // 更新下信息
-                        // app.spider.socket.log({
-                        //     message: `保存处理结果成功`,
-                        //     // data: result.result
-                        // });
-                        defer.resolve();
-                    }).catch((err) => {
-                        console.error(err);
-                        // 更新下信息
-                        app.spider.socket.log({
-                            message: "保存处理结果失败",
-                            isError: true,
-                            data: err.message
+            return new Promise((resolve, reject) => {
+                if (!rules.length || !queueItem.responseBody) {
+                    resolve();
+                } else {
+                    try {
+                        // 遍历处理html文本
+                        _.each(rules, (rule) => {
+                            promises.push(app.spider.deal.deal.index.doDeal(queueItem, rule));
                         });
-                        defer.reject(err);
-                    });
-                } catch (err) {
-                    defer.reject(err);
+                        // 所有的处理完后，保存结果
+                        Promise.all(promises).then((results) => {
+                            return Promise.all(this.checkStatus(queueItem, results, ch));
+                        }).then((res) => {
+                            console.log(`deal complete ${queueItem.url} data ${JSON.stringify(res)} at ${new Date()}`);
+                            // 更新下信息
+                            // app.spider.socket.log({
+                            //     message: `保存处理结果成功`,
+                            //     // data: result.result
+                            // });
+                            resolve();
+                        }).catch((err) => {
+                            console.error(err);
+                            // 更新下信息
+                            app.spider.socket.log({
+                                message: "保存处理结果失败",
+                                isError: true,
+                                data: err.message
+                            });
+                            reject(err);
+                        });
+                    } catch (err) {
+                        reject(err);
+                    }
                 }
-            }
+            });
 
-            return defer.promise;
+
+
+            // return defer.promise;
         }
     }
 

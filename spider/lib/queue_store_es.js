@@ -2,6 +2,7 @@
 
 const _ = require("lodash");
 const md5 = require("blueimp-md5");
+
 global.Promise = require("bluebird");
 
 module.exports = (app, core) => {
@@ -39,9 +40,7 @@ module.exports = (app, core) => {
          * @returns {promise}
          */
         getUrlAndQUrlDetail(queueItem) {
-            let defer = Promise.defer();
-
-            core.elastic.mget({
+            return core.elastic.mget({
                 body: {
                     docs: [{
                         _index: this.esIndex,
@@ -54,7 +53,7 @@ module.exports = (app, core) => {
                     }]
                 }
             }).then((data) => {
-                defer.resolve({
+                return {
                     esUrl: {
                         exists: data.docs[0].found,
                         detail: data.docs[0]._source
@@ -63,13 +62,8 @@ module.exports = (app, core) => {
                         exists: data.docs[1].found,
                         detail: data.docs[1]._source
                     }
-                });
-            }, (err) => {
-                console.log(queueItem);
-                defer.reject(err);
+                };
             });
-
-            return defer.promise;
         }
 
         /**
@@ -120,26 +114,23 @@ module.exports = (app, core) => {
          * @returns {Promise}
          */
         checkUrlDetail(queueItem) {
-            let defer = Promise.defer();
-
-            this.getUrlAndQUrlDetail(queueItem).then((data) => {
+            return this.getUrlAndQUrlDetail(queueItem).then((data) => {
                 if (!data.esUrl.exists && !data.esQueueUrl.exists) {
-                    return defer.resolve(queueItem);
+                    return queueItem;
                 }
                 if (!data.esQueueUrl.exists && !data.esUrl.detail) {
-                    return defer.resolve(queueItem);
+                    return queueItem;
                 }
                 if (!data.esQueueUrl.exists && !data.esUrl.detail.fetched) {
-                    return defer.resolve(queueItem);
+                    return queueItem;
                 }
-                defer.resolve({
+                return ({
                     isError: true,
                     url: queueItem.urlId,
                     err: new Error("queueItem不需要再爬取了！")
                 });
-            }, defer.reject);
-
-            return defer.promise;
+            });
+            // return defer.promise;
         }
 
         /**
@@ -150,25 +141,17 @@ module.exports = (app, core) => {
          * @returns {promise}
          */
         indexEsData(data, idField, type, index) {
-            let defer = Promise.defer();
             let config = {
                 index: index || this.esIndex,
                 type: type,
                 body: data,
-                // consistency: "one"
             };
 
             if (idField !== "randow") {
                 config.id = data[idField];
             }
 
-            core.elastic.index(config).then((res) => {
-                defer.resolve(res);
-            }, (err) => {
-                defer.reject(err);
-            });
-
-            return defer.promise;
+            return core.elastic.index(config);
         }
 
         /**
@@ -178,7 +161,6 @@ module.exports = (app, core) => {
          */
         addUrlsToEsUrls(urls, key, keyAlias) {
             let queueItems = {};
-            let defer = Promise.defer();
             let esMgetBody = [];
 
             // 检查url在es中是否存在
@@ -218,7 +200,7 @@ module.exports = (app, core) => {
 
             // 处理数据,先判断queueUrl中是否存在,存在则不添加到queue
             // 判断urls中是否存在,如果存在,则判断数据是否已经fetched,如果没有则加到queue里
-            core.elastic.mget({
+            return core.elastic.mget({
                 body: {
                     docs: esMgetBody
                 }
@@ -286,7 +268,7 @@ module.exports = (app, core) => {
                 return esBulkBody;
             }).then((esBulkBody) => {
                 if (!esBulkBody.length) {
-                    return defer.resolve();
+                    return null;
                 }
                 // 新建数据,并添加到queue
                 return core.elastic.bulk({
@@ -296,7 +278,7 @@ module.exports = (app, core) => {
                 let newQueueItems = [];
 
                 // 判断成功的数据，添加到queue中
-                _.each(response.items, (createResult) => {
+                response && _.each(response.items, (createResult) => {
                     createResult = createResult.create;
                     // 如果创建成功，则加入到queue中等待下载
                     if (createResult && createResult._type === this.esTypeQueueUrls && (createResult.status === 201) && queueItems[createResult._id]) {
@@ -310,11 +292,7 @@ module.exports = (app, core) => {
                 if (newQueueItems.length) {
                     return this.addQueueItemsToQueue(newQueueItems, key);
                 }
-            }).then(() => {
-                defer.resolve();
-            }).catch(defer.reject);
-
-            return defer.promise;
+            });
         }
 
         /**
@@ -326,11 +304,10 @@ module.exports = (app, core) => {
          * @returns {Promise}
          */
         addCompleteQueueItem(queueItem, responseBody, key, status = "downloaded") {
-            let defer = Promise.defer();
             let opts = [];
             let isError = !responseBody || status === "error";
 
-            this.checkUrlDetail(queueItem).then(() => {
+            return this.checkUrlDetail(queueItem).then(() => {
                 queueItem.fetched = true;
                 queueItem.updateDate = Date.now();
                 queueItem.status = status;
@@ -363,16 +340,17 @@ module.exports = (app, core) => {
                         text: responseBody
                     }]);
                 }
-                core.elastic.bulk({
+
+                return core.elastic.bulk({
                     body: opts
-                }).then(() => {
+                }).then((data) => {
                     if (!isError) {
                         return this.addCompleteQueueItemsToQueue(queueItem, responseBody, key);
                     }
-                }, defer.reject).then(defer.resolve, defer.reject);
-            }, defer.reject);
 
-            return defer.promise;
+                    return null;
+                });
+            });
         }
 
         /**
@@ -383,10 +361,10 @@ module.exports = (app, core) => {
          * @returns {promise}
          */
         addQueueItemsToQueue(queueItems, key, priority = 1) {
-            let defer = Promise.defer();
+            // let defer = Promise.defer();
 
             // 建立请求队列
-            core.q.getQueue(`crawler.urls.${key}`, {}).then((result) => {
+            return core.q.getQueue(`crawler.urls.${key}`, {}).then((result) => {
                 Promise.all([
                     // 绑定queue到exchange
                     result.ch.bindQueue(result.q.queue, "amq.topic", `${result.q.queue}.urls`),
@@ -400,11 +378,12 @@ module.exports = (app, core) => {
                         });
                     });
                     result.ch.close();
-                    defer.resolve(true);
-                });
-            }, defer.reject);
 
-            return defer.promise;
+                    return true;
+                });
+            });
+
+            // return defer.promise;
         }
 
         /**
@@ -415,23 +394,18 @@ module.exports = (app, core) => {
          * @returns {Promise}
          */
         addCompleteQueueItemsToQueue(queueItem, responseBody, key) {
-            let defer = Promise.defer();
-
             queueItem = _.extend({}, queueItem, {
                 responseBody: responseBody
             });
-            core.q.getQueue(`crawler.deals.${key}`, {}).then((result) => {
+
+            return core.q.getQueue(`crawler.deals.${key}`, {}).then((result) => {
                 result.ch.publish("amq.topic", `${result.q.queue}.bodys`, new Buffer(JSON.stringify(queueItem)), {
                     persistent: true
                 });
                 result.ch.close();
-                defer.resolve(true);
-            }, (err) => {
-                console.log(err);
-                defer.resolve();
-            });
 
-            return defer.promise;
+                return true;
+            });
         }
 
         /**
@@ -463,79 +437,78 @@ module.exports = (app, core) => {
          * @returns {Promise}
          */
         addMutipleCompleteData(results, key, aliasKey, index, keyField = "urlId") {
-            const defer = Promise.defer();
             let esMgetBody = [];
             let queueItemsNew = {};
             let notFoundQueueItems = [];
 
-            _.each(results, (result) => {
-                let queueItem = this.getQueueItemInfo(result.protocol, result.host, result.port, result.path, result.depth, result.query);
+            return new Promise((resolve, reject) => {
+                _.each(results, (result) => {
+                    let queueItem = this.getQueueItemInfo(result.protocol, result.host, result.port, result.path, result.depth, result.query);
 
-                queueItemsNew[queueItem[keyField]] = result;
-                esMgetBody.push({
-                    _index: index,
-                    _type: aliasKey,
-                    _id: queueItem[keyField]
+                    queueItemsNew[queueItem[keyField]] = result;
+                    esMgetBody.push({
+                        _index: index,
+                        _type: aliasKey,
+                        _id: queueItem[keyField]
+                    });
                 });
-            });
 
-            if (esMgetBody.length) {
-                core.elastic.mget({
-                    body: {
-                        docs: esMgetBody
-                    }
-                }).then((getRes) => {
-                    let updateDocs = [];
+                if (esMgetBody.length) {
+                    core.elastic.mget({
+                        body: {
+                            docs: esMgetBody
+                        }
+                    }).then((getRes) => {
+                        let updateDocs = [];
 
-                    _.each(getRes.docs, (doc) => {
-                        let res = doc._source || {};
-                        let cur = queueItemsNew[doc._id];
+                        _.each(getRes.docs, (doc) => {
+                            let res = doc._source || {};
+                            let cur = queueItemsNew[doc._id];
 
-                        if (!doc.found) {
-                            notFoundQueueItems.push(queueItemsNew[doc._id]);
-                        } else {
-                            // 如果图片字段不存在，或者长度小于2
-                            if (!res.pictures || !_.isArray(res.pictures) || res.pictures.length < 2) {
+                            if (!doc.found) {
                                 notFoundQueueItems.push(queueItemsNew[doc._id]);
                             } else {
-                                // 如果字段有更新，更新数据，更新总的数据表
-                                if (_.reduce(_.keys(cur), (key, equal) => {
-                                        return equal && res[key] == cur[key];
-                                    }, true)) {
-                                    updateDocs.push({
-                                        update: {
-                                            _index: index,
-                                            _type: aliasKey,
-                                            _id: doc._id
-                                        }
-                                    });
-                                    updateDocs.push({
-                                        doc: _.extend({
-                                            updatedAt: Date.now()
-                                        }, queueItemsNew[doc._id].res || {})
-                                    });
+                                // 如果图片字段不存在，或者长度小于2
+                                if (!res.pictures || !_.isArray(res.pictures) || res.pictures.length < 2) {
+                                    notFoundQueueItems.push(queueItemsNew[doc._id]);
+                                } else {
+                                    // 如果字段有更新，更新数据，更新总的数据表
+                                    if (_.reduce(_.keys(cur), (key, equal) => {
+                                            return equal && res[key] == cur[key];
+                                        }, true)) {
+                                        updateDocs.push({
+                                            update: {
+                                                _index: index,
+                                                _type: aliasKey,
+                                                _id: doc._id
+                                            }
+                                        });
+                                        updateDocs.push({
+                                            doc: _.extend({
+                                                updatedAt: Date.now()
+                                            }, queueItemsNew[doc._id].res || {})
+                                        });
+                                    }
                                 }
                             }
+                        });
+
+                        this.addUrlsToEsUrls(notFoundQueueItems, key, aliasKey);
+
+                        // this.addQueueItemsToQueue(notFoundqueueItems, key);
+
+                        return updateDocs;
+                    }).then((updateDocs) => {
+                        if (!updateDocs || !updateDocs.length) {
+                            return;
                         }
+
+                        return core.elastic.bulk({ body: updateDocs });
                     });
-
-                    this.addUrlsToEsUrls(notFoundQueueItems, key, aliasKey);
-
-                    // this.addQueueItemsToQueue(notFoundqueueItems, key);
-
-                    return updateDocs;
-                }).then((updateDocs) => {
-                    if (!updateDocs || !updateDocs.length) {
-                        return;
-                    }
-
-                    return core.elastic.bulk({ body: updateDocs });
-                }).then(defer.resolve, defer.reject);
-            } else {
-                defer.resolve();
-            }
-
-            return defer.promise;
+                } else {
+                    resolve();
+                }
+            });
         }
 
         /**
@@ -545,21 +518,18 @@ module.exports = (app, core) => {
          * @return {Promise}
          */
         rollbackCompleteData(queueItem, key) {
-            let defer = Promise.defer();
             let saveQueueItem = _.extend(queueItem);
 
             saveQueueItem.responseBody = "";
-            core.elastic.bulk({
+            return core.elastic.bulk({
                 body: [
                     { delete: { _index: this.esIndex, _type: this.esTypeUrls, _id: queueItem.urlId } },
                     { index: { _index: this.esIndex, _type: this.esTypeQueueUrls, _id: queueItem.urlId } },
                     saveQueueItem
                 ]
             }).then(() => {
-                this.addQueueItemsToQueue([queueItem], key, 2).then(defer.resolve, defer.reject);
-            }).catch(defer.reject);
-
-            return defer.promise;
+                return this.addQueueItemsToQueue([queueItem], key, 2);
+            });
         }
 
         /**

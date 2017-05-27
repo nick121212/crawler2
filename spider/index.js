@@ -59,57 +59,50 @@ module.exports = (app, core) => {
          * @param queueItem
          */
         fetchQueueItem(queueItem) {
-            let defer = Promise.defer();
+            return app.spider.download.index.start(this.downloader, uri(queueItem.url).normalize(), this.proxySettings || {}).then((result) => {
+                result.res && (queueItem.stateData = result.res.headers);
 
-            try {
-                // 开始下载页面
-                app.spider.download.index.start(this.downloader, uri(queueItem.url).normalize(), this.proxySettings || {}).then((result) => {
-                    result.res && (queueItem.stateData = result.res.headers);
+                if (result.res && result.res.status !== 200) {
+                    let err = new Error(result.res.statusText);
+                    err.status = result.res.status;
+                    throw err;
+                }
 
-                    if (result.res && result.res.status !== 200) {
-                        let err = new Error(result.res.statusText);
-                        err.status = result.res.status;
-                        throw err;
-                    }
+                return result;
+            }).then((result) => {
+                // 检测下下载的页面是否有error
+                let errorDeal = _.filter(this.deal.pages, (page) => {
+                    return page.key === "error";
+                });
 
-                    return result;
-                }).then((result) => {
-                    let defer = Promise.defer();
+                if (errorDeal.length) {
+                    return app.spider.deal.deal.index.doDeal(result, errorDeal[0]).then((res) => {
+                        let isError = false;
+                        _.forEach(res.result, (val) => {
+                            if (val) {
+                                isError = true;
+                                return false;
+                            }
+                        });
+                        if (isError) {
+                            throw errPage();
+                        }
 
-                    // 检测下下载的页面是否有error
-                    let errorDeal = _.filter(this.deal.pages, (page) => {
-                        return page.key === "error";
+                        return result;
+                        // isError ? throw errPage() : result;
                     });
+                }
 
-                    if (errorDeal.length) {
-                        app.spider.deal.deal.index.doDeal(result, errorDeal[0]).then((res) => {
-                            let isError = false;
-                            _.forEach(res.result, (val) => {
-                                if (val) {
-                                    isError = true;
-                                    return false;
-                                }
-                            });
-                            isError ? defer.reject(errPage()) : defer.resolve(result);
-                        }, defer.reject);
-                    } else {
-                        defer.resolve(result);
-                    }
+                return result;
+            }).then((result) => {
+                // 保存下载下来的页面
+                return this.queueStore.addCompleteQueueItem(queueItem, result.responseBody, this.key).catch((err) => {
+                    err.status = null;
+                    // reject(err);
 
-                    return defer.promise;
-                }).then((result) => {
-                    // 保存下载下来的页面
-                    return this.queueStore.addCompleteQueueItem(queueItem, result.responseBody, this.key).then(res => defer.resolve(result), (err) => {
-                        err.status = null;
-                        defer.reject(err);
-                    });
-                }).catch(defer.reject);
-            } catch (err) {
-                console.err(err);
-                defer.reject(err);
-            }
-
-            return defer.promise;
+                    throw err;
+                });
+            });
         }
 
         /**
@@ -289,32 +282,29 @@ module.exports = (app, core) => {
          * @param robotsTxtUrl
          */
         getRobotsTxt(robotsTxtUrl) {
-            let defer = Promise.defer();
             let robotsTxts = [];
 
-            if (robotsTxtUrl) {
-                robotsTxtUrl = this.queue.processURL(robotsTxtUrl.toString());
-                robotsTxtUrl = this.queueStore.getQueueItemInfo(robotsTxtUrl.protocol, robotsTxtUrl.host, robotsTxtUrl.port, robotsTxtUrl.path, robotsTxtUrl.depth);
-                let p = app.spider.download.index.start("superagent", robotsTxtUrl.url);
-
-                p.then((results) => {
-                    robotsTxts.push(robotsTxtParser(robotsTxtUrl.url, results.responseBody));
-                    defer.resolve(robotsTxts);
-                }).catch((err) => {
-                    if (err.status === 301 && err.response.headers.location) {
-                        let redirectTarget = uri(err.response.headers.location)
-                            .absoluteTo(robotsTxtUrl.url)
-                            .normalize();
-                        this.getRobotsTxt(redirectTarget).then(defer.resolve, defer.reject);
-                    } else {
-                        defer.reject(err);
-                    }
-                });
-            } else {
-                defer.resolve();
-            }
-
-            return defer.promise;
+            return new Promise((resolve, reject) => {
+                if (robotsTxtUrl) {
+                    robotsTxtUrl = this.queue.processURL(robotsTxtUrl.toString());
+                    robotsTxtUrl = this.queueStore.getQueueItemInfo(robotsTxtUrl.protocol, robotsTxtUrl.host, robotsTxtUrl.port, robotsTxtUrl.path, robotsTxtUrl.depth);
+                    app.spider.download.index.start("superagent", robotsTxtUrl.url).then((results) => {
+                        robotsTxts.push(robotsTxtParser(robotsTxtUrl.url, results.responseBody));
+                        resolve(robotsTxts);
+                    }).catch((err) => {
+                        if (err.status === 301 && err.response.headers.location) {
+                            let redirectTarget = uri(err.response.headers.location)
+                                .absoluteTo(robotsTxtUrl.url)
+                                .normalize();
+                            this.getRobotsTxt(redirectTarget).then(resolve, reject);
+                        } else {
+                            reject(err);
+                        }
+                    });
+                } else {
+                    resolve();
+                }
+            });
         }
 
         /**

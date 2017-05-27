@@ -11,7 +11,7 @@ const app = {};
 // const socketMain = io(`http://${core.config.socketChip.host}:${core.config.socketChip.port}/crawler`);
 const sockets = [];
 
-global.Promise = require("bluebird");
+// global.Promise = require("bluebird");
 // console.log(Promise.defer());
 
 _.each(core.config.hosts, (host) => {
@@ -32,3 +32,9 @@ consign({ verbose: false })
     .into(app, core, sockets);
 
 console.log(`pid:${process.pid};ENV:${process.env.ENV}`);
+
+
+process.on('unhandledRejection', (reason, p) => {
+    console.log("Unhandled Rejection at: Promise ", p, " reason: ", reason);
+    // application specific logging, throwing an error, or other logic here
+});

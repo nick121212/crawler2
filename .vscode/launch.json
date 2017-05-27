@@ -18,9 +18,7 @@
                 "NODE_IPS": "106.75.78.203:3000",
                 "NODE_QUEUE": "106.75.78.203"
             },
-            "externalConsole": false,
-            "sourceMaps": false,
-            "outDir": null
+            "sourceMaps": false
         },
         {
             "name": "附加",
