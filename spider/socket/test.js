@@ -6,8 +6,8 @@ let uri = require("urijs");
 let _ = require('lodash');
 
 module.exports = exports = (app, core, sockets) => {
-    _.each(sockets, (socket)=> {
-        socket.on("crawler:test", (params, cb)=> {
+    _.each(sockets, (socket) => {
+        socket.on("crawler:test", (params, cb) => {
             let config = params.key;
 
             console.log("start test:" + params.options.url);
@@ -30,12 +30,13 @@ module.exports = exports = (app, core, sockets) => {
 
                     // 所有的处理完后，保存结果
                     Promise.all(promises).then((results) => {
-                        let res = {ret: 0, data: [], showResult: true};
+                        let res = { ret: 0, data: [], showResult: true };
 
-                        _.each(results, (result)=> {
-                            "use strict";
+                        _.each(results, (result) => {
                             res.data.push(result.result);
                         });
+
+                        console.log(res);
 
                         cb(res);
                     }).catch((err) => {

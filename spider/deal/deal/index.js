@@ -37,15 +37,20 @@ module.exports = (app) => {
                 };
                 getPromises(results);
 
-                return new Promise((resolve, reject) => {
-                    if (promises.length) {
-                        return Promise.all(promises).then(check).catch(reject);
-                    }
-                    resolve({
-                        result: dataResults,
-                        rule: rule
-                    });
-                });
+                return promises.length ? Promise.all(promises).then(check) : {
+                    result: dataResults,
+                    rule: rule
+                };
+
+                // return new Promise((resolve, reject) => {
+                //     if (promises.length) {
+                //         return Promise.all(promises).then(check).catch(reject);
+                //     }
+                //     resolve({
+                //         result: dataResults,
+                //         rule: rule
+                //     });
+                // });
             };
 
             // 处理area
