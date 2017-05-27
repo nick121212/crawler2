@@ -15,9 +15,7 @@ module.exports = (app) => {
          * @returns Promise
          */
         doDeal(queueItem, data, results, $, index) {
-            let defer = Promise.defer();
-
-            app.spider.deal.html.index.getOne(data.htmlStrategy).doDeal(queueItem, data, $, index).then((res) => {
+            return app.spider.deal.html.index.getOne(data.htmlStrategy).doDeal(queueItem, data, $, index).then((res) => {
                 let promises = [];
 
                 for (let i = 0; i < res.len; i++) {
@@ -34,13 +32,11 @@ module.exports = (app) => {
                                 rtnResults.push(casee);
                             }
                         });
-                        defer.resolve(rtnResults);
-                    }).catch(defer.reject);
+                        return rtnResults;
+                    });
                 }
-                defer.resolve(res);
-            }, defer.reject);
-
-            return defer.promise;
+                return res;
+            });
         }
     }
 

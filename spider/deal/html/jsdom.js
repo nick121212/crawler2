@@ -9,26 +9,23 @@ module.exports = (app) => {
          * @param queueItem {Object} 数据
          */
         load(queueItem, $) {
-            let defer = Promise.defer();
-
-
-            !$ && jsdom.env({
-                html: queueItem.responseBody.replace(/iframe/g, "iframe1"),
-                parsingMode: "html",
-                src: [jquery],
-                done: function(err, window) {
-                    if (err) {
-                        return defer.reject(err);
+            return new Promise((resolve, reject) => {
+                !$ && jsdom.env({
+                    html: queueItem.responseBody.replace(/iframe/g, "iframe1"),
+                    parsingMode: "html",
+                    src: [jquery],
+                    done: function(err, window) {
+                        if (err) {
+                            return reject(err);
+                        }
+                        resolve(window.$("body"));
                     }
-                    defer.resolve(window.$("body"));
+                });
+
+                if ($) {
+                    resolve($);
                 }
             });
-
-            if ($) {
-                defer.resolve($);
-            }
-
-            return defer.promise;
         }
 
         /**
@@ -39,12 +36,11 @@ module.exports = (app) => {
          * @return promise
          */
         doDeal(queueItem, data, $, index) {
-            let defer = Promise.defer();
             let $sel, result, len = 0;
             let $noSelcSel;
 
             // 载入当前的cheerio根节点
-            this.load(queueItem, $).then(($) => {
+            return this.load(queueItem, $).then(($) => {
                 // 如果存在index，则获取索引节点
                 if (typeof index === "number" && $.size() > index) {
                     $sel = $.eq(index);
@@ -60,7 +56,7 @@ module.exports = (app) => {
                         result = this.doCallMethod($sel, data.methodInfo);
                     }
 
-                    defer.resolve({
+                    return {
                         result: result,
                         data: _.cloneDeep(data),
                         $cur: $sel,
@@ -68,13 +64,11 @@ module.exports = (app) => {
                         $parent: $,
                         len: len,
                         index: index
-                    });
+                    };
                 } catch (e) {
-                    defer.reject(e);
+                    throw e;
                 }
-            }, defer.reject);
-
-            return defer.promise;
+            });
         }
 
         doRemoveEle($sel, selector) {

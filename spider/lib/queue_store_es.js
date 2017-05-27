@@ -361,8 +361,6 @@ module.exports = (app, core) => {
          * @returns {promise}
          */
         addQueueItemsToQueue(queueItems, key, priority = 1) {
-            // let defer = Promise.defer();
-
             // 建立请求队列
             return core.q.getQueue(`crawler.urls.${key}`, {}).then((result) => {
                 Promise.all([

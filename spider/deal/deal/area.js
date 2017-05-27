@@ -12,7 +12,6 @@ module.exports = (app) => {
          */
         doDeal(queueItem, areas) {
             let promises = [];
-            let defer = Promise.defer();
 
             // 遍历
             _.each(areas, (area, key) => {
@@ -21,16 +20,14 @@ module.exports = (app) => {
                 strategy && promises.push(strategy.doDeal(queueItem, area));
             });
             // 执行
-            Promise.all(promises).then((results) => {
-                defer.resolve(_.keyBy(results, (res) => {
+            return Promise.all(promises).then((results) => {
+                return _.keyBy(results, (res) => {
                     if (res && res.data) {
                         return res.data.key;
                     }
                     return Date.now();
-                }));
-            }).catch(defer.reject);
-
-            return defer.promise;
+                });
+            });
         }
     }
     return new Strategy();

@@ -96,10 +96,10 @@ module.exports = (app, core) => {
                 return result;
             }).then((result) => {
                 // 保存下载下来的页面
-                return this.queueStore.addCompleteQueueItem(queueItem, result.responseBody, this.key).catch((err) => {
+                return this.queueStore.addCompleteQueueItem(queueItem, result.responseBody, this.key).then(() => {
+                    return result;
+                }).catch((err) => {
                     err.status = null;
-                    // reject(err);
-
                     throw err;
                 });
             });

@@ -113,7 +113,6 @@ module.exports = (app, core) => {
          */
         consumeQueue(queueItem, ch) {
             let rules = this.findRule(decodeURIComponent(queueItem.url)),
-                // defer = Promise.defer(),
                 promises = [];
 
             return new Promise((resolve, reject) => {

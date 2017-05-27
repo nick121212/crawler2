@@ -22,7 +22,6 @@ module.exports = (app) => {
          * @returns Promise
          */
         doDeal(queueItem, data, results, $, index) {
-            let defer = Promise.defer();
             let jData = jpp(results);
             let path = "";
             let idx = _.isUndefined(data.dataIndex) ? index : data.dataIndex;
@@ -37,7 +36,7 @@ module.exports = (app) => {
             jData.set(path, [], true);
             results = jData.get(path).value();
             // data.key && (results[data.key] = []);
-            app.spider.deal.html.index.getOne(data.htmlStrategy).doDeal(queueItem, data, $, index).then((res) => {
+            return app.spider.deal.html.index.getOne(data.htmlStrategy).doDeal(queueItem, data, $, index).then((res) => {
                 let promises = [];
 
                 res.result = results;
@@ -53,13 +52,11 @@ module.exports = (app) => {
                                 rtnResults.push(casee);
                             }
                         });
-                        defer.resolve(rtnResults);
-                    }).catch(defer.reject);
+                        return rtnResults;
+                    });
                 }
-                defer.resolve(res);
-            }, defer.reject);
-
-            return defer.promise;
+                return res;
+            });
         }
     }
 

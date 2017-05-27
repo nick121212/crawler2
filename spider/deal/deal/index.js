@@ -22,7 +22,6 @@ module.exports = (app) => {
          * @returns {Promise}
          */
         doDeal(queueItem, rule) {
-            let defer = Promise.defer();
             let promiseAll = [];
             let dataResults = {};
             let check = (results) => {
@@ -38,24 +37,25 @@ module.exports = (app) => {
                 };
                 getPromises(results);
 
-                return promises.length ? Promise.all(promises).then(check, defer.reject) : defer.resolve({
-                    result: dataResults,
-                    rule: rule
+                return new Promise((resolve, reject) => {
+                    if (promises.length) {
+                        return Promise.all(promises).then(check).catch(reject);
+                    }
+                    resolve({
+                        result: dataResults,
+                        rule: rule
+                    });
                 });
             };
 
             // 处理area
-            this.deals.area.doDeal(queueItem, rule.areas).then((results) => {
+            return this.deals.area.doDeal(queueItem, rule.areas).then((results) => {
                 _.forEach(rule.fields, (field, key) => {
                     promiseAll = promiseAll.concat(this.doDealData.call(this, queueItem, field.data, dataResults, results[key] ? results[key].$cur : null));
                 });
 
-                return Promise.all(promiseAll).then(check, (err) => {
-                    defer.reject(err);
-                });
-            }, defer.reject);
-
-            return defer.promise;
+                return Promise.all(promiseAll).then(check);
+            });
         }
     }
 
