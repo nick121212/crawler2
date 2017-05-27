@@ -15,10 +15,10 @@ class Downloader {
         //     horsemanSetting.proxy = `http://${ipInfo.host}:${ipInfo.port}`;
         //     horsemanSetting.proxyType = "http";
         // }
-        // if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
-        //     horsemanSetting.proxy = `http://${settings.ipInfo.host}:${settings.ipInfo.port}`;
-        //     horsemanSetting.proxyType = "http";
-        // }
+        if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
+            horsemanSetting.proxy = `http://${settings.ipInfo.host}:${settings.ipInfo.port}`;
+            horsemanSetting.proxyType = "http";
+        }
 
         horseman = new Horseman(horsemanSetting);
 
