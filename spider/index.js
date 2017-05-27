@@ -295,7 +295,9 @@ module.exports = (app, core) => {
             if (robotsTxtUrl) {
                 robotsTxtUrl = this.queue.processURL(robotsTxtUrl.toString());
                 robotsTxtUrl = this.queueStore.getQueueItemInfo(robotsTxtUrl.protocol, robotsTxtUrl.host, robotsTxtUrl.port, robotsTxtUrl.path, robotsTxtUrl.depth);
-                app.spider.download.index.start("superagent", robotsTxtUrl.url).then((results) => {
+                let p = app.spider.download.index.start("superagent", robotsTxtUrl.url);
+
+                p.then((results) => {
                     robotsTxts.push(robotsTxtParser(robotsTxtUrl.url, results.responseBody));
                     defer.resolve(robotsTxts);
                 }).catch((err) => {
@@ -311,6 +313,7 @@ module.exports = (app, core) => {
             } else {
                 defer.resolve();
             }
+
             return defer.promise;
         }
 
@@ -340,7 +343,7 @@ module.exports = (app, core) => {
             // 获得机器人信息
             this.getRobotsTxt(robotsTxtUrl).then((robots) => {
                 this.discover._robotsTxts = robots;
-            }, console.error).chain(() => {
+            }, console.error).tap(() => {
                 this.doInitDownloadDeal().then(next.bind(this));
             });
         }
