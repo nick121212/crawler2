@@ -11,9 +11,9 @@ class Downloader {
             try {
                 let req = request.get(uri.toString());
 
-                // if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
-                //     req.proxy(`http://${settings.ipInfo.host}:${settings.ipInfo.port}`);
-                // }
+                if (settings.useProxy && settings.ipInfo && settings.ipInfo.port && settings.ipInfo.port) {
+                    req.proxy(`http://${settings.ipInfo.host}:${settings.ipInfo.port}`);
+                }
                 // 5s超时，不允许跳转
                 req
                     .set("User-Agent", settings.ua || "")
