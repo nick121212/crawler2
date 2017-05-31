@@ -8,10 +8,9 @@ let channel = null;
 let connection = null;
 
 function getQueue(qName, qSetting) {
-    let defer = Promise.defer(),
-        ch = null;
+    let ch = null;
 
-    connPromise.then(conn => {
+    return connPromise.then(conn => {
         connection = conn;
 
         return conn.createChannel();
@@ -23,21 +22,18 @@ function getQueue(qName, qSetting) {
             autoDelete: false
         }, qSetting));
     }).then(q => {
-        defer.resolve({
+        return {
             ch: ch,
             q: q
-        });
-    }).catch(defer.reject);
-
-    return defer.promise;
+        };
+    });
 }
 
 function deleteQueue(qName, qSetting, isClsose = true) {
-    let defer = Promise.defer(),
-        ch = null,
+    let ch = null,
         connec;
 
-    amqplib.connect(connectionStr).then((conn) => {
+    return amqplib.connect(connectionStr).then((conn) => {
             connec = conn;
             return conn.createChannel();
         })
@@ -54,11 +50,7 @@ function deleteQueue(qName, qSetting, isClsose = true) {
             if (isClsose)
                 connec.close();
             return true;
-        })
-        .then(defer.resolve)
-        .catch(defer.reject);
-
-    return defer.promise;
+        });
 }
 
 function closeChannel() {
